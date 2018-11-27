@@ -1,6 +1,14 @@
 package model.request;
 
-import model.request.Request;
 
 public class ClearRequest extends Request {
+    private String vehicleTypeName;
+
+    public ClearRequest(String vehicleTypeName) {
+        this.vehicleTypeName = vehicleTypeName;
+    }
+
+    public String getVehicleTypeName() {
+        return vehicleTypeName;
+    }
 }
