@@ -1,9 +1,9 @@
 package model;
 
+import java.util.HashMap;
+
 public class Level {
     private int requiredMoney;
-    private int numberOfSheep;
-    private int numberOfChicken;
-    private int numberOfCow;
-    private int numberOfEgg;
+    private HashMap<Animal, Integer> requiredAnimals;
+    private HashMap<Product, Integer> requiredProduct;
 }
