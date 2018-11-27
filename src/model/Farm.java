@@ -39,4 +39,8 @@ public class Farm {
 
     public void levelPassedChecker() {
     }
+
+    public ArrayList<Animal> getAnimals() {
+        return null;
+    }
 }
