@@ -12,7 +12,9 @@ public abstract class WorkShop {
 
     public void updateWorkShop() {
         //todo Set hoursToFinish to maxHoursToFinish + 1 if work done.
+
     }
+
 
     public abstract SecondaryProduct getProduct();
 }
