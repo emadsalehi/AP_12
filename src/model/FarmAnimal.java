@@ -14,7 +14,12 @@ public class FarmAnimal extends Animal {
 
     @Override
     public void move(int destinationX, int destinationY) {
-
+        if (destinationX == 31) {
+            randomMove();
+        }
+        else {
+            intendedMove(destinationX, destinationY);
+        }
     }
 
 

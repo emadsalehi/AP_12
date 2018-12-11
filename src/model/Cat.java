@@ -1,12 +1,14 @@
 package model;
 
+import model.exceptions.NotPossibleException;
+
 public class Cat extends Animal {
     private int level = 1;
 
     public Cat(int x, int y) {
         super(x, y);
-        setBuyPrice(100000000); // TODO
-        setSellPrice(300000000);//TODO
+        setBuyPrice(2500); // TODO
+        setSellPrice(2000);//TODO
     }
 
     @Override
@@ -19,6 +21,11 @@ public class Cat extends Animal {
     }
 
     public int calculateUpgardePrice() {
-
+        if (level == 1) {
+            return 2000;
+        }
+        else {
+            throw new NotPossibleException("catCalculateUpgradePrice");
+        }
     }
 }

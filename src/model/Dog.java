@@ -5,8 +5,8 @@ public class Dog extends Animal {
 
     public Dog(int x, int y) {
         super(x, y);
-        setBuyPrice();
-        setSellPrice();
+        setBuyPrice(2000);
+        setSellPrice(1500);
     }
 
 
@@ -18,10 +18,5 @@ public class Dog extends Animal {
         else {
             intendedMove(destinationX, destinationY);
         }
-    }
-
-
-    public int calculateUpgradePrice() {
-        return 0;
     }
 }
