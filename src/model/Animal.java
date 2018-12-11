@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Random;
+
 public abstract class Animal {
     private int x;
     private int y;
@@ -38,7 +40,39 @@ public abstract class Animal {
     }
 
     public void randomMove() {
+        int randomX;
+        int randomY;
+
+        randomX = randomiser(x);
+        randomY = randomiser(y);
+
+        x = x + (int)(speed*(double)randomX/Math.sqrt(Math.pow(randomX,2)+Math.pow(randomY,2)));
+        y = y + (int)(speed*(double)randomY/Math.sqrt(Math.pow(randomX,2)+Math.pow(randomY,2)));
     }
+
+    public int randomiser(int value) {
+        Random random = new Random();
+        if ( value == 0 ) {
+            return random.nextInt(2);
+        }
+        else if ( value == 29) {
+            return random.nextInt(2) - 1;
+        }
+        else {
+            return random.nextInt(3) -1;
+        }
+    }
+
+    public void intendedMove(int destinationX, int destinationY) {
+        double xSpeed = ((double)(destinationX- getX()))/Math.sqrt((destinationX-getX())^2+(destinationY-getY())^2)
+                *getSpeed();
+        double ySpeed = ((double)(destinationY-getY()))/Math.sqrt((destinationX-getX())^2+(destinationY-getY())^2)
+                *getSpeed();
+        setX((int)Math.round(getX() + xSpeed));
+        setY((int)Math.round(getY() + ySpeed));
+    }
+
+
 
     public abstract void move(int destinationX, int destinationY);
 
