@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Helicopter {
     //todo modify speed and capacity in set level method.
-    private int level = 1;
+    private int level = 0;
     private double speed;
     private int capacity;
     private boolean isAvailable = true;
@@ -17,6 +17,8 @@ public class Helicopter {
 
     public void setLevel(int level) {
         this.level = level;
+        this.speed = 1 / (20 - 5 * level);   //speed = 1/travelDuration
+        this.capacity = level + 2;
     }
 
     public double getSpeed() {
@@ -51,7 +53,12 @@ public class Helicopter {
         this.readyToDeliver = readyToDeliver;
     }
 
-    public int calculateRquiredMoney() {
+    public int calculateRequiredMoney() {
+        int requiredMoney = 0;
+        for (Product product : products){
+            PrimitiveProduct primitiveProduct = (PrimitiveProduct) product;
+            requiredMoney += primitiveProduct.getPrimitiveProductType().getBuyCost();
+        }
         return 0;
     }
 }

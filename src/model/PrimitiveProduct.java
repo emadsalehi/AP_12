@@ -8,4 +8,8 @@ public class PrimitiveProduct extends Product {
     public PrimitiveProduct(PrimitiveProductType primitiveProductType) {
         this.primitiveProductType = primitiveProductType;
     }
+
+    public PrimitiveProductType getPrimitiveProductType() {
+        return primitiveProductType;
+    }
 }
