@@ -8,7 +8,7 @@ public class Truck {
     private int capacity;
     private boolean isAvailable = true;
     private boolean readyToPay = false;
-    private int upgradeCost = 0;
+    private int upgradeCost = 250;
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Animal> animals = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class Truck {
         this.level = level;
         this.speed = 1 / (20 - 5 * level);   //speed = 1/travelDuration
         this.capacity = level + 2;
-        this.upgradeCost = level * 100 + 500;
+        this.upgradeCost = (level - 1) * 100 + 500;
     }
 
     public double getSpeed() {

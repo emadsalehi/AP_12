@@ -8,7 +8,7 @@ public class Helicopter {
     private double speed;
     private int capacity;
     private boolean isAvailable = true;
-    private int upgradeCost = 0;
+    private int upgradeCost = 400;
     private ArrayList<Product> products = new ArrayList<>();
     private boolean readyToDeliver = false;
 
