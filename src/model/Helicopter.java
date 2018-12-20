@@ -8,6 +8,7 @@ public class Helicopter {
     private double speed;
     private int capacity;
     private boolean isAvailable = true;
+    private int upgradeCost = 0;
     private ArrayList<Product> products = new ArrayList<>();
     private boolean readyToDeliver = false;
 
@@ -17,8 +18,9 @@ public class Helicopter {
 
     public void setLevel(int level) {
         this.level = level;
-        this.speed = 1 / (20 - 5 * level);   //speed = 1/travelDuration
+        this.speed = 1 / (12 - 3 * level);   //speed = 1/travelDuration
         this.capacity = level + 2;
+        this.upgradeCost = level * 100 + 400;
     }
 
     public double getSpeed() {
@@ -35,6 +37,22 @@ public class Helicopter {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public int getUpgradeCost() {
+        return upgradeCost;
+    }
+
+    public void setUpgradeCost(int upgradeCost) {
+        this.upgradeCost = upgradeCost;
     }
 
     public ArrayList<Product> getProducts() {
@@ -59,6 +77,6 @@ public class Helicopter {
             PrimitiveProduct primitiveProduct = (PrimitiveProduct) product;
             requiredMoney += primitiveProduct.getPrimitiveProductType().getBuyCost();
         }
-        return 0;
+        return requiredMoney;
     }
 }
