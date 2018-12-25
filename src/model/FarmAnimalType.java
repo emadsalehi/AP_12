@@ -1,9 +1,9 @@
 package model;
 
 public enum FarmAnimalType {
-    CHICKEN(50 , 110 , 20 , 10 , 2 , 3 , 50 , 100),
-    SHEEP(55 , 110 , 20 , 10 , 2 , 9 , 150 , 1000),
-    COW(40 , 80 , 20 , 10 , 2 , 18 , 300 , 10000);
+    CHICKEN(50 , 110 , 20 , 10 , 2 , 3 , 50 , 100 , 5),
+    SHEEP(55 , 110 , 20 , 10 , 2 , 9 , 150 , 1000 , 10),
+    COW(40 , 80 , 20 , 10 , 2 , 18 , 300 , 10000 , 20);
 
     private final int speed;
     private final int hungryMovingSpeed;
@@ -13,8 +13,9 @@ public enum FarmAnimalType {
     private final int hungrySpeed;
     private final int hungryValue;
     private final int buyCost;
+    private final int depotSize;
 
-    FarmAnimalType(int speed, int hungryMovingSpeed, int productionPeriod, int oneTimeBite, int waitTime, int hungrySpeed, int hungryValue, int buyCost) {
+    FarmAnimalType(int speed, int hungryMovingSpeed, int productionPeriod, int oneTimeBite, int waitTime, int hungrySpeed, int hungryValue, int buyCost, int depotSize) {
         this.speed = speed;
         this.hungryMovingSpeed = hungryMovingSpeed;
         this.productionPeriod = productionPeriod;
@@ -23,6 +24,7 @@ public enum FarmAnimalType {
         this.hungrySpeed = hungrySpeed;
         this.hungryValue = hungryValue;
         this.buyCost = buyCost;
+        this.depotSize = depotSize;
     }
 
     public int getSpeed() {
@@ -55,5 +57,9 @@ public enum FarmAnimalType {
 
     public int getBuyCost() {
         return buyCost;
+    }
+
+    public int getDepotSize() {
+        return depotSize;
     }
 }
