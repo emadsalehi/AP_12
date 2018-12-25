@@ -33,6 +33,22 @@ public class Farm {
         //todo If product exist store it in storage and remove it from cells.
     }
 
+    public Helicopter getHelicopter() {
+        return helicopter;
+    }
+
+    public void setHelicopter(Helicopter helicopter) {
+        this.helicopter = helicopter;
+    }
+
+    public Truck getTruck() {
+        return truck;
+    }
+
+    public void setTruck(Truck truck) {
+        this.truck = truck;
+    }
+
     public void throwWorkshopProduct() {
         //todo Check hoursToFinish equals maxHoursToFinish + 1 and isWorking equals false throw product in destination.
     }
@@ -42,5 +58,13 @@ public class Farm {
 
     public ArrayList<Animal> getAnimals() {
         return null;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 }
