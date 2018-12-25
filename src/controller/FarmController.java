@@ -3,6 +3,8 @@ import model.*;
 import model.request.*;
 import view.View;
 
+import java.util.ArrayList;
+
 public class FarmController {
     private Farm farm = new Farm();
     private View view = new View();
@@ -55,7 +57,30 @@ public class FarmController {
     }
 
     public void addAction(AddRequest request) {
+        Truck truck = farm.getTruck();
+        Helicopter helicopter = farm.getHelicopter();
+        if (request.getVehicleTypeName().equals("truck")){
+            for (WildAnimalType wildAnimalType : WildAnimalType.values()){
+                if (wildAnimalType.name().equals(request.getItemName())){
+                    if (truck.getCapacity() > truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()){
+                        ArrayList<Animal> animals = truck.getAnimals();
+                        animals.add(new WildAnimal(0 , 0 , wildAnimalType));
+                        truck.setAnimals(animals);
+                    } //TODO else ---> print not enough capacity
+                }
+            }
+            for (FarmAnimalType farmAnimalType : FarmAnimalType.values()){
+                if(farmAnimalType.name().equals(request.getItemName())){
+                    if(truck.getCapacity() > truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()){
+                        ArrayList<Animal> animals = truck.getAnimals();
+                        animals.add(new FarmAnimal(0 , 0 , farmAnimalType));
+                        truck.setAnimals(animals);
+                    }
+                }
+            }
+        }else if (request.getVehicleTypeName().equals("helicopter")){
 
+        }
     }
 
     public void badAction(BadRequest request) {
