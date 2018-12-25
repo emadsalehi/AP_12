@@ -27,7 +27,7 @@ public class Truck {
     public void setLevel(int level) {
         this.level = level;
         this.speed = 1 / (20 - 5 * level);   //speed = 1/travelDuration
-        this.capacity = level + 2;
+        this.capacity = (level + 2) * 20;    //TODO: Capacity consists of slots
         this.upgradeCost = (level - 1) * 100 + 500;
     }
 
@@ -102,5 +102,24 @@ public class Truck {
             }
         }
         return paidMoney;
+    }
+
+    public int calculateUsedCapacity(){
+        int usedCapacity = 0;
+        for(Product p : products){
+            if (p instanceof PrimitiveProduct){
+                usedCapacity += ((PrimitiveProduct) p).getPrimitiveProductType().getDepotSize();
+            }else if (p instanceof  SecondaryProduct){
+                usedCapacity += ((SecondaryProduct) p).getSecondaryProductType().getDepotSize();
+            }
+        }
+        for (Animal a : animals){
+            if (a instanceof WildAnimal){
+                usedCapacity += ((WildAnimal) a).getWildAnimalType().getDepotSize();
+            } else if (a instanceof FarmAnimal){
+                usedCapacity += ((FarmAnimal) a).getFarmAnimalType().getDepotSize();
+            }
+        }
+        return usedCapacity;
     }
 }
