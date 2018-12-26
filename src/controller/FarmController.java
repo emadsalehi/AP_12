@@ -115,7 +115,18 @@ public class FarmController {
     }
 
     public void buyAction(BuyRequest request) {
-
+        int buyCost;
+        if(request.getAnimal() instanceof FarmAnimal){
+            buyCost = ((FarmAnimal) request.getAnimal()).getFarmAnimalType().getBuyCost();
+        }else {
+            buyCost = 2500;
+        }
+        if(farm.getMoney() < buyCost){
+            view.logNotEnoughMoney();
+        }else {
+            farm.addAnimal(request.getAnimal());
+            farm.setMoney(farm.getMoney() - buyCost);
+        }
     }
 
     public void cageAction(CageRequest request) {
