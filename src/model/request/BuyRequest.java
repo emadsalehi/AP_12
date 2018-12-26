@@ -1,15 +1,16 @@
 package model.request;
 
+import model.Animal;
 import model.FarmAnimalType;
 
 public class BuyRequest extends Request {
-    private FarmAnimalType farmAnimalType;
+    private Animal animal;
 
-    public BuyRequest(FarmAnimalType farmAnimalType) {
-        this.farmAnimalType = farmAnimalType;
+    public BuyRequest(Animal animal) {
+        this.animal = animal;
     }
 
-    public FarmAnimalType getFarmAnimalType() {
-        return farmAnimalType;
+    public Animal getAnimal() {
+        return animal;
     }
 }
