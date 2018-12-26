@@ -1,7 +1,12 @@
 package controller;
+import model.Cat;
+import model.Dog;
+import model.FarmAnimal;
 import model.FarmAnimalType;
 import model.request.*;
 import view.View;
+
+import java.util.Random;
 
 public class CommandAnalyzer {
     private final String BUY_REQUEST = "buy (cat|dog|cow|chicken|sheep)";  //Some Animals are absent in FarmAnimalType
@@ -26,7 +31,13 @@ public class CommandAnalyzer {
     public Request getRequest(String command) {
         if (command.matches(BUY_REQUEST)) {
             String[] params = command.split(" ");
-            return new BuyRequest(FarmAnimalType.valueOf(params[1].toUpperCase()));
+            if(params[1].equals("cow") || params[1].equals("chicken") || params[1].equals("sheep")) {
+                return new BuyRequest(new FarmAnimal((int)(Math.random() * 30) , (int)(Math.random() * 30) , FarmAnimalType.valueOf(params[1].toUpperCase())));
+            }else if (params[1].equals("cat")){
+                return new BuyRequest(new Cat((int)(Math.random() * 30) , (int)(Math.random() * 30)));
+            }else{
+                return new BuyRequest(new Dog((int)(Math.random() * 30) , (int)(Math.random() * 30)));
+            }
         }else if (command.matches(PICKUP_REQUEST)) {
             String[] params = command.split(" ");
             return new PickUpRequest(Integer.parseInt(params[1]) , Integer.parseInt(params[2]));
