@@ -62,7 +62,7 @@ public class FarmController {
         if (request.getVehicleTypeName().equals("truck")){
             for (WildAnimalType wildAnimalType : WildAnimalType.values()){
                 if (wildAnimalType.name().equals(request.getItemName())){
-                    if (truck.getCapacity() > truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()){
+                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()){
                         ArrayList<Animal> animals = truck.getAnimals();
                         animals.add(new WildAnimal(0 , 0 , wildAnimalType));
                         truck.setAnimals(animals);
@@ -71,15 +71,42 @@ public class FarmController {
             }
             for (FarmAnimalType farmAnimalType : FarmAnimalType.values()){
                 if(farmAnimalType.name().equals(request.getItemName())){
-                    if(truck.getCapacity() > truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()){
+                    if(truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()){
                         ArrayList<Animal> animals = truck.getAnimals();
                         animals.add(new FarmAnimal(0 , 0 , farmAnimalType));
                         truck.setAnimals(animals);
                     }
                 }
             }
+            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()){
+                if(primitiveProductType.name().equals(request.getItemName())){
+                    if(truck.getCapacity() >= truck.calculateUsedCapacity() + primitiveProductType.getDepotSize()){
+                        ArrayList<Product> products = truck.getProducts();
+                        products.add(new PrimitiveProduct(primitiveProductType));
+                        truck.setProducts(products);
+                    }
+                }
+            }
+            for (SecondaryProductType secondaryProductType : SecondaryProductType.values()){
+                if(secondaryProductType.name().equals(request.getItemName())){
+                    if(truck.getCapacity() >= truck.calculateUsedCapacity() + secondaryProductType.getDepotSize()){
+                        ArrayList<Product> products = truck.getProducts();
+                        products.add(new SecondaryProduct(secondaryProductType));
+                        truck.setProducts(products);
+                    }
+                }
+            }
         }else if (request.getVehicleTypeName().equals("helicopter")){
-
+            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()){
+                if(primitiveProductType.name().equals(request.getItemName())){
+                    if(helicopter.getCapacity() > helicopter.calculateUsedCapacity() + primitiveProductType.getDepotSize()
+                            && farm.getMoney() >= helicopter.calculateRequiredMoney() + primitiveProductType.getBuyCost()){
+                        ArrayList<Product> products = helicopter.getProducts();
+                        products.add(new PrimitiveProduct(primitiveProductType));
+                        helicopter.setProducts(products);
+                    }
+                }
+            }
         }
     }
 
