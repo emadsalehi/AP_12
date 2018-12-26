@@ -6,4 +6,7 @@ public class View {
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
+    public void logNotEnoughMoney(){
+        System.out.println("Not Enough Money");
+    }
 }
