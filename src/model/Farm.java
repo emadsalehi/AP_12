@@ -67,4 +67,11 @@ public class Farm {
     public void setMoney(int money) {
         this.money = money;
     }
+
+    public void addAnimal(Animal animal){
+        ArrayList<Animal> animals = cells[animal.getX()][animal.getY()].getAnimals();
+        animals.add(animal);
+        cells[animal.getX()][animal.getY()].setAnimals(animals);
+    }
+
 }
