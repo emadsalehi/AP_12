@@ -79,4 +79,16 @@ public class Helicopter {
         }
         return requiredMoney;
     }
+
+    public int calculateUsedCapacity(){
+        int usedCapacity = 0;
+        for(Product product : products){
+            if (product instanceof PrimitiveProduct){
+                usedCapacity += ((PrimitiveProduct) product).getPrimitiveProductType().getDepotSize();
+            }else if (product instanceof  SecondaryProduct){
+                usedCapacity += ((SecondaryProduct) product).getSecondaryProductType().getDepotSize();
+            }
+        }
+        return  usedCapacity;
+    }
 }
