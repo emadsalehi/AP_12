@@ -11,6 +11,7 @@ public class Farm {
     private Helicopter helicopter;
     private Truck truck;
     private Level level;
+    private final int maxPlantLevel = 5;
 
     public void updateCells() {
     }
@@ -38,8 +39,13 @@ public class Farm {
         return cell;
     }
 
-    void irrigate(int x, int y) {
-
+    public void irrigate(int x, int y) {
+        for (int i = x - 1 ; i <= x + 1 ; i++)
+            for (int j = y - 1 ; j <= y + 1 ; j++)
+                if (i >= 0 && i < 30 && j >= 0 && j < 30) {
+                    this.cells[i][j].setPlantLevel(maxPlantLevel);
+                    this.cells[i][j].setHasPlant(true);
+                }
     }
 
     public void userPickUp(int x, int y) {
