@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Farm {
     private Cell[][] cells = new Cell[30][30];
@@ -57,7 +58,38 @@ public class Farm {
         //todo Check hoursToFinish equals maxHoursToFinish + 1 and isWorking equals false throw product in destination.
     }
 
-    public void levelPassedChecker() {
+    public boolean levelPassedChecker() {
+        if ( money > level.getRequiredMoney()) {
+            HashMap <Animal, Integer> requiredAnimals = level.getRequiredAnimals();
+            HashMap <Product, Integer> requiredProduct = level.getRequiredProduct();
+
+            ArrayList<Animal> storageAnimals= storage.getAnimals();
+            ArrayList<Product> storageProducts = storage.getProducts();
+
+            for (HashMap.Entry<Animal, Integer> entry : requiredAnimals.entrySet()) {
+                Integer numberOfAnimals = 0;
+                for (Animal animal : storageAnimals) {
+                    if (animal.equals(entry.getKey())) {
+                        numberOfAnimals ++;
+                    }
+                }
+                if (numberOfAnimals < entry.getValue()) {
+                    return false;
+                }
+            }
+            for (HashMap.Entry<Product, Integer> entry : requiredProduct.entrySet()) {
+                Integer numberOfProducts = 0;
+                for (Product product : storageProducts) {
+                    if (product.equals(entry.getKey())) {
+                        numberOfProducts ++;
+                    }
+                }
+                if (numberOfProducts < entry.getValue()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public ArrayList<Animal> getAnimals() {
