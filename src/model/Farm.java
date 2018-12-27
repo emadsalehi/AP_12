@@ -16,6 +16,24 @@ public class Farm {
     }
 
     public Cell checkWildAndFarmCollision(Cell cell) {
+        for(int i = 0 ; i < 30 ; i++){
+            for (int j = 0 ; j < 30 ; j++){
+                ArrayList<Animal> cellAnimals = cells[i][j].getAnimals();
+                ArrayList<Animal> farmAnimals = new ArrayList<Animal>();
+                ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
+                for (Animal animal : cellAnimals){
+                    if(animal instanceof FarmAnimal){
+                        farmAnimals.add(animal);
+                    }else {
+                        wildAnimals.add(animal);
+                    }
+                }
+                if (!farmAnimals.isEmpty() && !wildAnimals.isEmpty()){
+                    cellAnimals.clear();
+                    cells[i][j].setAnimals(cellAnimals);
+                }
+            }
+        }
         return null;
     }
 
