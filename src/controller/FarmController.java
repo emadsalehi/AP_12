@@ -9,6 +9,8 @@ import java.util.Iterator;
 public class FarmController {
     private Farm farm = new Farm();
     private View view = new View();
+    private int truckTravelTimer = (int)(1.0 / farm.getTruck().getSpeed());
+    private int helicopterTravelTimer = (int)(1.0 / (int)farm.getHelicopter().getSpeed());
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
     public void listenForCommand() {
@@ -67,6 +69,7 @@ public class FarmController {
                         ArrayList<Animal> animals = truck.getAnimals();
                         animals.add(new WildAnimal(0 , 0 , wildAnimalType));
                         truck.setAnimals(animals);
+                        farm.setTruck(truck);
                     } //TODO else ---> print not enough capacity
                 }
             }
@@ -76,6 +79,7 @@ public class FarmController {
                         ArrayList<Animal> animals = truck.getAnimals();
                         animals.add(new FarmAnimal(0 , 0 , farmAnimalType));
                         truck.setAnimals(animals);
+                        farm.setTruck(truck);
                     }
                 }
             }
@@ -85,6 +89,7 @@ public class FarmController {
                         ArrayList<Product> products = truck.getProducts();
                         products.add(new PrimitiveProduct(primitiveProductType));
                         truck.setProducts(products);
+                        farm.setTruck(truck);
                     }
                 }
             }
@@ -94,6 +99,7 @@ public class FarmController {
                         ArrayList<Product> products = truck.getProducts();
                         products.add(new SecondaryProduct(secondaryProductType));
                         truck.setProducts(products);
+                        farm.setTruck(truck);
                     }
                 }
             }
@@ -106,6 +112,7 @@ public class FarmController {
                         products.add(new PrimitiveProduct(primitiveProductType));
                         helicopter.setProducts(products);
                         farm.setMoney(farm.getMoney() - primitiveProductType.getBuyCost());
+                        farm.setHelicopter(helicopter);
                     }
                 }
             }
@@ -157,11 +164,47 @@ public class FarmController {
     }
 
     public void clearAction(ClearRequest request) {
-        
+        if (request.getVehicleTypeName().equals("truck")){
+            Truck truck = farm.getTruck();
+            Storage storage = farm.getStorage();
+            ArrayList<Animal> truckAnimals = truck.getAnimals();
+            ArrayList<Product> truckProducts = truck.getProducts();
+            ArrayList<Animal> storageAnimals = storage.getAnimals();
+            ArrayList<Product> storageProducts = storage.getProducts();
+            for (Animal animal : truck.getAnimals()){
+                storageAnimals.add(animal);
+            }
+            for (Product product : truck.getProducts()){
+                storageProducts.add(product);
+            }
+            storage.setAnimals(storageAnimals);
+            storage.setProducts(storageProducts);
+            farm.setStorage(storage);
+            truckAnimals.clear();
+            truckProducts.clear();
+            truck.setAnimals(truckAnimals);
+            truck.setProducts(truckProducts);
+            farm.setTruck(truck);
+        }else{
+            Helicopter helicopter = farm.getHelicopter();
+            ArrayList<Product> helicopterProducts = helicopter.getProducts();
+            farm.setMoney(farm.getMoney() + helicopter.calculateRequiredMoney());
+            helicopterProducts.clear();
+            helicopter.setProducts(helicopterProducts);
+            farm.setHelicopter(helicopter);
+        }
     }
 
     public void goAction(GoRequest request) {
-
+        if(request.getVehivlePartName().equals("truck")){
+            Truck truck = farm.getTruck();
+            truck.setAvailable(false);
+            farm.setTruck(truck);
+        }else{
+            Helicopter helicopter = farm.getHelicopter();
+            helicopter.setAvailable(false);
+            farm.setHelicopter(helicopter);
+        }
     }
 
     public void loadCustomAction(LoadCustomRequest request) {

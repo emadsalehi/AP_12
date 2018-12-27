@@ -87,6 +87,7 @@ public class Truck {
         this.animals = animals;
     }
 
+
     public int calculatePaidMoney() {
         int paidMoney = 0;
         for (Product product : products){
@@ -122,4 +123,5 @@ public class Truck {
         }
         return usedCapacity;
     }
+
 }
