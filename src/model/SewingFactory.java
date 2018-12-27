@@ -8,7 +8,7 @@ public class SewingFactory extends WorkShop {
     }
 
     @Override
-    public int getRepairCost() {
+    public int getUpgradeCost() {
         return 0;
     }
 

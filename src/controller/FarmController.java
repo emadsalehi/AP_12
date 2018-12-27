@@ -2,6 +2,7 @@ package controller;
 import model.*;
 import model.request.StartRequest;
 import model.request.TurnRequest;
+import model.request.UpgradeRequest;
 import model.request.WellRequest;
 import view.View;
 
@@ -208,8 +209,84 @@ public class FarmController {
         }
     }
 
-    public void upgradeAction() {
-        
+    public void upgradeAction(UpgradeRequest request) {
+        if (request.getPartTOUpgradeName().equals("cat")) {
+            for (Animal animal : farm.getAnimals())
+                if (animal instanceof Cat) {
+                    if (animal.getLevel == 2)
+                        view.logLevelIsHighest();
+                    else if (farm.getMoney() < ((Cat) animal).getUpgardeCost())
+                        view.logNotEnoughMoney();
+                    else {
+                        farm.setMoney(farm.getMoney() - ((Cat) animal).getUpgradeost());
+                        animal.upgrade();
+                    }
+                }
+        } else if (request.getPartTOUpgradeName().equals("well")) {
+            if (farm.getWell().getLevel() == 4)
+                view.logLevelIsHighest();
+            else if (farm.getMoney() < farm.getWell().getUpgardeCost())
+                view.logNotEnoughMoney();
+            else {
+                farm.setMoney(farm.getMoney() - farm.getWell().getUpgardeCost());
+                farm.getWell().upgarde();
+            }
+        } else if (request.getPartTOUpgradeName().equals("truck")) {
+            if (farm.getTruck().getLevel() == 4)
+                view.logLevelIsHighest();
+            else if (farm.getMoney() < farm.getTruck().getUpgradeCost())
+                view.logNotEnoughMoney();
+            else {
+                farm.setMoney(farm.getMoney() - farm.getTruck().getUpgradeCost());
+                farm.getTruck().upgarde();
+            }
+        } else if (request.getPartTOUpgradeName().equals("helicopter")) {
+            if (farm.getHelicopter().getLevel() == 4)
+                view.logLevelIsHighest();
+            else if (farm.getMoney() < farm.getHelicopter().getUpgradeCost())
+                view.logNotEnoughMoney();
+            else {
+                farm.setMoney(farm.getMoney() - farm.getHelicopter().getUpgradeCost());
+                farm.getHelicopter().upgrade();
+            }
+        } else if (request.getPartTOUpgradeName().equals("warehouse")) {
+            if (farm.getStorage().getLevel() == 4)
+                view.logLevelIsHighest();
+            else if (farm.getMoney() < farm.getStorage().getUpgradeCost())
+                view.logNotEnoughMoney();
+            else {
+                farm.setMoney(farm.getMoney() - farm.getStorage().getUpgradeCost());
+                farm.getStorage().upgrade();
+            }
+        } else {
+            WorkShop selectedWorkShop = null;
+            for (WorkShop workShop : farm.getWorkShops()) {
+                if (request.getPartTOUpgradeName().equals("sewingfactory") && workShop instanceof SewingFactory)
+                    selectedWorkShop = workShop;
+                else if (request.getPartTOUpgradeName().equals("spinnery") && workShop instanceof Spinnery)
+                    selectedWorkShop = workShop;
+                else if (request.getPartTOUpgradeName().equals("eggpowderplant") && workShop instanceof EggPowderPlant)
+                    selectedWorkShop = workShop;
+                else if (request.getPartTOUpgradeName().equals("weavingfactory") && workShop instanceof WeavingFactory)
+                    selectedWorkShop = workShop;
+                else if (request.getPartTOUpgradeName().equals("cookiebakery") && workShop instanceof CookieBakery)
+                    selectedWorkShop = workShop;
+                else if (request.getPartTOUpgradeName().equals("cakebakery") && workShop instanceof CakeBakery)
+                    selectedWorkShop = workShop;
+                else {
+                    view.logWrongCommand();
+                    return;
+                }
+            }
+            if (selectedWorkShop.getLevel() == 4)
+                view.logLevelIsHighest();
+            else if (farm.getMoney() < selectedWorkShop.getUpgradeCost())
+                view.logNotEnoughMoney();
+            else {
+                farm.setMoney(farm.getMoney() - selectedWorkShop.getUpgradeCost());
+                selectedWorkShop.upgrade();
+            }
+        }
     }
 
     public void wellAction(WellRequest request) {
@@ -217,9 +294,12 @@ public class FarmController {
             view.logNotEnoughMoney();
             return;
         }
-        farm.setMoney(farm.getMoney() - farm.getWell().getFillPrice());
-        if (!farm.getWell().isWorking())
+        if (!farm.getWell().isWorking()) {
+            farm.setMoney(farm.getMoney() - farm.getWell().getFillPrice());
             farm.getWell().fill();
+        } else {
+            view.logWellIsWorking();
+        }
     }
 
     public Integer[] getAnimalDestination(Animal animal, Cell[][] cells) {

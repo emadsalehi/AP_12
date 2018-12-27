@@ -17,7 +17,7 @@ public abstract class WorkShop {
         this.numberOfProcessedProduct = numberOfProcessedProduct;
     }
 
-    public void upgradeWorkShop() {
+    public void upgrade() {
         this.level += 1;
     }
 
@@ -44,7 +44,7 @@ public abstract class WorkShop {
     }
 
     //todo complete this method for each workshop.
-    public abstract int getRepairCost();
+    public abstract int getUpgradeCost();
 
     public abstract SecondaryProduct getProduct();
 
