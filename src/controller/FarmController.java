@@ -73,12 +73,37 @@ public class FarmController {
         }
     }
 
-    public void printAction() {
+    public void printAction(String kind) {
+        if (kind.equals("info")) {
 
+        }
+        else if (kind.equals("map")) {
+
+        }
+        else if (kind.equals("levels")){
+
+        }
+        else if (kind.equals("warehouse")) {
+
+        }
+        else if (kind.equals("well")) {
+
+        }
+        else if (kind.equals("workshops")) {
+
+        }
+        else if (kind.equals("truck")) {
+
+        }
+        else if (kind.equals("helicopter")) {
+
+        }
+        //print [info|map|levels|warehouse|well|workshops|truck|helicopter]
     }
 
-    public void runAction() {
-
+    public void runAction(String path) throws FileNotFoundException {
+        Gson gson = new Gson();
+        farm = gson.fromJson(new FileReader(path), Farm.class);
     }
 
     public void saveGameAction() {

@@ -12,6 +12,31 @@ public class Farm {
     private Helicopter helicopter;
     private Truck truck;
     private Level level;
+    private int time;
+
+    public ArrayList<WorkShop> getWorkShops() {
+        return workShops;
+    }
+
+    public void setWorkShops(ArrayList<WorkShop> workShops) {
+        this.workShops = workShops;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public void setCells(Cell[][] cells) {
+        this.cells = cells;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 
     public void updateCells() {
     }
