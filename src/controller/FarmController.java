@@ -2,6 +2,7 @@ package controller;
 import model.*;
 import model.request.StartRequest;
 import model.request.TurnRequest;
+import model.request.WellRequest;
 import view.View;
 
 import java.util.ArrayList;
@@ -190,6 +191,7 @@ public class FarmController {
                     farm.setCells(cells);
                 }
             }
+            farm.getWell().rander();
             farm.updateCells();
             farm.getHelicopter().nextTrun();
             if (farm.getHelicopter().isReadyToDeliver()) {
@@ -207,11 +209,17 @@ public class FarmController {
     }
 
     public void upgradeAction() {
-
+        
     }
 
-    public void wellAction() {
-
+    public void wellAction(WellRequest request) {
+        if (farm.getMoney() < farm.getWell().getFillPrice()) {
+            view.logNotEnoughMoney();
+            return;
+        }
+        farm.setMoney(farm.getMoney() - farm.getWell().getFillPrice());
+        if (!farm.getWell().isWorking())
+            farm.getWell().fill();
     }
 
     public Integer[] getAnimalDestination(Animal animal, Cell[][] cells) {
