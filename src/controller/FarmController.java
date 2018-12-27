@@ -1,6 +1,16 @@
 package controller;
 import model.*;
+import model.exceptions.NotPossibleException;
 import view.View;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonStreamParser;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 
 public class FarmController {
     private Farm farm = new Farm();
@@ -35,16 +45,32 @@ public class FarmController {
 
     }
 
-    public void loadGameAction() {
-
+    public void loadGameAction(String path) throws FileNotFoundException {
+        Gson gson = new Gson();
+        farm = gson.fromJson(new FileReader(path), Farm.class);
     }
 
-    public void pickUpAction() {
-
+    public void pickUpAction(int x, int y) {
+        if ( x < 0 || x > 29 || y < 0 || y > 29) {
+            throw  new NotPossibleException("pickUp");
+        }
+        else {
+            farm.userPickUp(x, y);
+        }
     }
 
-    public void plantAction() {
+    public void plantAction(int x, int y) {
+        int[] xDisplace = {-1,0,1,-1,0,1,-1,0,1};
+        int[] yDisplace = {-1,-1,-1,0,0,0,1,1,1};
 
+        for ( int i = 0 ; i < 9 ; i++) {
+            if (x + xDisplace[i] < 0 || x+xDisplace[i]>29 || y+yDisplace[i] < 0 || y+yDisplace[i] > 29) {
+                continue;
+            }
+            else {
+                farm.irrigate(x + xDisplace[i], y + yDisplace[i]);
+            }
+        }
     }
 
     public void printAction() {
