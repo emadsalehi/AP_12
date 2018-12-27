@@ -4,6 +4,7 @@ import model.request.*;
 import view.View;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FarmController {
     private Farm farm = new Farm();
@@ -104,6 +105,7 @@ public class FarmController {
                         ArrayList<Product> products = helicopter.getProducts();
                         products.add(new PrimitiveProduct(primitiveProductType));
                         helicopter.setProducts(products);
+                        farm.setMoney(farm.getMoney() - primitiveProductType.getBuyCost());
                     }
                 }
             }
@@ -130,11 +132,32 @@ public class FarmController {
     }
 
     public void cageAction(CageRequest request) {
-
+        boolean wildFoundFlag = false;
+        Storage storage = farm.getStorage();
+        Cell[][] cells = farm.getCells();
+        ArrayList<Animal> cellAnimals = cells[request.getX()][request.getY()].getAnimals();
+        Iterator<Animal> animalIterator = cellAnimals.iterator();
+        while (animalIterator.hasNext()){
+            Animal animal = animalIterator.next();
+            if (animal instanceof WildAnimal){
+                wildFoundFlag = true;
+                if (((WildAnimal) animal).getWildAnimalType().getDepotSize() + storage.calculateUsedCapacity() <= storage.getCapacity()){
+                    ArrayList<Animal> animals = storage.getAnimals();
+                    animals.add(animal);
+                    storage.setAnimals(animals);
+                    animalIterator.remove();
+                }else {
+                    //TODO Cage for some turns
+                }
+            }
+        }
+        farm.setStorage(storage);
+        cells[request.getX()][request.getY()].setAnimals(cellAnimals);
+        farm.setCells(cells);
     }
 
     public void clearAction(ClearRequest request) {
-
+        
     }
 
     public void goAction(GoRequest request) {
