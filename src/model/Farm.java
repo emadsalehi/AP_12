@@ -74,4 +74,43 @@ public class Farm {
         cells[animal.getX()][animal.getY()].setAnimals(animals);
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public void setCells(Cell[][] cells) {
+        this.cells = cells;
+    }
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+
+    public Well getWell() {
+        return well;
+    }
+
+    public void setWell(Well well) {
+        this.well = well;
+    }
+
+    public ArrayList<WorkShop> getWorkShops() {
+        return workShops;
+    }
+
+    public void setWorkShops(ArrayList<WorkShop> workShops) {
+        this.workShops = workShops;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
 }
