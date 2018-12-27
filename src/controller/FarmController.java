@@ -1,5 +1,6 @@
 package controller;
 import model.*;
+import model.request.StartRequest;
 import view.View;
 
 public class FarmController {
@@ -59,8 +60,32 @@ public class FarmController {
 
     }
 
-    public void startAction() {
-
+    public void startAction(StartRequest request) {
+        //todo custom workshop not handled.
+        WorkShop selectedWorkShop = null;
+        for (WorkShop workShop : farm.getWorkShops()) {
+            if (request.getWorkShopName().equals("SewingFactory") && workShop instanceof SewingFactory)
+                selectedWorkShop = workShop;
+            else if (request.getWorkShopName().equals("Spinnery") && workShop instanceof Spinnery)
+                selectedWorkShop = workShop;
+            else if (request.getWorkShopName().equals("EggPowderPlant") && workShop instanceof EggPowderPlant)
+                selectedWorkShop = workShop;
+            else if (request.getWorkShopName().equals("WeavingFactory") && workShop instanceof WeavingFactory)
+                selectedWorkShop = workShop;
+            else if (request.getWorkShopName().equals("CookieBakery") && workShop instanceof CookieBakery)
+                selectedWorkShop = workShop;
+            else if (request.getWorkShopName().equals("CakeBakery") && workShop instanceof CakeBakery)
+                selectedWorkShop = workShop;
+            else {
+                view.logWrongCommand();
+                return;
+            }
+        }
+        if (selectedWorkShop.isWorking()) {
+            view.logWorkShopIsWorking();
+            return;
+        }
+        selectedWorkShop.startWorkShop();
     }
 
     public void turnAction() {
@@ -68,7 +93,7 @@ public class FarmController {
     }
 
     public void upgradeAction() {
-
+        
     }
 
     public void wellAction() {

@@ -26,7 +26,7 @@ public abstract class WorkShop {
             if (this.timeToFinish != 0)
                 this.timeToFinish -= 1;
             else {
-                this.timeToFinish = this.maxTimeToFinish - 1;
+                this.timeToFinish = this.maxTimeToFinish;
                 this.isWorking = false;
             }
         }
@@ -40,6 +40,7 @@ public abstract class WorkShop {
 
     public void startWorkShop(){
         this.isWorking = true;
+        this.timeToFinish = this.maxTimeToFinish - 1;
     }
 
     //todo complete this method for each workshop.
