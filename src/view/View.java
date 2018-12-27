@@ -9,4 +9,9 @@ public class View {
     public void logNotEnoughMoney(){
         System.out.println("Not Enough Money");
     }
+
+    public void logNoWildAnimalFound(){
+        System.out.println("No Wild Animal Found");
+    }
+
 }
