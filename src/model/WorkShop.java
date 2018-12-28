@@ -10,6 +10,7 @@ public abstract class WorkShop {
     private int numberOfRawProduct = 1;
     private int numberOfProcessedProduct = 1;
 
+    public void setNumberOfProcessedProduct(int numberOfProcessedProduct) {
     public WorkShop(int maxTimeToFinish, int throwedProductX, int throwedProductY, int numberOfProcessedProduct) {
         this.maxTimeToFinish = maxTimeToFinish;
         this.throwedProductX = throwedProductX;

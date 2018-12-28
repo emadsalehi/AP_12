@@ -10,4 +10,8 @@ public class SecondaryProduct extends Product {
     public SecondaryProductType getSecondaryProductType() {
         return secondaryProductType;
     }
+
+    public void setSecondaryProductType(SecondaryProductType secondaryProductType) {
+        this.secondaryProductType = secondaryProductType;
+    }
 }

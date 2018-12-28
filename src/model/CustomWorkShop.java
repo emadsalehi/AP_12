@@ -1,7 +1,21 @@
 package model;
 
 public class CustomWorkShop extends WorkShop {
+    private SecondaryProduct processedProduct;
+    private Product rawProduct;
 
+
+    public void setProcessedProduct(SecondaryProduct processedProduct) {
+        this.processedProduct = processedProduct;
+    }
+
+    public Product getRawProduct() {
+        return rawProduct;
+    }
+
+    public void setRawProduct(Product rawProduct) {
+        this.rawProduct = rawProduct;
+      
     public CustomWorkShop(int maxTimeToFinish, int throwedProductX, int throwedProductY, int numberOfProcessedProduct) {
         //todo replace variables with number for each workshop.
         super(maxTimeToFinish, throwedProductX, throwedProductY, numberOfProcessedProduct);
@@ -14,7 +28,9 @@ public class CustomWorkShop extends WorkShop {
 
     @Override
     public SecondaryProduct getProduct() {
-        SecondaryProduct secondaryProduct = new SecondaryProduct(SecondaryProductType.CAKE);
+        SecondaryProduct secondaryProduct = processedProduct;
         return secondaryProduct;
     }
+
+
 }

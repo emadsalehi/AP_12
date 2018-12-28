@@ -5,14 +5,18 @@ public class Dog extends Animal {
 
     public Dog(int x, int y) {
         super(x, y);
+        setBuyPrice(2000);
+        setSellPrice(1500);
     }
+
 
     @Override
     public void move(int destinationX, int destinationY) {
-
-    }
-
-    public int calculateUpgradePrice() {
-        return 0;
+        if (destinationX == 31) {
+            randomMove();
+        }
+        else {
+            intendedMove(destinationX, destinationY);
+        }
     }
 }

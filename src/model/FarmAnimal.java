@@ -4,6 +4,8 @@ public class FarmAnimal extends Animal {
     private boolean isHungry;
     private int timeTillHungry;
     private FarmAnimalType farmAnimalType;
+    private int hoursToCreateProduct;
+    private int maxTimeToproduce;
 
     public FarmAnimal(int x, int y, FarmAnimalType farmAnimalType) {
         super(x, y);
@@ -12,7 +14,12 @@ public class FarmAnimal extends Animal {
 
     @Override
     public void move(int destinationX, int destinationY) {
-
+        if (destinationX == 31) {
+            randomMove();
+        }
+        else {
+            intendedMove(destinationX, destinationY);
+        }
     }
 
 

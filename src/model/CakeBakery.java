@@ -2,6 +2,7 @@ package model;
 
 public class CakeBakery extends WorkShop {
 
+
     public CakeBakery(int maxTimeToFinish, int throwedProductX, int throwedProductY, int numberOfProcessedProduct) {
         //todo replace variables with number for each workshop.
         super(maxTimeToFinish, throwedProductX, throwedProductY, numberOfProcessedProduct);
@@ -17,4 +18,5 @@ public class CakeBakery extends WorkShop {
         SecondaryProduct secondaryProduct = new SecondaryProduct(SecondaryProductType.CAKE);
         return secondaryProduct;
     }
+
 }
