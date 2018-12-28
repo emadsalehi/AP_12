@@ -17,6 +17,24 @@ public class Farm {
     }
 
     public Cell checkWildAndFarmCollision(Cell cell) {
+        for(int i = 0 ; i < 30 ; i++){
+            for (int j = 0 ; j < 30 ; j++){
+                ArrayList<Animal> cellAnimals = cells[i][j].getAnimals();
+                ArrayList<Animal> farmAnimals = new ArrayList<Animal>();
+                ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
+                for (Animal animal : cellAnimals){
+                    if(animal instanceof FarmAnimal){
+                        farmAnimals.add(animal);
+                    }else {
+                        wildAnimals.add(animal);
+                    }
+                }
+                if (!farmAnimals.isEmpty() && !wildAnimals.isEmpty()){
+                    cellAnimals.clear();
+                    cells[i][j].setAnimals(cellAnimals);
+                }
+            }
+        }
         return null;
     }
 
@@ -63,13 +81,6 @@ public class Farm {
         return null;
     }
 
-    public Cell[][] getCells() {
-        return cells;
-    }
-
-    public void setCells(Cell[][] cells) {
-        this.cells = cells;
-    }
 
     public int getMoney() {
         return money;
@@ -77,6 +88,21 @@ public class Farm {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public void addAnimal(Animal animal){
+        ArrayList<Animal> animals = cells[animal.getX()][animal.getY()].getAnimals();
+        animals.add(animal);
+        cells[animal.getX()][animal.getY()].setAnimals(animals);
+    }
+
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public void setCells(Cell[][] cells) {
+        this.cells = cells;
     }
 
     public Storage getStorage() {
@@ -103,6 +129,7 @@ public class Farm {
         this.workShops = workShops;
     }
 
+
     public Helicopter getHelicopter() {
         return helicopter;
     }
@@ -118,6 +145,7 @@ public class Farm {
     public void setTruck(Truck truck) {
         this.truck = truck;
     }
+
 
     public Level getLevel() {
         return level;

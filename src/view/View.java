@@ -7,6 +7,11 @@ public class View {
         return input.nextLine();
     }
 
+    public void logNoWildAnimalFound(){
+        System.out.println("No Wild Animal Found");
+    }
+
+
     public void logWrongCommand() {
         System.out.println("Wrong command!");
     }

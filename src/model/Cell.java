@@ -8,6 +8,7 @@ public class Cell {
     private boolean hasPlant = false;
     private int plantLevel;
 
+
     public void addProduct(Product product) {
         this.products.add(product);
     }
@@ -19,6 +20,7 @@ public class Cell {
     public void setAnimals(ArrayList<Animal> animals) {
         this.animals = animals;
     }
+
 
     public ArrayList<Product> getProducts() {
         return products;
