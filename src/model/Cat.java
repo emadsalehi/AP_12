@@ -28,4 +28,8 @@ public class Cat extends Animal {
             throw new NotPossibleException("catCalculateUpgradePrice");
         }
     }
+
+    public int getLevel() {
+        return level;
+    }
 }

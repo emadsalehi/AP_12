@@ -340,7 +340,7 @@ public class FarmController {
             for (Product product : storage.getProducts()) {
                 if (product instanceof SecondaryProduct && ((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.CLOTHES)
                     product1 = product;
-                else if (product instanceof PrimitiveProduct && ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.plume)
+                else if (product instanceof PrimitiveProduct && ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.PLUME)
                     product2 = product;
             }
             if (product1 == null || product2 == null) {
@@ -353,7 +353,7 @@ public class FarmController {
             Product product1 = null;
             for (Product product : storage.getProducts())
                 if (product instanceof PrimitiveProduct &&
-                        ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.wool)
+                        ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.WOOL)
                     product1 = product;
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
@@ -364,7 +364,7 @@ public class FarmController {
             Product product1 = null;
             for (Product product : storage.getProducts())
                 if (product instanceof PrimitiveProduct &&
-                        ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.egg)
+                        ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.EGG)
                     product1 = product;
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
@@ -398,7 +398,7 @@ public class FarmController {
             Product product2 = null;
             for (Product product : storage.getProducts()) {
                 if (product instanceof PrimitiveProduct &&
-                        ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.flour)
+                        ((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.FLOUR)
                     product1 = product;
                 else if (product instanceof SecondaryProduct &&
                         ((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.COOKIE)
@@ -434,9 +434,9 @@ public class FarmController {
                     farm.setCells(cells);
                 }
             }
-            farm.getWell().rander();
+            farm.getWell().render();
             farm.updateCells();
-            farm.getHelicopter().nextTrun();
+            farm.getHelicopter().nextTurn();
             if (farm.getHelicopter().isReadyToDeliver()) {
                 for (Product product : farm.getHelicopter().getProducts()) {
                     int randomX = (int)(Math.random() * 30);
@@ -458,13 +458,13 @@ public class FarmController {
         if (request.getPartTOUpgradeName().equals("cat")) {
             for (Animal animal : farm.getAnimals())
                 if (animal instanceof Cat) {
-                    if (animal.getLevel == 2)
+                    if (((Cat) animal).getLevel() == 2)
                         view.logLevelIsHighest();
-                    else if (farm.getMoney() < ((Cat) animal).getUpgardeCost())
+                    else if (farm.getMoney() < ((Cat) animal).getUpgradeCost())
                         view.logNotEnoughMoney();
                     else {
-                        farm.setMoney(farm.getMoney() - ((Cat) animal).getUpgradeost());
-                        animal.upgrade();
+                        farm.setMoney(farm.getMoney() - ((Cat) animal).getUpgradeCost());
+                        ((Cat) animal).upgrade();
                     }
                 }
         } else if (request.getPartTOUpgradeName().equals("well")) {
@@ -472,11 +472,11 @@ public class FarmController {
                 view.logLevelIsHighest();
             else if (farm.getWell().isWorking())
                 view.logWellIsWorking();
-            else if (farm.getMoney() < farm.getWell().getUpgardeCost())
+            else if (farm.getMoney() < farm.getWell().getUpgradePrice())
                 view.logNotEnoughMoney();
             else {
-                farm.setMoney(farm.getMoney() - farm.getWell().getUpgardeCost());
-                farm.setWell(farm.getWell().upgarde());
+                farm.setMoney(farm.getMoney() - farm.getWell().getUpgradePrice());
+                farm.getWell().upgradeLevel();
             }
         } else if (request.getPartTOUpgradeName().equals("truck")) {
             if (farm.getTruck().getLevel() == 4)
@@ -487,7 +487,7 @@ public class FarmController {
                 view.logNotEnoughMoney();
             else {
                 farm.setMoney(farm.getMoney() - farm.getTruck().getUpgradeCost());
-                farm.setTruck(farm.getTruck().upgarde());
+                farm.getTruck().upgrade();
             }
         } else if (request.getPartTOUpgradeName().equals("helicopter")) {
             if (farm.getHelicopter().getLevel() == 4)
@@ -498,16 +498,16 @@ public class FarmController {
                 view.logNotEnoughMoney();
             else {
                 farm.setMoney(farm.getMoney() - farm.getHelicopter().getUpgradeCost());
-                farm.setHelicopter(farm.getHelicopter().upgrade());
+                farm.getHelicopter().upgrade();
             }
         } else if (request.getPartTOUpgradeName().equals("warehouse")) {
             if (farm.getStorage().getLevel() == 4)
                 view.logLevelIsHighest();
-            else if (farm.getMoney() < farm.getStorage().getUpgradeCost())
+            else if (farm.getMoney() < farm.getStorage().getUpgradePrice())
                 view.logNotEnoughMoney();
             else {
-                farm.setMoney(farm.getMoney() - farm.getStorage().getUpgradeCost());
-                farm.setStorage(farm.getStorage().upgrade());
+                farm.setMoney(farm.getMoney() - farm.getStorage().getUpgradePrice());
+                farm.getStorage().upgradeStorage();
             }
         } else {
             WorkShop selectedWorkShop = null;
