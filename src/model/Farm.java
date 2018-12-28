@@ -27,8 +27,24 @@ public class Farm {
        displacer();
        for (int i = 0 ; i < 30 ; i++) {
            for (int j = 0 ; j < 30 ; j++) {
-               checkWildAndFarmCollision(cells[i][j]);
-               catProductCollision(cells[i][j]);
+               Cell cell = cells[i][j];
+               checkWildAndFarmCollision(cell);
+               catProductCollision(cell);
+               if (cell.isHasPlant()) {
+                   for (Animal animal : cell.getAnimals()) {
+                       if (animal instanceof FarmAnimal) {
+                           if (((FarmAnimal) animal).isHungry()) {
+                               ((FarmAnimal) animal).setTimeTillHungry(((FarmAnimal) animal).getTimeTillHungry() + 1);
+                               cell.setPlantLevel(cell.getPlantLevel()-1);
+                           }
+                           if (cell.getPlantLevel()<1) {
+                               cell.setPlantLevel(0);
+                               cell.setHasPlant(false);
+                               break;
+                           }
+                       }
+                   }
+               }
            }
        }
     }
