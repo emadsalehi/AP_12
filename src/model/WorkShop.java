@@ -2,18 +2,52 @@ package model;
 
 public abstract class WorkShop {
     private boolean isWorking = false;
-    private int timeToFinish;
+    private int timeToFinish = 0;
     private int maxTimeToFinish;
-    private int level;
+    private int level = 1;
     private int throwedProductX;
     private int throwedProductY;
     private int numberOfRawProduct = 1;
-    private int numberOfProcessedProduct;
+    private int numberOfProcessedProduct = 1;
 
-    public void updateWorkShop() {
-        //todo Set hoursToFinish to maxHoursToFinish + 1 if work done.
-
+    public void setNumberOfProcessedProduct(int numberOfProcessedProduct) {
+    public WorkShop(int maxTimeToFinish, int throwedProductX, int throwedProductY, int numberOfProcessedProduct) {
+        this.maxTimeToFinish = maxTimeToFinish;
+        this.throwedProductX = throwedProductX;
+        this.throwedProductY = throwedProductY;
+        this.numberOfProcessedProduct = numberOfProcessedProduct;
     }
+
+    public void upgrade() {
+        this.level += 1;
+    }
+
+    public void nextTurn() {
+        if (this.isWorking) {
+            if (this.timeToFinish != 0)
+                this.timeToFinish -= 1;
+            else {
+                this.timeToFinish = this.maxTimeToFinish;
+                this.isWorking = false;
+            }
+        }
+    }
+
+    public boolean readyForDelivery(){
+        if (!this.isWorking && this.timeToFinish == this.maxTimeToFinish )
+            return true;
+        return false;
+    }
+
+    public void startWorkShop(){
+        this.isWorking = true;
+        this.timeToFinish = this.maxTimeToFinish - 1;
+    }
+
+    //todo complete this method for each workshop.
+    public abstract int getUpgradeCost();
+
+    public abstract SecondaryProduct getProduct();
 
     public boolean isWorking() {
         return isWorking;
@@ -78,6 +112,4 @@ public abstract class WorkShop {
     public void setNumberOfProcessedProduct(int numberOfProcessedProduct) {
         this.numberOfProcessedProduct = numberOfProcessedProduct;
     }
-
-    public abstract SecondaryProduct getProduct();
 }

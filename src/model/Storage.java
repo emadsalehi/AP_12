@@ -57,4 +57,36 @@ public class Storage {
         }
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getUpgradePrice() {
+        return upgradePrice;
+    }
+
+    public void setUpgradePrice(int upgradePrice) {
+        this.upgradePrice = upgradePrice;
+    }
+
+    public int calculateUsedCapacity(){
+        int usedCapacity = 0;
+        for(Product p : products){
+            if (p instanceof PrimitiveProduct){
+                usedCapacity += ((PrimitiveProduct) p).getPrimitiveProductType().getDepotSize();
+            }else if (p instanceof  SecondaryProduct){
+                usedCapacity += ((SecondaryProduct) p).getSecondaryProductType().getDepotSize();
+            }
+        }
+        for (Animal a : animals){
+            if (a instanceof WildAnimal){
+                usedCapacity += ((WildAnimal) a).getWildAnimalType().getDepotSize();
+            }
+        }
+        return usedCapacity;
+    }
 }

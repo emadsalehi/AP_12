@@ -12,9 +12,6 @@ public class View {
         return input.nextLine();
     }
 
-    public void logNotEnoughMoney() {
-        System.out.println("Not Enough Money");
-    }
     public void logInfo(int money, int time, Level level, Storage storage) {
         System.out.println("Money: " + money + " Time: " + time);
         System.out.println("Level: ");
@@ -49,6 +46,7 @@ public class View {
                     entry.getValue()+" ");
         }
     }
+  
     public void logMap (Farm farm) {
         Cell[][] cells = farm.getCells();
         for (int i = 0 ; i < 30 ; i++) {
@@ -68,6 +66,7 @@ public class View {
             System.out.printf("\n");
         }
     }
+  
     public void logLevel (Level level) {
         if (level.getRequiredMoney() != 0) {
             System.out.println("Money: " +level.getRequiredMoney()+" ");
@@ -81,14 +80,17 @@ public class View {
             System.out.print(entry.getKey().getClass().getSimpleName() + ": " +entry.getValue()+" ");
         }
     }
+  
     public void logWarehouse (Storage storage) {
         ArrayList <Product> products = storage.getProducts();
         ArrayList <Animal> animals = storage.getAnimals();
         PROBLEM
     }
+  
     public void logWell (Well well) {
         System.out.println(well.getWaterLeft()+"/"+well.getCapacity());
     }
+  
     public void logWorkshop (Farm farm) {
         ArrayList<WorkShop> workShops = farm.getWorkShops();
         for (WorkShop workShop : workShops) {
@@ -109,6 +111,7 @@ public class View {
             }
         }
     }
+  
     public void logTruck (Truck truck) {
         System.out.println();
     }
@@ -116,4 +119,42 @@ public class View {
 
     }
 
+}
+
+public void logNoWildAnimalFound(){
+        System.out.println("No Wild Animal Found");
+    }
+
+
+    public void logWrongCommand() {
+        System.out.println("Wrong command!");
+    }
+
+    public void logWorkShopIsWorking() {
+        System.out.println("WorkShop is working!");
+    }
+
+    public void logRequirementsIsNotEnough() {
+        System.out.println("Requirements is not enough!");
+    }
+
+    public void logNotEnoughMoney() {
+        System.out.println("Not enough money!");
+    }
+
+    public void logWellIsWorking() {
+        System.out.println("Well is working!");
+    }
+
+    public void logLevelIsHighest() {
+        System.out.println("Level is highest.");
+    }
+
+    public void logTruckIsNotAvailable() {
+        System.out.println("Truck is not available!");
+    }
+
+    public void logHelicopterIsNotAvailable() {
+        System.out.println("Helicopter is not available!");
+    }
 }
