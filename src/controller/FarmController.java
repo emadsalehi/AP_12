@@ -10,6 +10,7 @@ import com.google.gson.JsonStreamParser;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 
 public class FarmController {
@@ -41,8 +42,12 @@ public class FarmController {
 
     }
 
-    public void loadCustomAction() {
-
+    public void loadCustomAction(String path) throws FileNotFoundException {
+        Gson gson = new Gson();
+        ArrayList<WorkShop> workShops = farm.getWorkShops();
+        CustomWorkShop customWorkShop = gson.fromJson(new FileReader(path), CustomWorkShop.class);
+        workShops.add(customWorkShop);
+        farm.setWorkShops(workShops);
     }
 
     public void loadGameAction(String path) throws FileNotFoundException {
