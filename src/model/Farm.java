@@ -97,18 +97,6 @@ public class Farm {
         //todo If product exist store it in storage and remove it from cells.
     }
 
-    public void throwWorkshopProduct() {
-        WorkShop workShop = workShops.get(0);
-        if (workShop.getTimeToFinish() == workShop.getMaxTimeToFinish() + 1 && !workShop.isWorking()) {
-            Cell destinationCell = cells [workShop.getThrowedProductX()] [workShop.getThrowedProductY()];
-            ArrayList<Product> cellProducts = destinationCell.getProducts();
-            for ( int i = 0 ; i < workShop.getNumberOfProcessedProduct() ; i++) {
-                cellProducts.add(workShop.getProduct());
-            }
-            cells [workShop.getThrowedProductX()] [workShop.getThrowedProductY()].setProducts(cellProducts);
-        }
-    }
-
     public boolean levelPassedChecker() {
         if ( money > level.getRequiredMoney()) {
             HashMap <Animal, Integer> requiredAnimals = level.getRequiredAnimals();
