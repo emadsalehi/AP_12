@@ -11,6 +11,8 @@ public class Helicopter {
     private int upgradeCost = 400;
     private ArrayList<Product> products = new ArrayList<>();
     private boolean readyToDeliver = false;
+    private int travelDuration = 12;
+    private int travelCounter = 12;
 
     public int getLevel() {
         return level;
@@ -19,6 +21,8 @@ public class Helicopter {
     public void setLevel(int level) {
         this.level = level;
         this.speed = 1 / (12 - 3 * level);   //speed = 1/travelDuration
+        this.travelDuration = 12 - 3 * level;
+        this.travelCounter = this.travelDuration;
         this.capacity = level + 2;
         this.upgradeCost = level * 100 + 400;
     }
@@ -90,5 +94,23 @@ public class Helicopter {
             }
         }
         return  usedCapacity;
+    }
+
+    public void upgrade(){
+        setLevel(getLevel() + 1);
+    }
+
+    public void nextTurn(){
+        if (!isAvailable){
+            travelCounter--;
+            if (travelCounter == 0){
+                isAvailable = true;
+                readyToDeliver = true;
+                travelCounter = travelDuration;
+            }
+        }
+    }
+    public void clearProducts(){
+        products.clear();
     }
 }

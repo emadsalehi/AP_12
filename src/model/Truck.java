@@ -11,6 +11,8 @@ public class Truck {
     private int upgradeCost = 250;
     private ArrayList<Product> products = new ArrayList<>();
     private ArrayList<Animal> animals = new ArrayList<>();
+    private int travelDuration = 20;
+    private int travelCounter = 20;
 
     public Truck(int level, double speed, int capacity, boolean isAvailable, boolean readyToPay) {
         this.level = level;
@@ -27,6 +29,8 @@ public class Truck {
     public void setLevel(int level) {
         this.level = level;
         this.speed = 1 / (20 - 5 * level);   //speed = 1/travelDuration
+        this.travelDuration = 20 - 5 * level;
+        this.travelCounter = this.travelDuration;
         this.capacity = (level + 2) * 20;    //TODO: Capacity consists of slots
         this.upgradeCost = (level - 1) * 100 + 500;
     }
@@ -122,6 +126,26 @@ public class Truck {
             }
         }
         return usedCapacity;
+    }
+
+    public void upgrade(){
+        setLevel(getLevel() + 1);
+    }
+    public void nextTurn(){
+        if(!isAvailable){
+            travelCounter--;
+            if (travelCounter == 0){
+                isAvailable = true;
+                readyToPay = true;
+                travelCounter = travelDuration;
+            }
+        }
+    }
+    public void clearProducts(){
+        products.clear();
+    }
+    public void clearAnimals(){
+        animals.clear();
     }
 
 }
