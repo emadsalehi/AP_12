@@ -16,10 +16,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FarmController {
-    private Farm farm = new Farm();
+    private Farm farm;
     private View view = new View();
-    private int truckTravelTimer = (int) (1.0 / farm.getTruck().getSpeed());
-    private int helicopterTravelTimer = (int) (1.0 / (int) farm.getHelicopter().getSpeed());
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
     public void listenForCommand() {
@@ -129,7 +127,7 @@ public class FarmController {
     }
 
     public void badAction(BadRequest request) {
-
+        
     }
 
     public void buyAction(BuyRequest request) {
