@@ -1,6 +1,7 @@
 package controller;
 import model.*;
 import model.exceptions.NotPossibleException;
+import model.request.PrintRequest;
 import view.View;
 
 import com.google.gson.Gson;
@@ -11,6 +12,7 @@ import com.google.gson.JsonStreamParser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class FarmController {
@@ -78,30 +80,31 @@ public class FarmController {
         }
     }
 
-    public void printAction(String kind) {
-        if (kind.equals("info")) {
-
+    public void printAction(PrintRequest request) {
+        String printFrom = request.getPartToPrintName();
+        if (printFrom.equals("info")) {
+            view.logInfo(farm.getMoney(), farm.getTime(), farm.getLevel(),farm.getStorage());
         }
-        else if (kind.equals("map")) {
-
+        else if (printFrom.equals("map")) {
+            view.logMap(farm);
         }
-        else if (kind.equals("levels")){
-
+        else if (printFrom.equals("levels")){
+            view.logLevel(farm.getLevel());
         }
-        else if (kind.equals("warehouse")) {
-
+        else if (printFrom.equals("warehouse")) {
+            view.logWarehouse(farm.getStorage());
         }
-        else if (kind.equals("well")) {
-
+        else if (printFrom.equals("well")) {
+            view.logWell(farm.getWell());
         }
-        else if (kind.equals("workshops")) {
-
+        else if (printFrom.equals("workshops")) {
+            view.logWorkshop(farm);
         }
-        else if (kind.equals("truck")) {
-
+        else if (printFrom.equals("truck")) {
+            view.logTruck(farm.getTruck());
         }
-        else if (kind.equals("helicopter")) {
-
+        else if (printFrom.equals("helicopter")) {
+            view.logHelicopter(farm.getHelicopter());
         }
         //print [info|map|levels|warehouse|well|workshops|truck|helicopter]
     }

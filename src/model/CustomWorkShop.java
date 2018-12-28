@@ -1,12 +1,28 @@
 package model;
 
 public class CustomWorkShop extends WorkShop {
-    SecondaryProduct processedProduct;
-    Product rawProduct;
+    private SecondaryProduct processedProduct;
+    private Product rawProduct;
+
+    public SecondaryProduct getProcessedProduct() {
+        return processedProduct;
+    }
+
+    public void setProcessedProduct(SecondaryProduct processedProduct) {
+        this.processedProduct = processedProduct;
+    }
+
+    public Product getRawProduct() {
+        return rawProduct;
+    }
+
+    public void setRawProduct(Product rawProduct) {
+        this.rawProduct = rawProduct;
+    }
 
     @Override
     public SecondaryProduct getProduct() {
-        SecondaryProduct secondaryProduct = new SecondaryProduct(SecondaryProductType.CAKE);
+        SecondaryProduct secondaryProduct = processedProduct;
         return secondaryProduct;
     }
 

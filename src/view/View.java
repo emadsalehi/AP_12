@@ -92,18 +92,28 @@ public class View {
     public void logWorkshop (Farm farm) {
         ArrayList<WorkShop> workShops = farm.getWorkShops();
         for (WorkShop workShop : workShops) {
-            if (!workShop.getClass().getSimpleName().equals("CustomWorkShop")) {
-                System.out.print(workShop.);
-                PROBLEM
+            if (workShop instanceof CustomWorkShop) {
+                System.out.print("Custom: Products: "+((CustomWorkShop) workShop).getProcessedProduct()
+                        .getSecondaryProductType().toString());
+                if (((CustomWorkShop) workShop).getRawProduct() instanceof PrimitiveProduct) {
+                    System.out.print(" Raw: "+((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
+                            .getPrimitiveProductType().toString());
+                }
+                else {
+                    System.out.print(" Raw: "+((SecondaryProduct)((CustomWorkShop) workShop).getRawProduct())
+                            .getSecondaryProductType().toString());
+                }
             }
             else {
                 System.out.print(workShop.getClass().getSimpleName()+" ");
             }
         }
     }
-    public void logTruck () {
+    public void logTruck (Truck truck) {
+        System.out.println();
+    }
+    public void logHelicopter (Helicopter helicopter) {
 
     }
-
 
 }

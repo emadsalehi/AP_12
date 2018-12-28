@@ -6,4 +6,12 @@ public class SecondaryProduct extends Product {
     public SecondaryProduct(SecondaryProductType secondaryProductType) {
         this.secondaryProductType = secondaryProductType;
     }
+
+    public SecondaryProductType getSecondaryProductType() {
+        return secondaryProductType;
+    }
+
+    public void setSecondaryProductType(SecondaryProductType secondaryProductType) {
+        this.secondaryProductType = secondaryProductType;
+    }
 }
