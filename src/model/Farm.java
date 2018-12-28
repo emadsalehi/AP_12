@@ -20,7 +20,7 @@ public class Farm {
         return null;
     }
 
-    public void dissplacer() {
+    public void displacer() {
         for (int i = 0 ; i < 30 ; i++)
             for (int j = 0 ; j < 30 ; j++)
                 for (Animal animal : this.cells[i][j].getAnimals()) {
