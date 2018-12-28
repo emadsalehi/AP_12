@@ -4,7 +4,7 @@ public abstract class WorkShop {
     private boolean isWorking = false;
     private int timeToFinish = 0;
     private int maxTimeToFinish;
-    private int level = 1;
+    private int level = 0;
     private int throwedProductX;
     private int throwedProductY;
     private int numberOfRawProduct = 1;
@@ -17,9 +17,8 @@ public abstract class WorkShop {
         this.numberOfProcessedProduct = numberOfProcessedProduct;
     }
 
-    public void upgrade() {
-        this.level += 1;
-    }
+
+    public abstract void upgrade();
 
     public void nextTurn() {
         if (this.isWorking) {
@@ -43,7 +42,6 @@ public abstract class WorkShop {
         this.timeToFinish = this.maxTimeToFinish - 1;
     }
 
-    //todo complete this method for each workshop.
     public abstract int getUpgradeCost();
 
     public abstract SecondaryProduct getProduct();

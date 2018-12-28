@@ -6,6 +6,7 @@ import model.exceptions.NotPossibleException;
 import model.request.*;
 import view.View;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -434,12 +435,11 @@ public class FarmController {
         try {
             gson.toJson(farm, new FileWriter(request.getPathToJsonFile()));
         } catch (IOException e) {
-            view.logFileNotfound();
+            view.logFileNotFound();
         }
     }
 
     public void startAction(StartRequest request) {
-        //todo custom workshop not handled.
         //todo set in farm workshop not handled.
         WorkShop selectedWorkShop = null;
         for (WorkShop workShop : farm.getWorkShops()) {
@@ -454,6 +454,8 @@ public class FarmController {
             else if (request.getWorkShopName().equals("cookiebakery") && workShop instanceof CookieBakery)
                 selectedWorkShop = workShop;
             else if (request.getWorkShopName().equals("cakebakery") && workShop instanceof CakeBakery)
+                selectedWorkShop = workShop;
+            else if (request.getWorkShopName().equals("customworkshop") && workShop instanceof CustomWorkShop)
                 selectedWorkShop = workShop;
             else {
                 view.logWrongCommand();
@@ -541,6 +543,24 @@ public class FarmController {
             }
             storage.getProducts().remove(product1);
             storage.getProducts().remove(product2);
+        } else if (selectedWorkShop instanceof CustomWorkShop) {
+            Product product1 = null;
+            if (((CustomWorkShop) selectedWorkShop).getRawProduct() instanceof PrimitiveProduct) {
+                PrimitiveProductType type = ((PrimitiveProduct) ((CustomWorkShop) selectedWorkShop).getRawProduct()).getPrimitiveProductType();
+                for (Product product : storage.getProducts())
+                    if (product instanceof PrimitiveProduct && ((PrimitiveProduct) product).getPrimitiveProductType() == type)
+                        product1 = product;
+            } else if (((CustomWorkShop) selectedWorkShop).getRawProduct() instanceof SecondaryProduct){
+                SecondaryProductType type = ((SecondaryProduct) ((CustomWorkShop) selectedWorkShop).getRawProduct()).getSecondaryProductType();
+                for (Product product : storage.getProducts())
+                    if (product instanceof SecondaryProduct && ((SecondaryProduct) product).getSecondaryProductType() == type)
+                        product1 = product;
+            }
+            if (product1 == null) {
+                view.logRequirementsIsNotEnough();
+                return;
+            }
+            storage.getProducts().remove(product1);
         }
         farm.setStorage(storage);
         selectedWorkShop.startWorkShop();

@@ -81,4 +81,8 @@ public void logNoWildAnimalFound(){
     public void logHelicopterIsNotAvailable() {
         System.out.println("Helicopter is not available!");
     }
+
+    public void logFileNotFound() {
+        System.out.println("File Not Found!");
+    }
 }

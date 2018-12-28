@@ -107,8 +107,6 @@ public class Farm {
             }
             cells [workShop.getThrowedProductX()] [workShop.getThrowedProductY()].setProducts(cellProducts);
         }
-
-        //todo Check hoursToFinish equals maxHoursToFinish + 1 and isWorking equals false throw product in destination.
     }
 
     public boolean levelPassedChecker() {
