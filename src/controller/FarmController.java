@@ -602,6 +602,10 @@ public class FarmController {
                 farm.getTruck().setReadyToPay(false);
             }
             farm.setTime(farm.getTime() + 1);
+            if (farm.levelPassedChecker()) {
+                view.logLevelPassed();
+                return;
+            }
         }
     }
 

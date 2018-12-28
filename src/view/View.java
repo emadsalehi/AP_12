@@ -85,4 +85,8 @@ public void logNoWildAnimalFound(){
     public void logFileNotFound() {
         System.out.println("File Not Found!");
     }
+
+    public void logLevelPassed() {
+        System.out.println("Level passed.\nCongratulations!");
+    }
 }
