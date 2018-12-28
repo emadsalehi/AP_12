@@ -18,6 +18,22 @@ public class Helicopter {
         return level;
     }
 
+    public int getTravelDuration() {
+        return travelDuration;
+    }
+
+    public void setTravelDuration(int travelDuration) {
+        this.travelDuration = travelDuration;
+    }
+
+    public int getTravelCounter() {
+        return travelCounter;
+    }
+
+    public void setTravelCounter(int travelCounter) {
+        this.travelCounter = travelCounter;
+    }
+
     public void setLevel(int level) {
         this.level = level;
         this.speed = 1 / (12 - 3 * level);   //speed = 1/travelDuration
