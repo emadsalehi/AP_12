@@ -5,6 +5,7 @@ public class CustomWorkShop extends WorkShop {
     private Product rawProduct;
 
 
+
     public void setProcessedProduct(SecondaryProduct processedProduct) {
         this.processedProduct = processedProduct;
     }
@@ -18,7 +19,6 @@ public class CustomWorkShop extends WorkShop {
     }
 
     public CustomWorkShop(int maxTimeToFinish, int throwedProductX, int throwedProductY, int numberOfProcessedProduct) {
-        //todo replace variables with number for each workshop.
         super(maxTimeToFinish, throwedProductX, throwedProductY, numberOfProcessedProduct);
     }
 

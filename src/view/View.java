@@ -84,7 +84,24 @@ public class View {
     public void logWarehouse (Storage storage) {
         ArrayList <Product> products = storage.getProducts();
         ArrayList <Animal> animals = storage.getAnimals();
-        PROBLEM
+        System.out.println("Warehouse: Products: ");
+        for (Product product : products) {
+            if (product instanceof PrimitiveProduct) {
+                System.out.print(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+            }
+            else {
+                System.out.print(((SecondaryProduct) product).getSecondaryProductType().toString());
+            }
+        }
+        System.out.println("Animals: ");
+        for (Animal animal: animals) {
+            if (animal instanceof FarmAnimal) {
+                System.out.print(((FarmAnimal) animal).getFarmAnimalType().toString());
+            }
+            else if (animal instanceof WildAnimal){
+                System.out.print(((WildAnimal) animal).getWildAnimalType().toString());
+            }
+        }
     }
   
     public void logWell (Well well) {
@@ -113,13 +130,40 @@ public class View {
     }
   
     public void logTruck (Truck truck) {
-        System.out.println();
+        System.out.println("Level: "+truck.getLevel()+"Capacity: "+truck.getCapacity()+"isAvailable: "
+                +truck.isAvailable()+"time until arrived: "+truck.getTravelCounter());
+        for (Product product : truck.getProducts()) {
+            if (product instanceof PrimitiveProduct) {
+                System.out.print(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+            }
+            else {
+                System.out.print(((SecondaryProduct) product).getSecondaryProductType().toString());
+            }
+        }
+        System.out.println("Animals: ");
+        for (Animal animal: truck.getAnimals()) {
+            if (animal instanceof FarmAnimal) {
+                System.out.print(((FarmAnimal) animal).getFarmAnimalType().toString());
+            }
+            else if (animal instanceof WildAnimal){
+                System.out.print(((WildAnimal) animal).getWildAnimalType().toString());
+            }
+        }
     }
     public void logHelicopter (Helicopter helicopter) {
-
+        System.out.println("Level: "+helicopter.getLevel()+"Capacity: "+helicopter.getCapacity()+"isAvailable: "
+                +helicopter.isAvailable()+"time until arrived: "+helicopter.getTravelCounter());
+        for (Product product : helicopter.getProducts()) {
+            if (product instanceof PrimitiveProduct) {
+                System.out.print(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+            }
+            else {
+                System.out.print(((SecondaryProduct) product).getSecondaryProductType().toString());
+            }
+        }
     }
 
-}
+
 
 public void logNoWildAnimalFound(){
         System.out.println("No Wild Animal Found");

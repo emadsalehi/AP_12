@@ -56,6 +56,7 @@ public class Storage {
                 throw new NotPossibleException("Storage");
         }
     }
+    
 
     public int getCapacity() {
         return capacity;

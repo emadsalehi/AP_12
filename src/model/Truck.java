@@ -14,6 +14,22 @@ public class Truck {
     private int travelDuration = 20;
     private int travelCounter = 20;
 
+    public int getTravelDuration() {
+        return travelDuration;
+    }
+
+    public void setTravelDuration(int travelDuration) {
+        this.travelDuration = travelDuration;
+    }
+
+    public int getTravelCounter() {
+        return travelCounter;
+    }
+
+    public void setTravelCounter(int travelCounter) {
+        this.travelCounter = travelCounter;
+    }
+
     public Truck(int level, double speed, int capacity, boolean isAvailable, boolean readyToPay) {
         this.level = level;
         this.speed = speed;
