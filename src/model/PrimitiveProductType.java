@@ -4,7 +4,8 @@ public enum PrimitiveProductType {
     EGG(1 , 20 , 10),
     MILK(10 , 2000 , 1000),
     FLOUR(2 , 20 , 10),
-    PLUME(2 , 200 , 100);
+    PLUME(2 , 200 , 100),
+    WOOL(5 , 200 , 100);
     private final int depotSize;
     private final int buyCost;
     private final int saleCost;
