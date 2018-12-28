@@ -1,33 +1,24 @@
 package controller;
+
 import com.google.gson.Gson;
 import model.*;
 import model.exceptions.NotPossibleException;
-import model.request.PrintRequest;
-import view.View;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonStreamParser;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-
 import model.request.*;
 import view.View;
 
-import java.util.Iterator;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class FarmController {
     private Farm farm = new Farm();
     private View view = new View();
-    private int truckTravelTimer = (int)(1.0 / farm.getTruck().getSpeed());
-    private int helicopterTravelTimer = (int)(1.0 / (int)farm.getHelicopter().getSpeed());
+    private int truckTravelTimer = (int) (1.0 / farm.getTruck().getSpeed());
+    private int helicopterTravelTimer = (int) (1.0 / (int) farm.getHelicopter().getSpeed());
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
     public void listenForCommand() {
@@ -35,41 +26,41 @@ public class FarmController {
         while (requestsOnTheWay) {
             String command = view.getInput().trim();
             Request request = commandAnalyzer.getRequest(command);
-            if (request instanceof AddRequest){
+            if (request instanceof AddRequest) {
                 addAction((AddRequest) request);
-            }else if (request instanceof BadRequest){
+            } else if (request instanceof BadRequest) {
                 badAction((BadRequest) request);
-            }else if (request instanceof BuyRequest){
+            } else if (request instanceof BuyRequest) {
                 buyAction((BuyRequest) request);
-            }else if (request instanceof CageRequest){
+            } else if (request instanceof CageRequest) {
                 cageAction((CageRequest) request);
-            }else if (request instanceof ClearRequest){
+            } else if (request instanceof ClearRequest) {
                 clearAction((ClearRequest) request);
-            }else if (request instanceof GoRequest){
+            } else if (request instanceof GoRequest) {
                 goAction((GoRequest) request);
-            }else if (request instanceof LoadCustomRequest){
+            } else if (request instanceof LoadCustomRequest) {
                 loadCustomAction((LoadCustomRequest) request);
-            }else if (request instanceof LoadGameRequest){
+            } else if (request instanceof LoadGameRequest) {
                 loadGameAction((LoadGameRequest) request);
-            }else if (request instanceof PickUpRequest){
+            } else if (request instanceof PickUpRequest) {
                 pickUpAction((PickUpRequest) request);
-            }else if (request instanceof PlantRequest){
+            } else if (request instanceof PlantRequest) {
                 plantAction((PlantRequest) request);
-            }else if (request instanceof PrintRequest){
+            } else if (request instanceof PrintRequest) {
                 printAction((PrintRequest) request);
-            }else if (request instanceof RunRequest){
+            } else if (request instanceof RunRequest) {
                 runAction((RunRequest) request);
-            }else if (request instanceof SaveGameRequest){
+            } else if (request instanceof SaveGameRequest) {
                 saveGameAction((SaveGameRequest) request);
-            }else if (request instanceof StartRequest) {
+            } else if (request instanceof StartRequest) {
                 startAction((StartRequest) request);
-            }else if (request instanceof TurnRequest){
+            } else if (request instanceof TurnRequest) {
                 turnAction((TurnRequest) request);
-            }else if (request instanceof UpgradeRequest){
+            } else if (request instanceof UpgradeRequest) {
                 upgradeAction((UpgradeRequest) request);
-            }else if (request instanceof WellRequest){
+            } else if (request instanceof WellRequest) {
                 wellAction((WellRequest) request);
-            }else if (request instanceof ExitRequest){
+            } else if (request instanceof ExitRequest) {
                 requestsOnTheWay = false;
             }
         }
@@ -79,30 +70,30 @@ public class FarmController {
     public void addAction(AddRequest request) {
         Truck truck = farm.getTruck();
         Helicopter helicopter = farm.getHelicopter();
-        if (request.getVehicleTypeName().equals("truck")){
-            for (WildAnimalType wildAnimalType : WildAnimalType.values()){
-                if (wildAnimalType.name().equals(request.getItemName())){
-                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()){
+        if (request.getVehicleTypeName().equals("truck")) {
+            for (WildAnimalType wildAnimalType : WildAnimalType.values()) {
+                if (wildAnimalType.name().equals(request.getItemName())) {
+                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()) {
                         ArrayList<Animal> animals = truck.getAnimals();
-                        animals.add(new WildAnimal(0 , 0 , wildAnimalType));
+                        animals.add(new WildAnimal(0, 0, wildAnimalType));
                         truck.setAnimals(animals);
                         farm.setTruck(truck);
                     } //TODO else ---> print not enough capacity
                 }
             }
-            for (FarmAnimalType farmAnimalType : FarmAnimalType.values()){
-                if(farmAnimalType.name().equals(request.getItemName())){
-                    if(truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()){
+            for (FarmAnimalType farmAnimalType : FarmAnimalType.values()) {
+                if (farmAnimalType.name().equals(request.getItemName())) {
+                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()) {
                         ArrayList<Animal> animals = truck.getAnimals();
-                        animals.add(new FarmAnimal(0 , 0 , farmAnimalType));
+                        animals.add(new FarmAnimal(0, 0, farmAnimalType));
                         truck.setAnimals(animals);
                         farm.setTruck(truck);
                     }
                 }
             }
-            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()){
-                if(primitiveProductType.name().equals(request.getItemName())){
-                    if(truck.getCapacity() >= truck.calculateUsedCapacity() + primitiveProductType.getDepotSize()){
+            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()) {
+                if (primitiveProductType.name().equals(request.getItemName())) {
+                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + primitiveProductType.getDepotSize()) {
                         ArrayList<Product> products = truck.getProducts();
                         products.add(new PrimitiveProduct(primitiveProductType));
                         truck.setProducts(products);
@@ -110,9 +101,9 @@ public class FarmController {
                     }
                 }
             }
-            for (SecondaryProductType secondaryProductType : SecondaryProductType.values()){
-                if(secondaryProductType.name().equals(request.getItemName())){
-                    if(truck.getCapacity() >= truck.calculateUsedCapacity() + secondaryProductType.getDepotSize()){
+            for (SecondaryProductType secondaryProductType : SecondaryProductType.values()) {
+                if (secondaryProductType.name().equals(request.getItemName())) {
+                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + secondaryProductType.getDepotSize()) {
                         ArrayList<Product> products = truck.getProducts();
                         products.add(new SecondaryProduct(secondaryProductType));
                         truck.setProducts(products);
@@ -120,11 +111,11 @@ public class FarmController {
                     }
                 }
             }
-        }else if (request.getVehicleTypeName().equals("helicopter")){
-            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()){
-                if(primitiveProductType.name().equals(request.getItemName())){
-                    if(helicopter.getCapacity() > helicopter.calculateUsedCapacity() + primitiveProductType.getDepotSize()
-                            && farm.getMoney() >= helicopter.calculateRequiredMoney() + primitiveProductType.getBuyCost()){
+        } else if (request.getVehicleTypeName().equals("helicopter")) {
+            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()) {
+                if (primitiveProductType.name().equals(request.getItemName())) {
+                    if (helicopter.getCapacity() > helicopter.calculateUsedCapacity() + primitiveProductType.getDepotSize()
+                            && farm.getMoney() >= helicopter.calculateRequiredMoney() + primitiveProductType.getBuyCost()) {
                         ArrayList<Product> products = helicopter.getProducts();
                         products.add(new PrimitiveProduct(primitiveProductType));
                         helicopter.setProducts(products);
@@ -142,14 +133,14 @@ public class FarmController {
 
     public void buyAction(BuyRequest request) {
         int buyCost;
-        if(request.getAnimal() instanceof FarmAnimal){
+        if (request.getAnimal() instanceof FarmAnimal) {
             buyCost = ((FarmAnimal) request.getAnimal()).getFarmAnimalType().getBuyCost();
-        }else {
+        } else {
             buyCost = 2500;
         }
-        if(farm.getMoney() < buyCost){
+        if (farm.getMoney() < buyCost) {
             view.logNotEnoughMoney();
-        }else {
+        } else {
             farm.addAnimal(request.getAnimal());
             farm.setMoney(farm.getMoney() - buyCost);
         }
@@ -161,16 +152,16 @@ public class FarmController {
         Cell[][] cells = farm.getCells();
         ArrayList<Animal> cellAnimals = cells[request.getX()][request.getY()].getAnimals();
         Iterator<Animal> animalIterator = cellAnimals.iterator();
-        while (animalIterator.hasNext()){
+        while (animalIterator.hasNext()) {
             Animal animal = animalIterator.next();
-            if (animal instanceof WildAnimal){
+            if (animal instanceof WildAnimal) {
                 wildFoundFlag = true;
-                if (((WildAnimal) animal).getWildAnimalType().getDepotSize() + storage.calculateUsedCapacity() <= storage.getCapacity()){
+                if (((WildAnimal) animal).getWildAnimalType().getDepotSize() + storage.calculateUsedCapacity() <= storage.getCapacity()) {
                     ArrayList<Animal> animals = storage.getAnimals();
                     animals.add(animal);
                     storage.setAnimals(animals);
                     animalIterator.remove();
-                }else {
+                } else {
                     //TODO Cage for some turns
                 }
             }
@@ -181,17 +172,17 @@ public class FarmController {
     }
 
     public void clearAction(ClearRequest request) {
-        if (request.getVehicleTypeName().equals("truck")){
+        if (request.getVehicleTypeName().equals("truck")) {
             Truck truck = farm.getTruck();
             Storage storage = farm.getStorage();
             ArrayList<Animal> truckAnimals = truck.getAnimals();
             ArrayList<Product> truckProducts = truck.getProducts();
             ArrayList<Animal> storageAnimals = storage.getAnimals();
             ArrayList<Product> storageProducts = storage.getProducts();
-            for (Animal animal : truck.getAnimals()){
+            for (Animal animal : truck.getAnimals()) {
                 storageAnimals.add(animal);
             }
-            for (Product product : truck.getProducts()){
+            for (Product product : truck.getProducts()) {
                 storageProducts.add(product);
             }
             storage.setAnimals(storageAnimals);
@@ -202,7 +193,7 @@ public class FarmController {
             truck.setAnimals(truckAnimals);
             truck.setProducts(truckProducts);
             farm.setTruck(truck);
-        }else{
+        } else {
             Helicopter helicopter = farm.getHelicopter();
             ArrayList<Product> helicopterProducts = helicopter.getProducts();
             farm.setMoney(farm.getMoney() + helicopter.calculateRequiredMoney());
@@ -213,52 +204,62 @@ public class FarmController {
     }
 
     public void goAction(GoRequest request) {
-        if(request.getVehivlePartName().equals("truck")){
+        if (request.getVehivlePartName().equals("truck")) {
             Truck truck = farm.getTruck();
             truck.setAvailable(false);
             farm.setTruck(truck);
-        }else{
+        } else {
             Helicopter helicopter = farm.getHelicopter();
             helicopter.setAvailable(false);
             farm.setHelicopter(helicopter);
         }
     }
 
+
     public void loadCustomAction(LoadCustomRequest request) {
-
-    }
-
-    public void loadCustomAction(String path) throws FileNotFoundException {
+        String path = request.getPathToCustomDirectory();
         Gson gson = new Gson();
         ArrayList<WorkShop> workShops = farm.getWorkShops();
-        CustomWorkShop customWorkShop = gson.fromJson(new FileReader(path), CustomWorkShop.class);
+        CustomWorkShop customWorkShop = null;
+        try {
+            customWorkShop = gson.fromJson(new FileReader(path), CustomWorkShop.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         workShops.add(customWorkShop);
         farm.setWorkShops(workShops);
     }
 
-    public void loadGameAction(String path) throws FileNotFoundException {
+    public void loadGameAction(LoadGameRequest request) {
+        String path = request.getPathToJsonFile();
         Gson gson = new Gson();
-        farm = gson.fromJson(new FileReader(path), Farm.class);
+        try {
+            farm = gson.fromJson(new FileReader(path), Farm.class);
+        } catch (FileNotFoundException e) {
+            view.logFileNotFound();
+        }
     }
 
-    public void pickUpAction(int x, int y) {
-        if ( x < 0 || x > 29 || y < 0 || y > 29) {
-            throw  new NotPossibleException("pickUp");
-        }
-        else {
+    public void pickUpAction(PickUpRequest request) {
+        int x = request.getX();
+        int y = request.getY();
+        if (x < 0 || x > 29 || y < 0 || y > 29) {
+            throw new NotPossibleException("pickUp");
+        } else {
             farm.userPickUp(x, y);
         }
     }
 
-    public void plantAction(int x, int y) {
-        int[] xDisplace = {-1,0,1,-1,0,1,-1,0,1};
-        int[] yDisplace = {-1,-1,-1,0,0,0,1,1,1};
+    public void plantAction(PlantRequest request) {
+        int x = request.getX();
+        int y = request.getY();
+        int[] xDisplace = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        int[] yDisplace = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
 
-        for ( int i = 0 ; i < 9 ; i++) {
-            if (x + xDisplace[i] < 0 || x+xDisplace[i]>29 || y+yDisplace[i] < 0 || y+yDisplace[i] > 29) {
+        for (int i = 0; i < 9; i++) {
+            if (x + xDisplace[i] < 0 || x + xDisplace[i] > 29 || y + yDisplace[i] < 0 || y + yDisplace[i] > 29) {
                 continue;
-            }
-            else {
+            } else {
                 farm.irrigate(x + xDisplace[i], y + yDisplace[i]);
             }
         }
@@ -267,35 +268,165 @@ public class FarmController {
     public void printAction(PrintRequest request) {
         String printFrom = request.getPartToPrintName();
         if (printFrom.equals("info")) {
-            view.logInfo(farm.getMoney(), farm.getTime(), farm.getLevel(),farm.getStorage());
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Money: " + farm.getMoney() + " Time: " + farm.getMoney());
+            stringBuilder.append("Level: ");
+            if (farm.getLevel().getRequiredMoney() != 0) {
+                stringBuilder.append("Money: " + farm.getMoney() + "/" + farm.getLevel().getRequiredMoney() + ' ');
+            }
+            HashMap<Animal, Integer> requiredAnimals = farm.getLevel().getRequiredAnimals();
+            HashMap<Product, Integer> requiredProduct = farm.getLevel().getRequiredProduct();
+
+            ArrayList<Animal> storageAnimals = farm.getStorage().getAnimals();
+            ArrayList<Product> storageProducts = farm.getStorage().getProducts();
+
+            for (HashMap.Entry<Animal, Integer> entry : requiredAnimals.entrySet()) {
+                Integer numberOfAnimals = 0;
+                for (Animal animal : storageAnimals) {
+                    if (animal.equals(entry.getKey())) {
+                        numberOfAnimals++;
+                    }
+                }
+                stringBuilder.append(entry.getKey().getClass().getSimpleName() + ": " + numberOfAnimals.toString() + "/" +
+                        entry.getValue() + " ");
+
+            }
+            for (HashMap.Entry<Product, Integer> entry : requiredProduct.entrySet()) {
+                Integer numberOfProducts = 0;
+                for (Product product : storageProducts) {
+                    if (product.equals(entry.getKey())) {
+                        numberOfProducts++;
+                    }
+                }
+                stringBuilder.append(entry.getKey().getClass().getSimpleName() + ": " + numberOfProducts.toString() + "/" +
+                        entry.getValue() + " ");
+            }
+            view.logInfo(stringBuilder.toString());
+        } else if (printFrom.equals("map")) {
+            StringBuilder stringBuilder = new StringBuilder();
+            Cell[][] cells = farm.getCells();
+            for (int i = 0; i < 30; i++) {
+                for (int j = 0; j < 30; j++) {
+                    Cell cell = cells[i][j];
+                    if (cell.getAnimals().size() != 0) {
+                        stringBuilder.append(cell.getAnimals().get(0).getClass().getSimpleName().codePointAt(0));
+                    } else if (cell.getProducts().size() != 0) {
+                        stringBuilder.append(cell.getProducts().get(0).getClass().getSimpleName().codePointAt(0));
+                    } else if (cell.isHasPlant()) {
+                        stringBuilder.append("O");
+                    }
+                }
+            }
+            view.logMap(stringBuilder.toString());
+        } else if (printFrom.equals("levels")) {
+            Level level = farm.getLevel();
+            StringBuilder stringBuilder = new StringBuilder();
+            if (level.getRequiredMoney() != 0) {
+                stringBuilder.append("Money: " + level.getRequiredMoney() + " ");
+            }
+            HashMap<Animal, Integer> requiredAnimals = level.getRequiredAnimals();
+            HashMap<Product, Integer> requiredProduct = level.getRequiredProduct();
+            for (HashMap.Entry<Animal, Integer> entry : requiredAnimals.entrySet()) {
+                stringBuilder.append(entry.getKey().getClass().getSimpleName() + ": " + entry.getValue() + " ");
+            }
+            for (HashMap.Entry<Product, Integer> entry : requiredProduct.entrySet()) {
+                stringBuilder.append(entry.getKey().getClass().getSimpleName() + ": " + entry.getValue() + " ");
+            }
+            view.logLevel(stringBuilder.toString());
+        } else if (printFrom.equals("warehouse")) {
+            ArrayList<Product> products = farm.getStorage().getProducts();
+            ArrayList<Animal> animals = farm.getStorage().getAnimals();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Warehouse: Products: ");
+            for (Product product : products) {
+                if (product instanceof PrimitiveProduct) {
+                    stringBuilder.append(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+                } else {
+                    stringBuilder.append(((SecondaryProduct) product).getSecondaryProductType().toString());
+                }
+            }
+            stringBuilder.append("\nAnimals: ");
+            for (Animal animal : animals) {
+                if (animal instanceof FarmAnimal) {
+                    stringBuilder.append(((FarmAnimal) animal).getFarmAnimalType().toString());
+                } else if (animal instanceof WildAnimal) {
+                    stringBuilder.append(((WildAnimal) animal).getWildAnimalType().toString());
+                }
+            }
+            view.logWarehouse(stringBuilder.toString());
+        } else if (printFrom.equals("well")) {
+            Well well = farm.getWell();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(well.getWaterLeft() + "/" + well.getCapacity());
+            view.logWell(stringBuilder.toString());
+        } else if (printFrom.equals("workshops")) {
+            ArrayList<WorkShop> workShops = farm.getWorkShops();
+            StringBuilder stringBuilder = new StringBuilder();
+            for (WorkShop workShop : workShops) {
+                if (workShop instanceof CustomWorkShop) {
+                    stringBuilder.append("Custom: Products: " + ((CustomWorkShop) workShop).getProcessedProduct()
+                            .getSecondaryProductType().toString());
+                    if (((CustomWorkShop) workShop).getRawProduct() instanceof PrimitiveProduct) {
+                        stringBuilder.append(" Raw: " + ((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
+                                .getPrimitiveProductType().toString());
+                    } else {
+                        stringBuilder.append(" Raw: " + ((SecondaryProduct) ((CustomWorkShop) workShop).getRawProduct())
+                                .getSecondaryProductType().toString());
+                    }
+                } else {
+                    stringBuilder.append(workShop.getClass().getSimpleName() + " ");
+                }
+            }
+            view.logWorkshop(stringBuilder.toString());
+        } else if (printFrom.equals("truck")) {
+            Truck truck = farm.getTruck();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Level: "+truck.getLevel()+"Capacity: "+truck.getCapacity()+"isAvailable: "
+                    +truck.isAvailable()+"time until arrived: "+truck.getTravelCounter());
+            for (Product product : truck.getProducts()) {
+                if (product instanceof PrimitiveProduct) {
+                    stringBuilder.append(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+                }
+                else {
+                    stringBuilder.append(((SecondaryProduct) product).getSecondaryProductType().toString());
+                }
+            }
+            stringBuilder.append("\nAnimals: ");
+            for (Animal animal: truck.getAnimals()) {
+                if (animal instanceof FarmAnimal) {
+                    stringBuilder.append(((FarmAnimal) animal).getFarmAnimalType().toString());
+                }
+                else if (animal instanceof WildAnimal){
+                    stringBuilder.append(((WildAnimal) animal).getWildAnimalType().toString());
+                }
+            }
+            view.logTruck(stringBuilder.toString());
+        } else if (printFrom.equals("helicopter")) {
+            Helicopter helicopter = farm.getHelicopter();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("\nLevel: "+helicopter.getLevel()+"Capacity: "+helicopter.getCapacity()+"isAvailable: "
+                    +helicopter.isAvailable()+"time until arrived: "+helicopter.getTravelCounter());
+            for (Product product : helicopter.getProducts()) {
+                if (product instanceof PrimitiveProduct) {
+                    stringBuilder.append(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+                }
+                else {
+                    stringBuilder.append(((SecondaryProduct) product).getSecondaryProductType().toString());
+                }
+            }
+            view.logHelicopter(stringBuilder.toString());
         }
-        else if (printFrom.equals("map")) {
-            view.logMap(farm);
-        }
-        else if (printFrom.equals("levels")){
-            view.logLevel(farm.getLevel());
-        }
-        else if (printFrom.equals("warehouse")) {
-            view.logWarehouse(farm.getStorage());
-        }
-        else if (printFrom.equals("well")) {
-            view.logWell(farm.getWell());
-        }
-        else if (printFrom.equals("workshops")) {
-            view.logWorkshop(farm);
-        }
-        else if (printFrom.equals("truck")) {
-            view.logTruck(farm.getTruck());
-        }
-        else if (printFrom.equals("helicopter")) {
-            view.logHelicopter(farm.getHelicopter());
-        }
-        //print [info|map|levels|warehouse|well|workshops|truck|helicopter]
+        
     }
 
-    public void runAction(String path) throws FileNotFoundException {
+    public void runAction(RunRequest request) {
+        String path = request.getMapName();
         Gson gson = new Gson();
-        farm = gson.fromJson(new FileReader(path), Farm.class);
+        try {
+            farm = gson.fromJson(new FileReader(path), Farm.class);
+        } catch (FileNotFoundException e) {
+            view.logFileNotFound();
+        }
     }
 
     public void saveGameAction(SaveGameRequest request) {
@@ -303,7 +434,7 @@ public class FarmController {
         try {
             gson.toJson(farm, new FileWriter(request.getPathToJsonFile()));
         } catch (IOException e) {
-            e.printStackTrace();
+            view.logFileNotfound();
         }
     }
 
@@ -416,7 +547,7 @@ public class FarmController {
     }
 
     public void turnAction(TurnRequest request) {
-        for (int i = 0 ; i < request.getNumberOfTurns() ; i++) {
+        for (int i = 0; i < request.getNumberOfTurns(); i++) {
             for (Animal animal : farm.getAnimals()) {
                 Integer[] destination = getAnimalDestination(animal, farm.getCells());
                 animal.move(destination[0], destination[1]);
@@ -428,7 +559,7 @@ public class FarmController {
                     int throwX = workShop.getThrowedProductX();
                     int throwY = workShop.getThrowedProductY();
                     ArrayList<Product> products = cells[throwX][throwY].getProducts();
-                    for (int j = 0 ; j < workShop.getNumberOfProcessedProduct() ; j++)
+                    for (int j = 0; j < workShop.getNumberOfProcessedProduct(); j++)
                         products.add(workShop.getProduct());
                     cells[throwX][throwY].setProducts(products);
                     farm.setCells(cells);
@@ -439,8 +570,8 @@ public class FarmController {
             farm.getHelicopter().nextTurn();
             if (farm.getHelicopter().isReadyToDeliver()) {
                 for (Product product : farm.getHelicopter().getProducts()) {
-                    int randomX = (int)(Math.random() * 30);
-                    int randomY = (int)(Math.random() * 30);
+                    int randomX = (int) (Math.random() * 30);
+                    int randomY = (int) (Math.random() * 30);
                     farm.getCells()[randomX][randomY].addProduct(product);
                 }
                 farm.getHelicopter().setReadyToDeliver(false);
@@ -460,10 +591,10 @@ public class FarmController {
                 if (animal instanceof Cat) {
                     if (((Cat) animal).getLevel() == 2)
                         view.logLevelIsHighest();
-                    else if (farm.getMoney() < ((Cat) animal).getUpgradeCost())
+                    else if (farm.getMoney() < ((Cat) animal).calculateUpgardePrice())
                         view.logNotEnoughMoney();
                     else {
-                        farm.setMoney(farm.getMoney() - ((Cat) animal).getUpgradeCost());
+                        farm.setMoney(farm.getMoney() - ((Cat) animal).calculateUpgardePrice());
                         ((Cat) animal).upgrade();
                     }
                 }
@@ -571,7 +702,7 @@ public class FarmController {
     public Integer[] getCatDestination(int catX, int catY, Cell[][] cells) {
         Integer[] destination = {-1, -1};
         double distance = 10000;
-        for (int i  = 0 ; i < 30 ; i++) {
+        for (int i = 0; i < 30; i++) {
             for (int j = 0; j < 30; j++) {
                 for (Product product : cells[i][j].getProducts())
                     if (product != null)
@@ -589,7 +720,7 @@ public class FarmController {
     public Integer[] getFarmAnimalDestination(int farmAnimalX, int farmAnimalY, Cell[][] cells) {
         Integer[] destination = {-1, -1};
         double distance = 10000;
-        for (int i  = 0 ; i < 30 ; i++) {
+        for (int i = 0; i < 30; i++) {
             for (int j = 0; j < 30; j++) {
                 if (cells[i][j].isHasPlant())
                     if (distance > Math.sqrt(Math.pow(farmAnimalX - i, 2) + Math.pow(farmAnimalY - j, 2))) {
@@ -605,7 +736,7 @@ public class FarmController {
     public Integer[] getDogDestination(int dogX, int dogY, Cell[][] cells) {
         Integer[] destination = {-1, -1};
         double distance = 10000;
-        for (int i  = 0 ; i < 30 ; i++) {
+        for (int i = 0; i < 30; i++) {
             for (int j = 0; j < 30; j++) {
                 for (Animal animal : cells[i][j].getAnimals())
                     if (animal instanceof WildAnimal)

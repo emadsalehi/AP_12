@@ -29,6 +29,15 @@ public class Cat extends Animal {
         }
     }
 
+    public  void upgrade() {
+        if (level == 1) {
+            level = 2;
+        }
+        else {
+            throw new NotPossibleException("carUpgrade");
+        }
+    }
+
     public int getLevel() {
         return level;
     }

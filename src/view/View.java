@@ -12,155 +12,35 @@ public class View {
         return input.nextLine();
     }
 
-    public void logInfo(int money, int time, Level level, Storage storage) {
-        System.out.println("Money: " + money + " Time: " + time);
-        System.out.println("Level: ");
-        if (level.getRequiredMoney() != 0) {
-            System.out.println("Money: " + money + "/" + level.getRequiredMoney()+' ');
-        }
-        HashMap<Animal, Integer> requiredAnimals = level.getRequiredAnimals();
-        HashMap<Product, Integer> requiredProduct = level.getRequiredProduct();
+    public void logInfo(String string) {
+        System.out.println(string);
+    }
+  
+    public void logMap (String string) {
+        System.out.println(string);
+    }
+  
+    public void logLevel (String string) {
+        System.out.println(string);
+    }
+  
+    public void logWarehouse (String string) {
+        System.out.println(string);
+    }
+  
+    public void logWell (String string) {
+        System.out.println(string);
+    }
+  
+    public void logWorkshop (String string) {
+        System.out.println(string);
+    }
+  
+    public void logTruck (String string) {
+        System.out.println(string);
+    }
+    public void logHelicopter (String string) {
 
-        ArrayList<Animal> storageAnimals = storage.getAnimals();
-        ArrayList<Product> storageProducts = storage.getProducts();
-
-        for (HashMap.Entry<Animal, Integer> entry : requiredAnimals.entrySet()) {
-            Integer numberOfAnimals = 0;
-            for (Animal animal : storageAnimals) {
-                if (animal.equals(entry.getKey())) {
-                    numberOfAnimals++;
-                }
-            }
-            System.out.print(entry.getKey().getClass().getSimpleName()+": "+numberOfAnimals.toString()+"/" +
-                    entry.getValue()+" ");
-
-        }
-        for (HashMap.Entry<Product, Integer> entry : requiredProduct.entrySet()) {
-            Integer numberOfProducts = 0;
-            for (Product product : storageProducts) {
-                if (product.equals(entry.getKey())) {
-                    numberOfProducts++;
-                }
-            }
-            System.out.print(entry.getKey().getClass().getSimpleName()+": "+numberOfProducts.toString()+"/" +
-                    entry.getValue()+" ");
-        }
-    }
-  
-    public void logMap (Farm farm) {
-        Cell[][] cells = farm.getCells();
-        for (int i = 0 ; i < 30 ; i++) {
-            for (int j = 0; j < 30 ; j++) {
-                Cell cell = cells[i][j];
-                if (cell.getAnimals().size() != 0) {
-                    System.out.print(cell.getAnimals().get(0).getClass().getSimpleName().codePointAt(0));
-                }
-                else if (cell.getProducts().size() != 0) {
-                    System.out.print(cell.getProducts().get(0).getClass().getSimpleName().codePointAt(0));
-                }
-
-                else if (cell.isHasPlant()) {
-                    System.out.print("O");
-                }
-            }
-            System.out.printf("\n");
-        }
-    }
-  
-    public void logLevel (Level level) {
-        if (level.getRequiredMoney() != 0) {
-            System.out.println("Money: " +level.getRequiredMoney()+" ");
-        }
-        HashMap<Animal, Integer> requiredAnimals = level.getRequiredAnimals();
-        HashMap<Product, Integer> requiredProduct = level.getRequiredProduct();
-        for (HashMap.Entry<Animal, Integer> entry : requiredAnimals.entrySet()) {
-            System.out.print(entry.getKey().getClass().getSimpleName() + ": " +entry.getValue()+" ");
-        }
-        for (HashMap.Entry<Product, Integer> entry : requiredProduct.entrySet()) {
-            System.out.print(entry.getKey().getClass().getSimpleName() + ": " +entry.getValue()+" ");
-        }
-    }
-  
-    public void logWarehouse (Storage storage) {
-        ArrayList <Product> products = storage.getProducts();
-        ArrayList <Animal> animals = storage.getAnimals();
-        System.out.println("Warehouse: Products: ");
-        for (Product product : products) {
-            if (product instanceof PrimitiveProduct) {
-                System.out.print(((PrimitiveProduct) product).getPrimitiveProductType().toString());
-            }
-            else {
-                System.out.print(((SecondaryProduct) product).getSecondaryProductType().toString());
-            }
-        }
-        System.out.println("Animals: ");
-        for (Animal animal: animals) {
-            if (animal instanceof FarmAnimal) {
-                System.out.print(((FarmAnimal) animal).getFarmAnimalType().toString());
-            }
-            else if (animal instanceof WildAnimal){
-                System.out.print(((WildAnimal) animal).getWildAnimalType().toString());
-            }
-        }
-    }
-  
-    public void logWell (Well well) {
-        System.out.println(well.getWaterLeft()+"/"+well.getCapacity());
-    }
-  
-    public void logWorkshop (Farm farm) {
-        ArrayList<WorkShop> workShops = farm.getWorkShops();
-        for (WorkShop workShop : workShops) {
-            if (workShop instanceof CustomWorkShop) {
-                System.out.print("Custom: Products: "+((CustomWorkShop) workShop).getProcessedProduct()
-                        .getSecondaryProductType().toString());
-                if (((CustomWorkShop) workShop).getRawProduct() instanceof PrimitiveProduct) {
-                    System.out.print(" Raw: "+((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
-                            .getPrimitiveProductType().toString());
-                }
-                else {
-                    System.out.print(" Raw: "+((SecondaryProduct)((CustomWorkShop) workShop).getRawProduct())
-                            .getSecondaryProductType().toString());
-                }
-            }
-            else {
-                System.out.print(workShop.getClass().getSimpleName()+" ");
-            }
-        }
-    }
-  
-    public void logTruck (Truck truck) {
-        System.out.println("Level: "+truck.getLevel()+"Capacity: "+truck.getCapacity()+"isAvailable: "
-                +truck.isAvailable()+"time until arrived: "+truck.getTravelCounter());
-        for (Product product : truck.getProducts()) {
-            if (product instanceof PrimitiveProduct) {
-                System.out.print(((PrimitiveProduct) product).getPrimitiveProductType().toString());
-            }
-            else {
-                System.out.print(((SecondaryProduct) product).getSecondaryProductType().toString());
-            }
-        }
-        System.out.println("Animals: ");
-        for (Animal animal: truck.getAnimals()) {
-            if (animal instanceof FarmAnimal) {
-                System.out.print(((FarmAnimal) animal).getFarmAnimalType().toString());
-            }
-            else if (animal instanceof WildAnimal){
-                System.out.print(((WildAnimal) animal).getWildAnimalType().toString());
-            }
-        }
-    }
-    public void logHelicopter (Helicopter helicopter) {
-        System.out.println("Level: "+helicopter.getLevel()+"Capacity: "+helicopter.getCapacity()+"isAvailable: "
-                +helicopter.isAvailable()+"time until arrived: "+helicopter.getTravelCounter());
-        for (Product product : helicopter.getProducts()) {
-            if (product instanceof PrimitiveProduct) {
-                System.out.print(((PrimitiveProduct) product).getPrimitiveProductType().toString());
-            }
-            else {
-                System.out.print(((SecondaryProduct) product).getSecondaryProductType().toString());
-            }
-        }
     }
 
 
