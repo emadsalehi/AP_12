@@ -1,8 +1,6 @@
 package model;
 
 public enum SecondaryProductType {
-    COOKIE, EGG_POWDER, CAKE, THREAD, CLOTHES, FABRIC;
-
     COOKIE(5 , 200 , 100),
     EGG_POWDER(4 , 100 , 50),
     CAKE(6 , 400 , 200),
