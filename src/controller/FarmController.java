@@ -127,7 +127,7 @@ public class FarmController {
     }
 
     public void badAction(BadRequest request) {
-        
+        view.logWrongCommand();
     }
 
     public void buyAction(BuyRequest request) {
