@@ -601,6 +601,7 @@ public class FarmController {
                 farm.setMoney(farm.getMoney() + farm.getTruck().calculatePaidMoney());
                 farm.getTruck().setReadyToPay(false);
             }
+            farm.setTime(farm.getTime() + 1);
         }
     }
 
