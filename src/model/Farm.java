@@ -39,21 +39,28 @@ public class Farm {
     }
 
     public void updateCells() {
+       displacer();
+       for (int i = 0 ; i < 30 ; i++) {
+           for (int j = 0 ; j < 30 ; j++) {
+               checkWildAndFarmCollision(cells[i][j]);
+               catProductCollision(cells[i][j]);
+           }
+       }
     }
 
     public Cell checkWildAndFarmCollision(Cell cell) {
         return null;
-    }//not mine
+    }
 
     public void displacer() {
-    } //not mine
+    }
 
     public Cell catProductCollision(Cell cell) {
         return null;
-    } // not mine
+    }
 
     public void irrigate(int x, int y) {
-    }  //not mine
+    }
 
     public void userPickUp(int x, int y) {
         Cell cell = cells[x][y];
