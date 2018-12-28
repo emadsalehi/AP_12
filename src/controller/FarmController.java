@@ -1,11 +1,11 @@
 package controller;
+import com.google.gson.Gson;
 import model.*;
-import model.request.StartRequest;
-import model.request.TurnRequest;
-import model.request.UpgradeRequest;
-import model.request.WellRequest;
+import model.request.*;
 import view.View;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FarmController {
@@ -61,8 +61,13 @@ public class FarmController {
 
     }
 
-    public void saveGameAction() {
-
+    public void saveGameAction(SaveGameRequest request) {
+        Gson gson = new Gson();
+        try {
+            gson.toJson(farm, new FileWriter(request.getPathToJsonFile()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void startAction(StartRequest request) {
@@ -196,16 +201,18 @@ public class FarmController {
             farm.updateCells();
             farm.getHelicopter().nextTrun();
             if (farm.getHelicopter().isReadyToDeliver()) {
-                Storage storage = farm.getStorage();
-                ArrayList<Product> products = storage.getProducts();
-                for (Product product : farm.getHelicopter().getProducts())
-                    products.add(product);
-                storage.setProducts(products);
-                farm.setStorage(storage);
+                for (Product product : farm.getHelicopter().getProducts()) {
+                    int randomX = (int)(Math.random() * 30);
+                    int randomY = (int)(Math.random() * 30);
+                    farm.getCells()[randomX][randomY].addProduct(product);
+                }
+                farm.getHelicopter().setReadyToDeliver(false);
             }
             farm.getTruck().nextTurn();
-            if (farm.getTruck().isReadyToPay())
+            if (farm.getTruck().isReadyToPay()) {
                 farm.setMoney(farm.getMoney() + farm.getTruck().calculatePaidMoney());
+                farm.getTruck().setReadyToPay(false);
+            }
         }
     }
 
@@ -225,29 +232,35 @@ public class FarmController {
         } else if (request.getPartTOUpgradeName().equals("well")) {
             if (farm.getWell().getLevel() == 4)
                 view.logLevelIsHighest();
+            else if (farm.getWell().isWorking())
+                view.logWellIsWorking();
             else if (farm.getMoney() < farm.getWell().getUpgardeCost())
                 view.logNotEnoughMoney();
             else {
                 farm.setMoney(farm.getMoney() - farm.getWell().getUpgardeCost());
-                farm.getWell().upgarde();
+                farm.setWell(farm.getWell().upgarde());
             }
         } else if (request.getPartTOUpgradeName().equals("truck")) {
             if (farm.getTruck().getLevel() == 4)
                 view.logLevelIsHighest();
+            else if (!farm.getTruck().isAvailable())
+                view.logTruckIsNotAvailable();
             else if (farm.getMoney() < farm.getTruck().getUpgradeCost())
                 view.logNotEnoughMoney();
             else {
                 farm.setMoney(farm.getMoney() - farm.getTruck().getUpgradeCost());
-                farm.getTruck().upgarde();
+                farm.setTruck(farm.getTruck().upgarde());
             }
         } else if (request.getPartTOUpgradeName().equals("helicopter")) {
             if (farm.getHelicopter().getLevel() == 4)
                 view.logLevelIsHighest();
+            else if (!farm.getHelicopter().isAvailable())
+                view.logHelicopterIsNotAvailable();
             else if (farm.getMoney() < farm.getHelicopter().getUpgradeCost())
                 view.logNotEnoughMoney();
             else {
                 farm.setMoney(farm.getMoney() - farm.getHelicopter().getUpgradeCost());
-                farm.getHelicopter().upgrade();
+                farm.setHelicopter(farm.getHelicopter().upgrade());
             }
         } else if (request.getPartTOUpgradeName().equals("warehouse")) {
             if (farm.getStorage().getLevel() == 4)
@@ -256,7 +269,7 @@ public class FarmController {
                 view.logNotEnoughMoney();
             else {
                 farm.setMoney(farm.getMoney() - farm.getStorage().getUpgradeCost());
-                farm.getStorage().upgrade();
+                farm.setStorage(farm.getStorage().upgrade());
             }
         } else {
             WorkShop selectedWorkShop = null;
@@ -280,6 +293,8 @@ public class FarmController {
             }
             if (selectedWorkShop.getLevel() == 4)
                 view.logLevelIsHighest();
+            else if (selectedWorkShop.isWorking())
+                view.logWorkShopIsWorking();
             else if (farm.getMoney() < selectedWorkShop.getUpgradeCost())
                 view.logNotEnoughMoney();
             else {
