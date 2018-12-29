@@ -6,7 +6,6 @@ import model.exceptions.NotPossibleException;
 import model.request.*;
 import view.View;
 
-import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -203,7 +202,7 @@ public class FarmController {
     }
 
     public void goAction(GoRequest request) {
-        if (request.getVehivlePartName().equals("truck")) {
+        if (request.getVehiclePartName().equals("truck")) {
             Truck truck = farm.getTruck();
             truck.setAvailable(false);
             farm.setTruck(truck);

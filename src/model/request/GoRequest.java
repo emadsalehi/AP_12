@@ -1,13 +1,13 @@
 package model.request;
 
 public class GoRequest extends Request {
-    private String vehivlePartName;
+    private String vehiclePartName;
 
-    public GoRequest(String vehivlePartName) {
-        this.vehivlePartName = vehivlePartName;
+    public GoRequest(String vehiclePartName) {
+        this.vehiclePartName = vehiclePartName;
     }
 
-    public String getVehivlePartName() {
-        return vehivlePartName;
+    public String getVehiclePartName() {
+        return vehiclePartName;
     }
 }
