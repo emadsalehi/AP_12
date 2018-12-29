@@ -7,12 +7,12 @@ public class Farm {
     private final int maxPlantLevel = 5;
     private Cell[][] cells = new Cell[30][30];
     private int money = 1000;
-    private Storage storage;
-    private Well well;
+    private Storage storage = new Storage();
+    private Well well = new Well();
     private java.util.ArrayList<WorkShop> workShops = new ArrayList<>();
-    private Helicopter helicopter;
-    private Truck truck;
-    private Level level;
+    private Helicopter helicopter = new Helicopter();
+    private Truck truck = new Truck();
+    private Level level = new Level();
     private int time;
 
     public int getTime() {

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Helicopter {
     //todo modify speed and capacity in set level method.
     private int level = 0;
-    private double speed;
-    private int capacity;
+    private double speed = 1 / (12 - 3 * level);
+    private int capacity = (level + 2) * 10;
     private boolean isAvailable = true;
     private int upgradeCost = 400;
     private ArrayList<Product> products = new ArrayList<>();

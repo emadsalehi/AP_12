@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Truck {
     private int level = 0;
-    private double speed;
-    private int capacity;
+    private double speed = 1 / (20 - 5 * level);
+    private int capacity = (level + 2) * 20;
     private boolean isAvailable = true;
     private boolean readyToPay = false;
     private int upgradeCost = 250;
@@ -30,13 +30,13 @@ public class Truck {
         this.travelCounter = travelCounter;
     }
 
-    public Truck(int level, double speed, int capacity, boolean isAvailable, boolean readyToPay) {
+    /*public Truck(int level, double speed, int capacity, boolean isAvailable, boolean readyToPay) {
         this.level = level;
         this.speed = speed;
         this.capacity = capacity;
         this.isAvailable = isAvailable;
         this.readyToPay = readyToPay;
-    }
+    }*/
 
     public int getLevel() {
         return level;

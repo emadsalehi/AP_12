@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FarmController {
-    private Farm farm;
+    private Farm farm = new Farm();
     private View view = new View();
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
