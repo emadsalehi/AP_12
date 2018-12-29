@@ -50,25 +50,38 @@ public class Farm {
     }
 
     public Cell checkWildAndFarmCollision(Cell cell) {
-        for(int i = 0 ; i < 30 ; i++){
-            for (int j = 0 ; j < 30 ; j++){
-                ArrayList<Animal> cellAnimals = cells[i][j].getAnimals();
-                ArrayList<Animal> farmAnimals = new ArrayList<Animal>();
-                ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
-                for (Animal animal : cellAnimals){
-                    if(animal instanceof FarmAnimal){
-                        farmAnimals.add(animal);
-                    }else {
-                        wildAnimals.add(animal);
-                    }
-                }
-                if (!farmAnimals.isEmpty() && !wildAnimals.isEmpty()){
-                    cellAnimals.clear();
-                    cells[i][j].setAnimals(cellAnimals);
-                }
+
+        ArrayList<Animal> cellAnimals = cell.getAnimals();
+        ArrayList<Animal> farmAnimals = new ArrayList<Animal>();
+        ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
+        for (Animal animal : cellAnimals){
+            if(animal instanceof FarmAnimal){
+                farmAnimals.add(animal);
+            }else {
+                wildAnimals.add(animal);
             }
         }
-        return null;
+        if (!farmAnimals.isEmpty() && !wildAnimals.isEmpty()){
+            cellAnimals.clear();
+            cell.setAnimals(cellAnimals);
+        }
+        return cell;
+    }
+
+    public Cell checkWildAndProductCollision(Cell cell) {
+        ArrayList<Animal> cellAnimals = cell.getAnimals();
+        ArrayList<Product> cellProducts = cell.getProducts();
+        ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
+        for (Animal animal : cellAnimals){
+            if (animal instanceof WildAnimal){
+                wildAnimals.add(animal);
+            }
+        }
+        if (!wildAnimals.isEmpty()){
+            cellProducts.clear();
+            cell.setProducts(cellProducts);
+        }
+        return cell;
     }
 
     public void displacer() {
