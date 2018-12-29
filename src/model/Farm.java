@@ -29,6 +29,7 @@ public class Farm {
            for (int j = 0 ; j < 30 ; j++) {
                Cell cell = cells[i][j];
                checkWildAndFarmCollision(cell);
+               checkWildAndProductCollision(cell);
                catProductCollision(cell);
                if (cell.isHasPlant()) {
                    for (Animal animal : cell.getAnimals()) {
