@@ -4,8 +4,10 @@ public class FarmAnimal extends Animal {
     private boolean isHungry;
     private int timeTillHungry;
     private FarmAnimalType farmAnimalType;
-    private int hoursToCreateProduct;
-    private int maxTimeToproduce;
+    private int productionPeriod = farmAnimalType.getProductionPeriod();
+    private int productionTimer = productionPeriod;
+    private boolean readyToProduce = false;
+
 
     public FarmAnimal(int x, int y, FarmAnimalType farmAnimalType) {
         super(x, y);
@@ -19,6 +21,14 @@ public class FarmAnimal extends Animal {
         }
         else {
             intendedMove(destinationX, destinationY);
+        }
+    }
+
+    public void nextTurn(){
+        productionTimer--;
+        if (productionTimer == 0){
+            productionTimer = productionPeriod;
+            readyToProduce = true;
         }
     }
 
@@ -47,4 +57,11 @@ public class FarmAnimal extends Animal {
         this.farmAnimalType = farmAnimalType;
     }
 
+    public boolean isReadyToProduce() {
+        return readyToProduce;
+    }
+
+    public void setReadyToProduce(boolean readyToProduce) {
+        this.readyToProduce = readyToProduce;
+    }
 }
