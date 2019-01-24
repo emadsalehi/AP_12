@@ -12,10 +12,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class GraphicController extends Application {
+    private final int WIDTH = 800;
+    private final int HEIGHT = 600;
 
     private Group menu = new Group();
     private Group game = new Group();
-    private Scene scene = new Scene(menu, 800, 600);
+    private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private final String pathToBackGroundImage = "D:\\University\\AP\\Project\\AP_12\\src\\GUI\\Textures\\back.png";
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
