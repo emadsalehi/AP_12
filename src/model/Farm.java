@@ -35,11 +35,13 @@ public class Farm {
                     if (animal instanceof FarmAnimal) {
                         if (cell.isHasPlant()) {
                             if (((FarmAnimal) animal).isHungry()) {
+                                animal.setMoving(false);
                                 ((FarmAnimal) animal).setTimeTillHungry(((FarmAnimal) animal).getTimeTillHungry() + 1);
                                 cell.setPlantLevel(cell.getPlantLevel() - 1);
                             }
                             if (cell.getPlantLevel() < 1) {
                                 cell.setPlantLevel(0);
+                                animal.setMoving(true);
                                 cell.setHasPlant(false);
                                 break;
                             }
@@ -90,7 +92,7 @@ public class Farm {
     public Cell checkWildAndProductCollision(Cell cell) {
         ArrayList<Animal> cellAnimals = cell.getAnimals();
         ArrayList<Product> cellProducts = cell.getProducts();
-        ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
+        ArrayList<Animal> wildAnimals = new ArrayList<>();
         for (Animal animal : cellAnimals) {
             if (animal instanceof WildAnimal) {
                 wildAnimals.add(animal);

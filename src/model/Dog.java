@@ -19,4 +19,5 @@ public class Dog extends Animal {
             intendedMove(destinationX, destinationY);
         }
     }
+
 }

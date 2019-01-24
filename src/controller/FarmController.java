@@ -160,6 +160,7 @@ public class FarmController {
                     storage.setAnimals(animals);
                     animalIterator.remove();
                 } else {
+                    animal.setMoving(false);
                     //TODO Cage for some turns
                 }
             }
