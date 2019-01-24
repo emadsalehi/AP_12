@@ -125,4 +125,11 @@ public abstract class Animal {
         this.y = y;
     }
 
+    public int getXDirection() {
+        return xDirection;
+    }
+
+    public int getYDirection() {
+        return yDirection;
+    }
 }

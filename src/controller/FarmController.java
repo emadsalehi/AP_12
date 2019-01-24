@@ -772,4 +772,8 @@ public class FarmController {
         }
         return destination;
     }
+
+    public Farm getFarm() {
+        return farm;
+    }
 }
