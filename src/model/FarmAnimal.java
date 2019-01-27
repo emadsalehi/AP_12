@@ -4,7 +4,7 @@ public class FarmAnimal extends Animal {
     private boolean isHungry;
     private int timeTillHungry;
     private FarmAnimalType farmAnimalType;
-    private int productionPeriod = farmAnimalType.getProductionPeriod();
+    private int productionPeriod;
     private int productionTimer = productionPeriod;
     private boolean readyToProduce = false;
 
@@ -12,6 +12,7 @@ public class FarmAnimal extends Animal {
     public FarmAnimal(int x, int y, FarmAnimalType farmAnimalType) {
         super(x, y);
         this.farmAnimalType = farmAnimalType;
+        this.productionPeriod = farmAnimalType.getProductionPeriod();
     }
 
     @Override

@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.*;
+import model.request.PickUpRequest;
 import model.request.TurnRequest;
 
 import java.io.FileInputStream;
@@ -81,8 +82,13 @@ public class GraphicController extends Application {
                             ArrayList<Product> products = cells[i][j].getProducts();
                             for (Product product : products) {
                                 ImageView productImageView = getProductImageView(product);
+                                productImageView.setX(i);
+                                productImageView.setY(j);
                                 game.getChildren().add(productImageView);
+                                int finalI = i;
+                                int finalJ = j;
                                 productImageView.setOnMouseClicked(event -> {
+                                    farmController.pickUpAction(new PickUpRequest(finalI, finalJ));
                                     game.getChildren().remove(productImageView);
                                 });
                             }

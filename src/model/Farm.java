@@ -5,7 +5,11 @@ import java.util.HashMap;
 
 public class Farm {
     private final int maxPlantLevel = 5;
-    private Cell[][] cells = new Cell[30][30];
+    private Cell[][] cells = new Cell[30][30]; {
+        for (int i = 0; i < 30; i++)
+            for (int j = 0; j < 30; j++)
+                cells[i][j] = new Cell();
+    }
     private int money = 1000;
     private Storage storage = new Storage();
     private Well well = new Well();
@@ -14,6 +18,10 @@ public class Farm {
     private Truck truck = new Truck();
     private Level level = new Level();
     private int time;
+
+    public Farm(ArrayList<WorkShop> workShops) {
+        this.workShops = workShops;
+    }
 
     public int getTime() {
         return time;
@@ -179,10 +187,6 @@ public class Farm {
             }
         }
         return true;
-    }
-
-    public ArrayList<Animal> getAnimals() {
-        return null;
     }
 
 

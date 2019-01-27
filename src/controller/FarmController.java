@@ -15,7 +15,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FarmController {
-    private Farm farm = new Farm();
+    ArrayList<WorkShop> workShops = new ArrayList<>(); {
+        workShops.add(new CookieBakery());
+        workShops.add(new SewingFactory());
+        workShops.add(new EggPowderPlant());
+        workShops.add(new CakeBakery());
+        workShops.add(new Spinnery());
+        workShops.add(new WeavingFactory());
+    }
+    private Farm farm = new Farm(workShops);
     private View view = new View();
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
@@ -363,13 +371,13 @@ public class FarmController {
             StringBuilder stringBuilder = new StringBuilder();
             for (WorkShop workShop : workShops) {
                 if (workShop instanceof CustomWorkShop) {
-                    stringBuilder.append("Custom: Products: " + ((CustomWorkShop) workShop).getProcessedProduct()
+                    stringBuilder.append("Custom: Products: ").append(((CustomWorkShop) workShop).getProcessedProduct()
                             .getSecondaryProductType().toString());
                     if (((CustomWorkShop) workShop).getRawProduct() instanceof PrimitiveProduct) {
-                        stringBuilder.append(" Raw: " + ((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
+                        stringBuilder.append(" Raw: ").append(((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
                                 .getPrimitiveProductType().toString());
                     } else {
-                        stringBuilder.append(" Raw: " + ((SecondaryProduct) ((CustomWorkShop) workShop).getRawProduct())
+                        stringBuilder.append(" Raw: ").append(((SecondaryProduct) ((CustomWorkShop) workShop).getRawProduct())
                                 .getSecondaryProductType().toString());
                     }
                 } else {
@@ -566,14 +574,19 @@ public class FarmController {
 
     public void turnAction(TurnRequest request) {
         for (int i = 0; i < request.getNumberOfTurns(); i++) {
-            for (Animal animal : farm.getAnimals()) {
-                Integer[] destination = getAnimalDestination(animal, farm.getCells());
-                animal.move(destination[0], destination[1]);
+            Cell[][] cells = farm.getCells();
+            for (int j = 0; j < 30; j++) {
+                for (int k = 0; k < 30; k++) {
+                    ArrayList<Animal> animals = cells[j][k].getAnimals();
+                    for (Animal animal : cells[j][k].getAnimals()) {
+                        Integer[] destination = getAnimalDestination(animal, cells);
+                        animal.move(destination[0], destination[1]);
+                    }
+                }
             }
             for (WorkShop workShop : farm.getWorkShops()) {
                 workShop.nextTurn();
                 if (workShop.readyForDelivery()) {
-                    Cell[][] cells = farm.getCells();
                     int throwX = workShop.getThrowedProductX();
                     int throwY = workShop.getThrowedProductY();
                     ArrayList<Product> products = cells[throwX][throwY].getProducts();
@@ -600,27 +613,31 @@ public class FarmController {
                 farm.getTruck().setReadyToPay(false);
             }
             farm.setTime(farm.getTime() + 1);
-            if (farm.levelPassedChecker()) {
-                view.logLevelPassed();
-                return;
-            }
+//            if (farm.levelPassedChecker()) {
+//                view.logLevelPassed();
+//                return;
+//            }
         }
     }
 
 
     public void upgradeAction(UpgradeRequest request) {
         if (request.getPartTOUpgradeName().equals("cat")) {
-            for (Animal animal : farm.getAnimals())
-                if (animal instanceof Cat) {
-                    if (((Cat) animal).getLevel() == 2)
-                        view.logLevelIsHighest();
-                    else if (farm.getMoney() < ((Cat) animal).calculateUpgardePrice())
-                        view.logNotEnoughMoney();
-                    else {
-                        farm.setMoney(farm.getMoney() - ((Cat) animal).calculateUpgardePrice());
-                        ((Cat) animal).upgrade();
-                    }
+            for (int i = 0; i < 30; i++) {
+                for (int j = 0; j < 30; j++) {
+                    for (Animal animal : farm.getCells()[i][j].getAnimals())
+                        if (animal instanceof Cat) {
+                            if (((Cat) animal).getLevel() == 2)
+                                view.logLevelIsHighest();
+                            else if (farm.getMoney() < ((Cat) animal).calculateUpgardePrice())
+                                view.logNotEnoughMoney();
+                            else {
+                                farm.setMoney(farm.getMoney() - ((Cat) animal).calculateUpgardePrice());
+                                ((Cat) animal).upgrade();
+                            }
+                        }
                 }
+            }
         } else if (request.getPartTOUpgradeName().equals("well")) {
             if (farm.getWell().getLevel() == 4)
                 view.logLevelIsHighest();

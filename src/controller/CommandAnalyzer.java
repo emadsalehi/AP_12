@@ -4,9 +4,6 @@ import model.Dog;
 import model.FarmAnimal;
 import model.FarmAnimalType;
 import model.request.*;
-import view.View;
-
-import java.util.Random;
 
 public class CommandAnalyzer {
     private final String BUY_REQUEST = "buy (cat|dog|cow|chicken|sheep)";  //Some Animals are absent in FarmAnimalType
