@@ -4,13 +4,16 @@ import controller.FarmController;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.*;
+import model.request.CageRequest;
 import model.request.PickUpRequest;
+import model.request.PlantRequest;
 import model.request.TurnRequest;
 
 import java.io.FileInputStream;
@@ -24,7 +27,7 @@ public class GraphicController extends Application {
     private Group menu = new Group();
     private Group game = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
-    private int timeConstant = 1000;
+    private int timeConstant = 500;
     private final String pathToBackGroundImage = "D:\\University\\AP\\Project\\AP_12\\src\\GUI\\Textures\\back.png";
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
@@ -55,7 +58,6 @@ public class GraphicController extends Application {
             private long lastTime = 0;
             private double time = 0;
             private long second = 1000000000;
-
             @Override
             public void handle(long now) {
                 if (lastTime == 0)
@@ -68,14 +70,20 @@ public class GraphicController extends Application {
                     farmController.turnAction(new TurnRequest(1));
                     Farm farm = farmController.getFarm();
                     Cell[][] cells = farm.getCells();
+                    game.setOnMouseClicked(event -> {
+                        int x = (int)((event.getX() - Utils.startX) / Utils.cellXSize);
+                        int y = (int)((event.getY() - Utils.startY) / Utils.cellYSize);
+                        if (x >= 0 && x < 30 && y >= 0 && y < 30) {
+                            if (!farmController.pickUpAction(new PickUpRequest(x, y)))
+                                if (!farmController.cageAction(new CageRequest(x, y)))
+                                    farmController.plantAction(new PlantRequest(x, y));
+                        }
+                    });
                     for (int i = 0; i < 30; i++) {
                         for (int j = 0; j < 30; j++) {
                             ArrayList<Animal> animals = cells[i][j].getAnimals();
                             ArrayList<Animation> animations = new ArrayList<>();
                             for (Animal animal : animals) {
-                                if (animal instanceof FarmAnimal) {
-
-                                }
                                 Animation animation = new SpriteAnimal(animal, timeConstant, game);
                                 animation.setCycleCount(animal.getSpeed());
                                 animations.add(animation);
@@ -83,20 +91,18 @@ public class GraphicController extends Application {
                             for (Animation animation : animations) {
                                 animation.play();
                             }
-                            ArrayList<Product> products = cells[i][j].getProducts();
-                            for (Product product : products) {
+                            for (Product product : cells[i][j].getProducts()) {
                                 ImageView productImageView = getProductImageView(product);
                                 productImageView.setX(i);
                                 productImageView.setY(j);
                                 game.getChildren().add(productImageView);
-                                int finalI = i;
-                                int finalJ = j;
-                                productImageView.setOnMouseClicked(event -> {
-                                    farmController.pickUpAction(new PickUpRequest(finalI, finalJ));
-                                    game.getChildren().remove(productImageView);
-                                });
                             }
-
+                            if (cells[i][j].isHasPlant()) {
+                                ImageView imageView = getPlantImageView(cells[i][j].getPlantLevel());
+                                imageView.setX(Utils.startX + Utils.cellXSize * i);
+                                imageView.setY(Utils.startY + Utils.cellYSize * j);
+                                game.getChildren().add(imageView);
+                            }
                         }
                     }
 
@@ -136,6 +142,25 @@ public class GraphicController extends Application {
         try {
             ImageView productImageView = new ImageView(new Image(new FileInputStream(pathToImage.toString())));
             return productImageView;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ImageView getPlantImageView(int plantLevel) {
+        String pathToImage  = "src/GUI/Textures/Grass/grass1.png";
+        try {
+            ImageView grassView = new ImageView(new Image(new FileInputStream(pathToImage)));
+            if (plantLevel == 1)
+                grassView.setViewport(new Rectangle2D(148, 0, 47, 47));
+            else if (plantLevel == 2)
+                grassView.setViewport(new Rectangle2D(148, 47, 47, 47));
+            else if (plantLevel == 3)
+                grassView.setViewport(new Rectangle2D(148, 94, 47, 47));
+            else if (plantLevel >= 4)
+                grassView.setViewport(new Rectangle2D(148, 148, 47, 47));
+            return grassView;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -153,7 +153,7 @@ public class Farm {
                 }
     }
 
-    public void userPickUp(int x, int y) {
+    public boolean userPickUp(int x, int y) {
         Cell cell = cells[x][y];
         if (cell.getProducts().size() != 0) {
             ArrayList<Product> cellProducts = cell.getProducts();
@@ -163,7 +163,9 @@ public class Farm {
             storage.setProducts(storageProducts);
             cellProducts.remove(cellProducts.size() - 1);
             cell.setProducts(cellProducts);
-        }
+            return true;
+        } else
+            return false;
         //todo If product exist store it in storage and remove it from cells.
     }
 
