@@ -18,8 +18,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class GraphicController extends Application {
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    private final int WIDTH = Utils.sceneWidth;
+    private final int HEIGHT = Utils.sceneHeight;
 
     private Group menu = new Group();
     private Group game = new Group();
@@ -73,8 +73,9 @@ public class GraphicController extends Application {
                             ArrayList<Animal> animals = cells[i][j].getAnimals();
                             ArrayList<Animation> animations = new ArrayList<>();
                             for (Animal animal : animals) {
-                                System.out.println(animal.getXDirection());
-                                System.out.println(animal.getYDirection());
+                                if (animal instanceof FarmAnimal) {
+
+                                }
                                 Animation animation = new SpriteAnimal(animal, timeConstant, game);
                                 animation.setCycleCount(animal.getSpeed());
                                 animations.add(animation);
@@ -95,6 +96,7 @@ public class GraphicController extends Application {
                                     game.getChildren().remove(productImageView);
                                 });
                             }
+
                         }
                     }
 

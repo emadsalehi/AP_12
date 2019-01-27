@@ -2,7 +2,7 @@ package model;
 
 public class FarmAnimal extends Animal {
     private boolean isHungry = false;
-    private int timeTillHungry = 10;
+    private int timeTillHungry = 17;
     private int timeTillFill = 5;
     private FarmAnimalType farmAnimalType;
     private int productionPeriod;
@@ -33,7 +33,7 @@ public class FarmAnimal extends Animal {
             isHungry = true;
         }
         if (isHungry == false && timeTillHungry <= 0) {
-            timeTillHungry = 10;
+            timeTillHungry = 17;
         }
         if (productionTimer == 0){
             productionTimer = productionPeriod;

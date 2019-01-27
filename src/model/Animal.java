@@ -7,6 +7,7 @@ public abstract class Animal {
     private int y;
     private int buyPrice;
     private int sellPrice;
+    private int timeTillRandom = 4;
     private int speed = 1;
     private String type;
     private int xDirection = -1;
@@ -59,10 +60,16 @@ public abstract class Animal {
     }
 
     public void randomMove() {
-        while (xDirection == 0 && yDirection == 0) {
+        if (timeTillRandom == 0) {
+            timeTillRandom = 4;
             xDirection = randomiser(x);
             yDirection = randomiser(y);
-        }
+            while (xDirection == 0 && yDirection == 0) {
+                xDirection = randomiser(x);
+                yDirection = randomiser(y);
+            }
+        } else
+            timeTillRandom--;
 
         x += speed * xDirection;
         y += speed * yDirection;

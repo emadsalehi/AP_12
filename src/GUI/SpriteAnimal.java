@@ -24,7 +24,8 @@ public class SpriteAnimal extends Transition {
     private int width;
     private int height;
     private int lastIndex;
-    private final int cellSize = 10;
+    private final int xCellSize = Utils.cellXSize;
+    private final int yCellSize = Utils.cellYSize;
 
     public SpriteAnimal(Animal animal, int timeConstant, Group game) {
         this.animal = animal;
@@ -45,8 +46,8 @@ public class SpriteAnimal extends Transition {
             imageView.setViewport(new Rectangle2D(x, y, width, height));
             imageView.setVisible(true);
             if (animal.isMoving()) {
-                imageView.setX(imageView.getX() + (double)animal.getXDirection() * (double)cellSize / (double)count);
-                imageView.setY(imageView.getY() + animal.getYDirection() * cellSize / count);
+                imageView.setX(imageView.getX() + (double)animal.getXDirection() * (double) xCellSize / (double)count);
+                imageView.setY(imageView.getY() + (double)animal.getYDirection() * (double) yCellSize / (double)count);
             }
             lastIndex = index;
         }
@@ -88,12 +89,12 @@ public class SpriteAnimal extends Transition {
             e.printStackTrace();
         }
         if (animal.isMoving()) {
-            animalView.setX(170 + cellSize * animal.getX() + animal.getXDirection() * animal.getSpeed());
-            animalView.setY(200 + cellSize * animal.getY() + animal.getYDirection() * animal.getSpeed());
+            animalView.setX(Utils.startX + xCellSize * animal.getX() + animal.getXDirection() * animal.getSpeed());
+            animalView.setY(Utils.startY + yCellSize * animal.getY() + animal.getYDirection() * animal.getSpeed());
             this.setCycleDuration(Duration.millis(timeConstant / animal.getSpeed()));
         } else {
-            animalView.setX(170 + cellSize * animal.getX());
-            animalView.setY(200 + cellSize * animal.getY());
+            animalView.setX(Utils.startX + xCellSize * animal.getX());
+            animalView.setY(Utils.startY + yCellSize * animal.getY());
             this.setCycleDuration(Duration.millis(timeConstant));
         }
         width = (int)animalView.getImage().getWidth() / columns;
@@ -105,11 +106,11 @@ public class SpriteAnimal extends Transition {
     public String getDirectionString (int xDirection, int yDirection) {
         if (xDirection == 1) {
             if (yDirection == 1)
-                return "right_down.png";
+                return "down_right.png";
             else if (yDirection == 0)
                 return "right.png";
             else
-                return "right_up.png";
+                return "up_right.png";
 
         } else if (xDirection == 0) {
             if (yDirection == 1)
@@ -119,7 +120,7 @@ public class SpriteAnimal extends Transition {
 
         } else if (xDirection == -1) {
             if (yDirection == 1)
-                return "left_down.png";
+                return "down_left.png";
             else if (yDirection == 0)
                 return "left.png";
             else

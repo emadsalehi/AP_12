@@ -2,7 +2,6 @@ package controller;
 
 import com.google.gson.Gson;
 import model.*;
-import model.exceptions.NotPossibleException;
 import model.request.*;
 import view.View;
 
@@ -251,7 +250,7 @@ public class FarmController {
         int x = request.getX();
         int y = request.getY();
         if (x < 0 || x > 29 || y < 0 || y > 29) {
-            throw new NotPossibleException("pickUp");
+            view.logNotPossible();
         } else {
             farm.userPickUp(x, y);
         }
