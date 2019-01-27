@@ -3,6 +3,7 @@ package GUI;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -13,6 +14,7 @@ import java.io.FileNotFoundException;
 
 public class SpriteAnimal extends Transition {
     private Animal animal;
+    private Group game;
     private ImageView imageView;
     private int timeConstant;
     private int count = 24;
@@ -22,12 +24,14 @@ public class SpriteAnimal extends Transition {
     private int width;
     private int height;
     private int lastIndex;
-    private final int cellSize = 14;
+    private final int cellSize = 10;
 
-    public SpriteAnimal(Animal animal, int timeConstant) {
+    public SpriteAnimal(Animal animal, int timeConstant, Group game) {
         this.animal = animal;
         this.timeConstant = timeConstant;
         this.imageView = getAnimalImageView();
+        this.game = game;
+        game.getChildren().add(this.imageView);
         this.setInterpolator(Interpolator.LINEAR);
     }
 
@@ -37,9 +41,11 @@ public class SpriteAnimal extends Transition {
         if (index != lastIndex) {
             final int x = (index % columns) * width + offsetX;
             final int y = (index / columns) * height + offsetY;
+            imageView.setVisible(false);
             imageView.setViewport(new Rectangle2D(x, y, width, height));
+            imageView.setVisible(true);
             if (animal.isMoving()) {
-                imageView.setX(imageView.getX() + animal.getXDirection() * cellSize / count);
+                imageView.setX(imageView.getX() + (double)animal.getXDirection() * (double)cellSize / (double)count);
                 imageView.setY(imageView.getY() + animal.getYDirection() * cellSize / count);
             }
             lastIndex = index;
@@ -81,8 +87,6 @@ public class SpriteAnimal extends Transition {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        this.height = (int)animalView.getFitHeight();
-        this.width = (int)animalView.getFitWidth() / this.count;
         if (animal.isMoving()) {
             animalView.setX(170 + cellSize * animal.getX() + animal.getXDirection() * animal.getSpeed());
             animalView.setY(200 + cellSize * animal.getY() + animal.getYDirection() * animal.getSpeed());
@@ -92,7 +96,9 @@ public class SpriteAnimal extends Transition {
             animalView.setY(200 + cellSize * animal.getY());
             this.setCycleDuration(Duration.millis(timeConstant));
         }
-        animalView.setViewport(new Rectangle2D(0, 0, this.width, this.height));
+        width = (int)animalView.getImage().getWidth() / columns;
+        height = (int) animalView.getImage().getHeight() / (count / columns);
+        animalView.setViewport(new Rectangle2D(0, 0, width, height));
         return animalView;
     }
 

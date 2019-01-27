@@ -75,7 +75,7 @@ public class GraphicController extends Application {
                             for (Animal animal : animals) {
                                 System.out.println(animal.getXDirection());
                                 System.out.println(animal.getYDirection());
-                                Animation animation = new SpriteAnimal(animal, timeConstant);
+                                Animation animation = new SpriteAnimal(animal, timeConstant, game);
                                 animation.setCycleCount(animal.getSpeed());
                                 animations.add(animation);
                             }

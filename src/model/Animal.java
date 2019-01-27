@@ -9,7 +9,6 @@ public abstract class Animal {
     private int sellPrice;
     private int speed = 1;
     private String type;
-    private int movesTillNewRandom;
     private int xDirection = -1;
     private int yDirection = 0;
     private boolean isMoving = true;
@@ -17,7 +16,6 @@ public abstract class Animal {
     public Animal(int x, int y) {
         this.x = x;
         this.y = y;
-        this.movesTillNewRandom = 4;
     }
 
     public boolean isMoving() {
@@ -61,21 +59,13 @@ public abstract class Animal {
     }
 
     public void randomMove() {
-        if (movesTillNewRandom == 0) {
-            movesTillNewRandom = 4;
-
-            while (xDirection == 0 && yDirection == 0) {
-                xDirection = randomiser(x);
-                yDirection = randomiser(y);
-            }
-
-            x += speed * xDirection;
-            y += speed * yDirection;
-        } else {
-            movesTillNewRandom--;
-            x += speed * xDirection;
-            y += speed * yDirection;
+        while (xDirection == 0 && yDirection == 0) {
+            xDirection = randomiser(x);
+            yDirection = randomiser(y);
         }
+
+        x += speed * xDirection;
+        y += speed * yDirection;
     }
 
     public int randomiser(int value) {
