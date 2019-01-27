@@ -19,6 +19,14 @@ public class FarmController {
     private View view = new View();
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
+    public Farm getFarm() {
+        return farm;
+    }
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
+    }
+
     public void listenForCommand() {
         boolean requestsOnTheWay = true;
         while (requestsOnTheWay) {
