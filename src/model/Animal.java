@@ -7,18 +7,17 @@ public abstract class Animal {
     private int y;
     private int buyPrice;
     private int sellPrice;
-    private int speed;
+    private int speed = 1;
     private String type;
     private int movesTillNewRandom;
-    private int xDirection = 0;
+    private int xDirection = -1;
     private int yDirection = 0;
-    private boolean isMoving;
+    private boolean isMoving = true;
 
     public Animal(int x, int y) {
         this.x = x;
         this.y = y;
-        this.movesTillNewRandom = 5;
-        this.isMoving = false;
+        this.movesTillNewRandom = 4;
     }
 
     public boolean isMoving() {
@@ -62,31 +61,28 @@ public abstract class Animal {
     }
 
     public void randomMove() {
-        if (isMoving) {
+        if (movesTillNewRandom == 0) {
+            movesTillNewRandom = 4;
 
-        } else {
-            if (movesTillNewRandom == 0) {
-                movesTillNewRandom = 5;
-
+            while (xDirection == 0 && yDirection == 0) {
                 xDirection = randomiser(x);
                 yDirection = randomiser(y);
-
-                x += speed * xDirection;
-                y += speed * yDirection;
-            } else {
-                movesTillNewRandom--;
-                x += speed * xDirection;
-                y += speed * yDirection;
             }
-        }
 
+            x += speed * xDirection;
+            y += speed * yDirection;
+        } else {
+            movesTillNewRandom--;
+            x += speed * xDirection;
+            y += speed * yDirection;
+        }
     }
 
     public int randomiser(int value) {
         Random random = new Random();
-        if (value == speed) {
+        if (value <= speed * 4) {
             return random.nextInt(2);
-        } else if (value == 29 - speed) {
+        } else if (value >= 29 - speed * 4) {
             return random.nextInt(2) - 1;
         } else {
             return random.nextInt(3) - 1;
@@ -96,9 +92,9 @@ public abstract class Animal {
     public void intendedMove(int destinationX, int destinationY) {
 
         xDirection = (int) Math.round(((double) (destinationX - getX())) /
-                Math.sqrt((destinationX - getX()) ^ 2 + (destinationY - getY()) ^ 2));
+                Math.sqrt(Math.pow((destinationX - getX()), 2) + Math.pow((destinationY - getY()) , 2)));
         yDirection = (int) Math.round(((double) (destinationY - getY())) /
-                Math.sqrt((destinationX - getX()) ^ 2 + (destinationY - getY()) ^ 2));
+                Math.sqrt(Math.pow((destinationX - getX()), 2) + Math.pow((destinationY - getY()) , 2)));
         int xSpeed = xDirection * getSpeed();
         int ySpeed = yDirection * getSpeed();
         setX(getX() + xSpeed);

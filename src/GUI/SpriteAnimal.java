@@ -99,11 +99,11 @@ public class SpriteAnimal extends Transition {
     public String getDirectionString (int xDirection, int yDirection) {
         if (xDirection == 1) {
             if (yDirection == 1)
-                return "down_right.png";
+                return "right_down.png";
             else if (yDirection == 0)
                 return "right.png";
             else
-                return "up_right.png";
+                return "right_up.png";
 
         } else if (xDirection == 0) {
             if (yDirection == 1)
@@ -113,11 +113,11 @@ public class SpriteAnimal extends Transition {
 
         } else if (xDirection == -1) {
             if (yDirection == 1)
-                return "down_left.png";
+                return "left_down.png";
             else if (yDirection == 0)
                 return "left.png";
             else
-                return "left_up.png";
+                return "up_left.png";
         }
         return "";
     }

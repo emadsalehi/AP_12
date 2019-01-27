@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Farm {
     private final int maxPlantLevel = 5;
@@ -44,14 +45,16 @@ public class Farm {
                         if (cell.isHasPlant()) {
                             if (((FarmAnimal) animal).isHungry()) {
                                 animal.setMoving(false);
-                                ((FarmAnimal) animal).setTimeTillHungry(((FarmAnimal) animal).getTimeTillHungry() + 1);
+                                ((FarmAnimal) animal).setTimeTillFill(((FarmAnimal) animal).getTimeTillFill() - 1);
                                 cell.setPlantLevel(cell.getPlantLevel() - 1);
+                                if (((FarmAnimal) animal).getTimeTillFill() == 0) {
+                                    ((FarmAnimal) animal).setHungry(false);
+                                    ((FarmAnimal) animal).setTimeTillFill(5);
+                                    animal.setMoving(true);
+                                }
                             }
-                            if (cell.getPlantLevel() < 1) {
-                                cell.setPlantLevel(0);
-                                animal.setMoving(true);
+                            if (cell.getPlantLevel() == 0) {
                                 cell.setHasPlant(false);
-                                break;
                             }
                         }
                         ((FarmAnimal) animal).nextTurn();
@@ -115,11 +118,20 @@ public class Farm {
 
     public void displacer() {
         for (int i = 0; i < 30; i++)
-            for (int j = 0; j < 30; j++)
-                for (Animal animal : this.cells[i][j].getAnimals()) {
-                    this.cells[animal.getX()][animal.getY()].getAnimals().add(animal);
-                    this.cells[i][j].getAnimals().remove(animal);
+            for (int j = 0; j < 30; j++) {
+                Iterator<Animal> animalIterator = cells[i][j].getAnimals().iterator();
+                while (animalIterator.hasNext()) {
+                    Animal animal = animalIterator.next();
+                    if (animal.getX() != i && animal.getY() != j) {
+                        cells[animal.getX()][animal.getY()].getAnimals().add(animal);
+                        animalIterator.remove();
+                    }
                 }
+//                for (Animal animal : this.cells[i][j].getAnimals()) {
+//                    this.cells[animal.getX()][animal.getY()].getAnimals().add(animal);
+//                    this.cells[i][j].getAnimals().remove(animal);
+//                }
+            }
     }
 
     public Cell catProductCollision(Cell cell) {

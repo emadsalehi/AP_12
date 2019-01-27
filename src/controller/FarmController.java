@@ -316,12 +316,15 @@ public class FarmController {
                 for (int j = 0; j < 30; j++) {
                     Cell cell = cells[i][j];
                     if (cell.getAnimals().size() != 0) {
-                        stringBuilder.append(cell.getAnimals().get(0).getClass().getSimpleName().codePointAt(0));
+                        stringBuilder.append(cell.getAnimals().get(0).getClass().getSimpleName().charAt(0));
                     } else if (cell.getProducts().size() != 0) {
-                        stringBuilder.append(cell.getProducts().get(0).getClass().getSimpleName().codePointAt(0));
+                        stringBuilder.append(cell.getProducts().get(0).getClass().getSimpleName().charAt(0));
                     } else if (cell.isHasPlant()) {
                         stringBuilder.append("O");
+                    } else {
+                        stringBuilder.append(".");
                     }
+                    stringBuilder.append("\n");
                 }
             }
             view.logMap(stringBuilder.toString());
@@ -371,13 +374,13 @@ public class FarmController {
             StringBuilder stringBuilder = new StringBuilder();
             for (WorkShop workShop : workShops) {
                 if (workShop instanceof CustomWorkShop) {
-                    stringBuilder.append("Custom: Products: ").append(((CustomWorkShop) workShop).getProcessedProduct()
+                    stringBuilder.append("Custom: Products: " + ((CustomWorkShop) workShop).getProcessedProduct()
                             .getSecondaryProductType().toString());
                     if (((CustomWorkShop) workShop).getRawProduct() instanceof PrimitiveProduct) {
-                        stringBuilder.append(" Raw: ").append(((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
+                        stringBuilder.append(" Raw: " + ((PrimitiveProduct) ((CustomWorkShop) workShop).getRawProduct())
                                 .getPrimitiveProductType().toString());
                     } else {
-                        stringBuilder.append(" Raw: ").append(((SecondaryProduct) ((CustomWorkShop) workShop).getRawProduct())
+                        stringBuilder.append(" Raw: " + ((SecondaryProduct) ((CustomWorkShop) workShop).getRawProduct())
                                 .getSecondaryProductType().toString());
                     }
                 } else {
@@ -423,7 +426,7 @@ public class FarmController {
             }
             view.logHelicopter(stringBuilder.toString());
         }
-        
+
     }
 
     public void runAction(RunRequest request) {

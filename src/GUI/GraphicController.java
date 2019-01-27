@@ -40,7 +40,8 @@ public class GraphicController extends Application {
     public void start(Stage primaryStage) {
         newGame();
         scene.setRoot(game);
-
+        WriteThread writeThread = new WriteThread(farmController);
+        writeThread.start();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -72,6 +73,8 @@ public class GraphicController extends Application {
                             ArrayList<Animal> animals = cells[i][j].getAnimals();
                             ArrayList<Animation> animations = new ArrayList<>();
                             for (Animal animal : animals) {
+                                System.out.println(animal.getXDirection());
+                                System.out.println(animal.getYDirection());
                                 Animation animation = new SpriteAnimal(animal, timeConstant);
                                 animation.setCycleCount(animal.getSpeed());
                                 animations.add(animation);
