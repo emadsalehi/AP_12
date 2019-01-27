@@ -9,9 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import model.Animal;
-import model.Cell;
-import model.Farm;
+import model.*;
 import model.request.TurnRequest;
 
 import java.io.FileInputStream;
@@ -51,8 +49,6 @@ public class GraphicController extends Application {
     }
 
     public void newGame() {
-        this.game.getChildren().clear();
-        this.game.getChildren().add(backGround);
         AnimationTimer gameRunner = new AnimationTimer() {
             private long lastTime = 0;
             private double time = 0;
@@ -65,6 +61,8 @@ public class GraphicController extends Application {
                 if (now > lastTime + second / timeConstant * 1000) {
                     lastTime = now;
                     time += 1;
+                    game.getChildren().clear();
+                    game.getChildren().add(backGround);
                     farmController.turnAction(new TurnRequest(1));
                     Farm farm = farmController.getFarm();
                     Cell[][] cells = farm.getCells();
@@ -80,12 +78,56 @@ public class GraphicController extends Application {
                             for (Animation animation : animations) {
                                 animation.play();
                             }
-                            
+                            ArrayList<Product> products = cells[i][j].getProducts();
+                            for (Product product : products) {
+                                ImageView productImageView = getProductImageView(product);
+                                game.getChildren().add(productImageView);
+                                productImageView.setOnMouseClicked(event -> {
+                                    game.getChildren().remove(productImageView);
+                                });
+                            }
                         }
                     }
+
                 }
             }
         };
         gameRunner.start();
+    }
+
+    public ImageView getProductImageView(Product product) {
+        StringBuilder pathToImage = new StringBuilder("src/GUI/Textures/Products/");
+        if (product instanceof PrimitiveProduct) {
+            if (((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.EGG)
+                pathToImage.append("Egg/normal_2.png");
+            else if (((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.MILK)
+                pathToImage.append("Milk.png");
+            else if (((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.WOOL)
+                pathToImage.append("Wool/normal.png");
+            else if (((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.PLUME)
+                pathToImage.append("Plume/normal.png");
+            else if (((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.FLOUR)
+                pathToImage.append("Flour.png");
+        } else if (product instanceof SecondaryProduct){
+            if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.CAKE)
+                pathToImage.append("FlouryCake.png");
+            else if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.EGG_POWDER)
+                pathToImage.append("EggPowder.png");
+            else if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.FABRIC)
+                pathToImage.append("Fabric.png");
+            else if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.CLOTHES)
+                pathToImage.append("CarnivalDress.png");
+            else if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.THREAD)
+                pathToImage.append("Sewing.png");
+            else if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.COOKIE)
+                pathToImage.append("Cake.png");
+        }
+        try {
+            ImageView productImageView = new ImageView(new Image(new FileInputStream(pathToImage.toString())));
+            return productImageView;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
