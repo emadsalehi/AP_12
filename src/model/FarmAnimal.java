@@ -1,22 +1,25 @@
 package model;
 
 public class FarmAnimal extends Animal {
-    private boolean isHungry;
-    private int timeTillHungry;
+    private boolean isHungry = false;
+    private int timeTillHungry = 17;
+    private int timeTillFill = 5;
     private FarmAnimalType farmAnimalType;
-    private int productionPeriod = farmAnimalType.getProductionPeriod();
-    private int productionTimer = productionPeriod;
+    private int productionPeriod;
+    private int productionTimer;
     private boolean readyToProduce = false;
 
 
     public FarmAnimal(int x, int y, FarmAnimalType farmAnimalType) {
         super(x, y);
         this.farmAnimalType = farmAnimalType;
+        this.productionPeriod = farmAnimalType.getProductionPeriod();
+        this.productionTimer = this.productionPeriod;
     }
 
     @Override
     public void move(int destinationX, int destinationY) {
-        if (destinationX == 31) {
+        if (!isHungry || destinationX == -1 || destinationY == -1) {
             randomMove();
         }
         else {
@@ -25,7 +28,13 @@ public class FarmAnimal extends Animal {
     }
 
     public void nextTurn(){
-        productionTimer--;
+        if (isHungry == false) {
+            productionTimer--;
+            timeTillHungry--;
+        }
+        if (timeTillHungry == 0) {
+            isHungry = true;
+        }
         if (productionTimer == 0){
             productionTimer = productionPeriod;
             readyToProduce = true;
@@ -63,5 +72,13 @@ public class FarmAnimal extends Animal {
 
     public void setReadyToProduce(boolean readyToProduce) {
         this.readyToProduce = readyToProduce;
+    }
+
+    public int getTimeTillFill() {
+        return timeTillFill;
+    }
+
+    public void setTimeTillFill(int timeTillFill) {
+        this.timeTillFill = timeTillFill;
     }
 }

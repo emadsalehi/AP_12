@@ -2,7 +2,6 @@ package controller;
 
 import com.google.gson.Gson;
 import model.*;
-import model.exceptions.NotPossibleException;
 import model.request.*;
 import view.View;
 
@@ -15,7 +14,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class FarmController {
-    private Farm farm = new Farm();
+    ArrayList<WorkShop> workShops = new ArrayList<>(); {
+        workShops.add(new CookieBakery());
+        workShops.add(new SewingFactory());
+        workShops.add(new EggPowderPlant());
+        workShops.add(new CakeBakery());
+        workShops.add(new Spinnery());
+        workShops.add(new WeavingFactory());
+    }
+    private Farm farm = new Farm(workShops);
     private View view = new View();
     private CommandAnalyzer commandAnalyzer = new CommandAnalyzer();
 
@@ -129,7 +136,7 @@ public class FarmController {
         view.logWrongCommand();
     }
 
-    public void buyAction(BuyRequest request) {
+    public boolean buyAction(BuyRequest request) {
         int buyCost;
         if (request.getAnimal() instanceof FarmAnimal) {
             buyCost = ((FarmAnimal) request.getAnimal()).getFarmAnimalType().getBuyCost();
@@ -138,13 +145,15 @@ public class FarmController {
         }
         if (farm.getMoney() < buyCost) {
             view.logNotEnoughMoney();
+            return false;
         } else {
             farm.addAnimal(request.getAnimal());
             farm.setMoney(farm.getMoney() - buyCost);
         }
+        return true;
     }
 
-    public void cageAction(CageRequest request) {
+    public boolean cageAction(CageRequest request) {
         boolean wildFoundFlag = false;
         Storage storage = farm.getStorage();
         Cell[][] cells = farm.getCells();
@@ -168,6 +177,7 @@ public class FarmController {
         farm.setStorage(storage);
         cells[request.getX()][request.getY()].setAnimals(cellAnimals);
         farm.setCells(cells);
+        return wildFoundFlag;
     }
 
     public void clearAction(ClearRequest request) {
@@ -239,22 +249,25 @@ public class FarmController {
         }
     }
 
-    public void pickUpAction(PickUpRequest request) {
+    public boolean pickUpAction(PickUpRequest request) {
         int x = request.getX();
         int y = request.getY();
         if (x < 0 || x > 29 || y < 0 || y > 29) {
-            throw new NotPossibleException("pickUp");
+            view.logNotPossible();
+            return false;
         } else {
-            farm.userPickUp(x, y);
+            return farm.userPickUp(x, y);
         }
     }
 
-    public void plantAction(PlantRequest request) {
+    public boolean plantAction(PlantRequest request) {
         int x = request.getX();
         int y = request.getY();
         int[] xDisplace = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int[] yDisplace = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
-
+        if (farm.getWell().getWaterLeft() == 0 || farm.getWell().isWorking())
+            return false;
+        farm.getWell().setWaterLeft(farm.getWell().getWaterLeft() - 1);
         for (int i = 0; i < 9; i++) {
             if (x + xDisplace[i] < 0 || x + xDisplace[i] > 29 || y + yDisplace[i] < 0 || y + yDisplace[i] > 29) {
                 continue;
@@ -262,6 +275,7 @@ public class FarmController {
                 farm.irrigate(x + xDisplace[i], y + yDisplace[i]);
             }
         }
+        return true;
     }
 
     public void printAction(PrintRequest request) {
@@ -308,12 +322,15 @@ public class FarmController {
                 for (int j = 0; j < 30; j++) {
                     Cell cell = cells[i][j];
                     if (cell.getAnimals().size() != 0) {
-                        stringBuilder.append(cell.getAnimals().get(0).getClass().getSimpleName().codePointAt(0));
+                        stringBuilder.append(cell.getAnimals().get(0).getClass().getSimpleName().charAt(0));
                     } else if (cell.getProducts().size() != 0) {
-                        stringBuilder.append(cell.getProducts().get(0).getClass().getSimpleName().codePointAt(0));
+                        stringBuilder.append(cell.getProducts().get(0).getClass().getSimpleName().charAt(0));
                     } else if (cell.isHasPlant()) {
                         stringBuilder.append("O");
+                    } else {
+                        stringBuilder.append(".");
                     }
+                    stringBuilder.append("\n");
                 }
             }
             view.logMap(stringBuilder.toString());
@@ -415,7 +432,7 @@ public class FarmController {
             }
             view.logHelicopter(stringBuilder.toString());
         }
-        
+
     }
 
     public void runAction(RunRequest request) {
@@ -566,14 +583,18 @@ public class FarmController {
 
     public void turnAction(TurnRequest request) {
         for (int i = 0; i < request.getNumberOfTurns(); i++) {
-            for (Animal animal : farm.getAnimals()) {
-                Integer[] destination = getAnimalDestination(animal, farm.getCells());
-                animal.move(destination[0], destination[1]);
+            Cell[][] cells = farm.getCells();
+            for (int j = 0; j < 30; j++) {
+                for (int k = 0; k < 30; k++) {
+                    for (Animal animal : cells[j][k].getAnimals()) {
+                        Integer[] destination = getAnimalDestination(animal, cells);
+                        animal.move(destination[0], destination[1]);
+                    }
+                }
             }
             for (WorkShop workShop : farm.getWorkShops()) {
                 workShop.nextTurn();
                 if (workShop.readyForDelivery()) {
-                    Cell[][] cells = farm.getCells();
                     int throwX = workShop.getThrowedProductX();
                     int throwY = workShop.getThrowedProductY();
                     ArrayList<Product> products = cells[throwX][throwY].getProducts();
@@ -600,65 +621,91 @@ public class FarmController {
                 farm.getTruck().setReadyToPay(false);
             }
             farm.setTime(farm.getTime() + 1);
-            if (farm.levelPassedChecker()) {
-                view.logLevelPassed();
-                return;
-            }
+//            if (farm.levelPassedChecker()) {
+//                view.logLevelPassed();
+//                return;
+//            }
         }
     }
 
 
-    public void upgradeAction(UpgradeRequest request) {
+    public boolean upgradeAction(UpgradeRequest request) {
         if (request.getPartTOUpgradeName().equals("cat")) {
-            for (Animal animal : farm.getAnimals())
-                if (animal instanceof Cat) {
-                    if (((Cat) animal).getLevel() == 2)
-                        view.logLevelIsHighest();
-                    else if (farm.getMoney() < ((Cat) animal).calculateUpgardePrice())
-                        view.logNotEnoughMoney();
-                    else {
-                        farm.setMoney(farm.getMoney() - ((Cat) animal).calculateUpgardePrice());
-                        ((Cat) animal).upgrade();
-                    }
+            for (int i = 0; i < 30; i++) {
+                for (int j = 0; j < 30; j++) {
+                    for (Animal animal : farm.getCells()[i][j].getAnimals())
+                        if (animal instanceof Cat) {
+                            if (((Cat) animal).getLevel() == 2)
+                                view.logLevelIsHighest();
+                            else if (farm.getMoney() < ((Cat) animal).calculateUpgardePrice())
+                                view.logNotEnoughMoney();
+                            else {
+                                farm.setMoney(farm.getMoney() - ((Cat) animal).calculateUpgardePrice());
+                                ((Cat) animal).upgrade();
+                            }
+                        }
                 }
+            }
         } else if (request.getPartTOUpgradeName().equals("well")) {
-            if (farm.getWell().getLevel() == 4)
+            if (farm.getWell().getLevel() == 4) {
                 view.logLevelIsHighest();
-            else if (farm.getWell().isWorking())
+                return false;
+            }
+            else if (farm.getWell().isWorking()) {
                 view.logWellIsWorking();
-            else if (farm.getMoney() < farm.getWell().getUpgradePrice())
+                return false;
+            }
+            else if (farm.getMoney() < farm.getWell().getUpgradePrice()) {
                 view.logNotEnoughMoney();
+                return false;
+            }
             else {
                 farm.setMoney(farm.getMoney() - farm.getWell().getUpgradePrice());
                 farm.getWell().upgradeLevel();
             }
         } else if (request.getPartTOUpgradeName().equals("truck")) {
-            if (farm.getTruck().getLevel() == 4)
+            if (farm.getTruck().getLevel() == 4) {
                 view.logLevelIsHighest();
-            else if (!farm.getTruck().isAvailable())
+                return false;
+            }
+            else if (!farm.getTruck().isAvailable()) {
                 view.logTruckIsNotAvailable();
-            else if (farm.getMoney() < farm.getTruck().getUpgradeCost())
+                return false;
+            }
+            else if (farm.getMoney() < farm.getTruck().getUpgradeCost()) {
                 view.logNotEnoughMoney();
+                return false;
+            }
             else {
                 farm.setMoney(farm.getMoney() - farm.getTruck().getUpgradeCost());
                 farm.getTruck().upgrade();
             }
         } else if (request.getPartTOUpgradeName().equals("helicopter")) {
-            if (farm.getHelicopter().getLevel() == 4)
+            if (farm.getHelicopter().getLevel() == 4) {
                 view.logLevelIsHighest();
-            else if (!farm.getHelicopter().isAvailable())
+                return false;
+            }
+            else if (!farm.getHelicopter().isAvailable()) {
                 view.logHelicopterIsNotAvailable();
-            else if (farm.getMoney() < farm.getHelicopter().getUpgradeCost())
+                return false;
+            }
+            else if (farm.getMoney() < farm.getHelicopter().getUpgradeCost()) {
                 view.logNotEnoughMoney();
+                return false;
+            }
             else {
                 farm.setMoney(farm.getMoney() - farm.getHelicopter().getUpgradeCost());
                 farm.getHelicopter().upgrade();
             }
         } else if (request.getPartTOUpgradeName().equals("warehouse")) {
-            if (farm.getStorage().getLevel() == 4)
+            if (farm.getStorage().getLevel() == 4) {
                 view.logLevelIsHighest();
-            else if (farm.getMoney() < farm.getStorage().getUpgradePrice())
+                return false;
+            }
+            else if (farm.getMoney() < farm.getStorage().getUpgradePrice()) {
                 view.logNotEnoughMoney();
+                return false;
+            }
             else {
                 farm.setMoney(farm.getMoney() - farm.getStorage().getUpgradePrice());
                 farm.getStorage().upgradeStorage();
@@ -680,33 +727,42 @@ public class FarmController {
                     selectedWorkShop = workShop;
                 else {
                     view.logWrongCommand();
-                    return;
+                    return false;
                 }
             }
-            if (selectedWorkShop.getLevel() == 4)
+            if (selectedWorkShop.getLevel() == 4) {
                 view.logLevelIsHighest();
-            else if (selectedWorkShop.isWorking())
+                return false;
+            }
+            else if (selectedWorkShop.isWorking()) {
                 view.logWorkShopIsWorking();
-            else if (farm.getMoney() < selectedWorkShop.getUpgradeCost())
+                return false;
+            }
+            else if (farm.getMoney() < selectedWorkShop.getUpgradeCost()) {
                 view.logNotEnoughMoney();
+                return false;
+            }
             else {
                 farm.setMoney(farm.getMoney() - selectedWorkShop.getUpgradeCost());
                 selectedWorkShop.upgrade();
             }
         }
+        return true;
     }
 
-    public void wellAction(WellRequest request) {
+    public boolean wellAction(WellRequest request) {
         if (farm.getMoney() < farm.getWell().getFillPrice()) {
             view.logNotEnoughMoney();
-            return;
+            return false;
         }
         if (!farm.getWell().isWorking()) {
             farm.setMoney(farm.getMoney() - farm.getWell().getFillPrice());
             farm.getWell().fill();
         } else {
             view.logWellIsWorking();
+            return false;
         }
+        return true;
     }
 
 
@@ -771,5 +827,9 @@ public class FarmController {
             }
         }
         return destination;
+    }
+
+    public Farm getFarm() {
+        return farm;
     }
 }
