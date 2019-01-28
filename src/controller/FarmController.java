@@ -267,7 +267,7 @@ public class FarmController {
         int[] yDisplace = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         if (farm.getWell().getWaterLeft() == 0 || farm.getWell().isWorking())
             return false;
-
+        farm.getWell().setWaterLeft(farm.getWell().getWaterLeft() - 1);
         for (int i = 0; i < 9; i++) {
             if (x + xDisplace[i] < 0 || x + xDisplace[i] > 29 || y + yDisplace[i] < 0 || y + yDisplace[i] > 29) {
                 continue;
@@ -586,7 +586,6 @@ public class FarmController {
             Cell[][] cells = farm.getCells();
             for (int j = 0; j < 30; j++) {
                 for (int k = 0; k < 30; k++) {
-                    ArrayList<Animal> animals = cells[j][k].getAnimals();
                     for (Animal animal : cells[j][k].getAnimals()) {
                         Integer[] destination = getAnimalDestination(animal, cells);
                         animal.move(destination[0], destination[1]);

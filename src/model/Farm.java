@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class Farm {
-    private final int maxPlantLevel = 5;
+    private final int maxPlantLevel = 4;
     private Cell[][] cells = new Cell[30][30]; {
         for (int i = 0; i < 30; i++)
             for (int j = 0; j < 30; j++)
@@ -46,10 +46,11 @@ public class Farm {
                             if (((FarmAnimal) animal).isHungry()) {
                                 animal.setMoving(false);
                                 ((FarmAnimal) animal).setTimeTillFill(((FarmAnimal) animal).getTimeTillFill() - 1);
-                                cell.setPlantLevel(cell.getPlantLevel() - 1);
+                                cell.setPlantLevel(cell.getPlantLevel() - 2);
                                 if (((FarmAnimal) animal).getTimeTillFill() == 0) {
                                     ((FarmAnimal) animal).setHungry(false);
                                     ((FarmAnimal) animal).setTimeTillFill(5);
+                                    ((FarmAnimal) animal).setTimeTillHungry(17);
                                     animal.setMoving(true);
                                 }
                             }
@@ -76,24 +77,20 @@ public class Farm {
                         }
                     }
                 }
-
             }
         }
     }
 
     public Cell checkWildAndFarmCollision(Cell cell) {
-
         ArrayList<Animal> cellAnimals = cell.getAnimals();
-        ArrayList<Animal> farmAnimals = new ArrayList<Animal>();
-        ArrayList<Animal> wildAnimals = new ArrayList<Animal>();
+        boolean hasWild = false, hasFarm = false;
         for (Animal animal : cellAnimals) {
-            if (animal instanceof FarmAnimal) {
-                farmAnimals.add(animal);
-            } else {
-                wildAnimals.add(animal);
-            }
+            if (animal instanceof WildAnimal)
+                hasWild = true;
+            else if (animal instanceof FarmAnimal)
+                hasFarm = true;
         }
-        if (!farmAnimals.isEmpty() && !wildAnimals.isEmpty()) {
+        if (hasFarm && hasWild) {
             cellAnimals.clear();
             cell.setAnimals(cellAnimals);
         }
@@ -101,17 +98,13 @@ public class Farm {
     }
 
     public Cell checkWildAndProductCollision(Cell cell) {
-        ArrayList<Animal> cellAnimals = cell.getAnimals();
         ArrayList<Product> cellProducts = cell.getProducts();
-        ArrayList<Animal> wildAnimals = new ArrayList<>();
-        for (Animal animal : cellAnimals) {
+        for (Animal animal : cell.getAnimals()) {
             if (animal instanceof WildAnimal) {
-                wildAnimals.add(animal);
+                cellProducts.clear();
+                cell.setProducts(cellProducts);
+                return cell;
             }
-        }
-        if (!wildAnimals.isEmpty()) {
-            cellProducts.clear();
-            cell.setProducts(cellProducts);
         }
         return cell;
     }
@@ -127,30 +120,26 @@ public class Farm {
                         animalIterator.remove();
                     }
                 }
-//                for (Animal animal : this.cells[i][j].getAnimals()) {
-//                    this.cells[animal.getX()][animal.getY()].getAnimals().add(animal);
-//                    this.cells[i][j].getAnimals().remove(animal);
-//                }
             }
     }
 
     public Cell catProductCollision(Cell cell) {
         ArrayList<Product> products = cell.getProducts();
-        ArrayList<Product> storageProducts = this.getStorage().getProducts();
-        for (Product product : products)
-            storageProducts.add(product);
-        this.storage.setProducts(storageProducts);
-        cell.setProducts(new ArrayList<Product>());
+        for (Animal animal : cell.getAnimals()) {
+            if(animal instanceof Cat) {
+                for (Product product : products)
+                    storage.getProducts().add(product);
+                products.clear();
+                cell.setProducts(products);
+                return cell;
+            }
+        }
         return cell;
     }
 
     public void irrigate(int x, int y) {
-        for (int i = x - 1; i <= x + 1; i++)
-            for (int j = y - 1; j <= y + 1; j++)
-                if (i >= 0 && i < 30 && j >= 0 && j < 30) {
-                    this.cells[i][j].setPlantLevel(maxPlantLevel);
-                    this.cells[i][j].setHasPlant(true);
-                }
+        this.cells[x][y].setPlantLevel(maxPlantLevel);
+        this.cells[x][y].setHasPlant(true);
     }
 
     public boolean userPickUp(int x, int y) {

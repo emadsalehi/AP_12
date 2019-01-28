@@ -32,6 +32,7 @@ public class SpriteAnimal extends Transition {
         this.timeConstant = timeConstant;
         this.imageView = getAnimalImageView();
         this.game = game;
+        this.imageView.setViewOrder(0);
         game.getChildren().add(this.imageView);
         this.setInterpolator(Interpolator.LINEAR);
     }
@@ -89,12 +90,12 @@ public class SpriteAnimal extends Transition {
             e.printStackTrace();
         }
         if (animal.isMoving()) {
-            animalView.setX(Utils.startX + xCellSize * animal.getX() + animal.getXDirection() * animal.getSpeed());
-            animalView.setY(Utils.startY + yCellSize * animal.getY() + animal.getYDirection() * animal.getSpeed());
+            animalView.setX(Utils.startX + xCellSize * animal.getX() + animal.getXDirection() * animal.getSpeed() - 25);
+            animalView.setY(Utils.startY + yCellSize * animal.getY() + animal.getYDirection() * animal.getSpeed() - 60);
             this.setCycleDuration(Duration.millis(timeConstant / animal.getSpeed()));
         } else {
-            animalView.setX(Utils.startX + xCellSize * animal.getX());
-            animalView.setY(Utils.startY + yCellSize * animal.getY());
+            animalView.setX(Utils.startX + xCellSize * animal.getX() - 25);
+            animalView.setY(Utils.startY + yCellSize * animal.getY() - 60);
             this.setCycleDuration(Duration.millis(timeConstant));
         }
         width = (int)animalView.getImage().getWidth() / columns;
@@ -117,6 +118,8 @@ public class SpriteAnimal extends Transition {
                 return "down.png";
             else if (yDirection == -1)
                 return "up.png";
+            else
+                return "eat.png";
 
         } else if (xDirection == -1) {
             if (yDirection == 1)

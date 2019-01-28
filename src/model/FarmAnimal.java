@@ -6,7 +6,7 @@ public class FarmAnimal extends Animal {
     private int timeTillFill = 5;
     private FarmAnimalType farmAnimalType;
     private int productionPeriod;
-    private int productionTimer = productionPeriod;
+    private int productionTimer;
     private boolean readyToProduce = false;
 
 
@@ -14,11 +14,12 @@ public class FarmAnimal extends Animal {
         super(x, y);
         this.farmAnimalType = farmAnimalType;
         this.productionPeriod = farmAnimalType.getProductionPeriod();
+        this.productionTimer = this.productionPeriod;
     }
 
     @Override
     public void move(int destinationX, int destinationY) {
-        if (!isHungry) {
+        if (!isHungry || destinationX == -1 || destinationY == -1) {
             randomMove();
         }
         else {
@@ -27,13 +28,12 @@ public class FarmAnimal extends Animal {
     }
 
     public void nextTurn(){
-        productionTimer--;
-        timeTillHungry--;
+        if (isHungry == false) {
+            productionTimer--;
+            timeTillHungry--;
+        }
         if (timeTillHungry == 0) {
             isHungry = true;
-        }
-        if (isHungry == false && timeTillHungry <= 0) {
-            timeTillHungry = 17;
         }
         if (productionTimer == 0){
             productionTimer = productionPeriod;

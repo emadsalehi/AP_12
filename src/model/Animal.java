@@ -92,6 +92,10 @@ public abstract class Animal {
                 Math.sqrt(Math.pow((destinationX - getX()), 2) + Math.pow((destinationY - getY()) , 2)));
         yDirection = (int) Math.round(((double) (destinationY - getY())) /
                 Math.sqrt(Math.pow((destinationX - getX()), 2) + Math.pow((destinationY - getY()) , 2)));
+        if(xDirection == 0 && yDirection == 0) {
+            randomMove();
+            return;
+        }
         int xSpeed = xDirection * getSpeed();
         int ySpeed = yDirection * getSpeed();
         setX(getX() + xSpeed);

@@ -23,12 +23,12 @@ import java.util.ArrayList;
 public class GraphicController extends Application {
     private final int WIDTH = Utils.sceneWidth;
     private final int HEIGHT = Utils.sceneHeight;
-
+    private final Image grassImage = new Image(new FileInputStream("src/GUI/Textures/Grass/grass1.png"));
     private Group menu = new Group();
     private Group game = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
-    private int timeConstant = 500;
-    private final String pathToBackGroundImage = "D:\\University\\AP\\Project\\AP_12\\src\\GUI\\Textures\\back.png";
+    private int timeConstant = 1000;
+    private final String pathToBackGroundImage = "src/GUI/Textures/back.png";
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
 
@@ -81,6 +81,12 @@ public class GraphicController extends Application {
                     });
                     for (int i = 0; i < 30; i++) {
                         for (int j = 0; j < 30; j++) {
+                            if (cells[i][j].isHasPlant()) {
+                                ImageView imageView = getPlantImageView(cells[i][j].getPlantLevel());
+                                imageView.setX(Utils.startX + Utils.cellXSize * i - 20);
+                                imageView.setY(Utils.startY + Utils.cellYSize * j - 20);
+                                game.getChildren().add(imageView);
+                            }
                             ArrayList<Animal> animals = cells[i][j].getAnimals();
                             ArrayList<Animation> animations = new ArrayList<>();
                             for (Animal animal : animals) {
@@ -93,15 +99,9 @@ public class GraphicController extends Application {
                             }
                             for (Product product : cells[i][j].getProducts()) {
                                 ImageView productImageView = getProductImageView(product);
-                                productImageView.setX(i);
-                                productImageView.setY(j);
+                                productImageView.setX(Utils.startX + Utils.cellXSize * i - 15);
+                                productImageView.setY(Utils.startY + Utils.cellYSize * j - 15);
                                 game.getChildren().add(productImageView);
-                            }
-                            if (cells[i][j].isHasPlant()) {
-                                ImageView imageView = getPlantImageView(cells[i][j].getPlantLevel());
-                                imageView.setX(Utils.startX + Utils.cellXSize * i);
-                                imageView.setY(Utils.startY + Utils.cellYSize * j);
-                                game.getChildren().add(imageView);
                             }
                         }
                     }
@@ -140,8 +140,7 @@ public class GraphicController extends Application {
                 pathToImage.append("Cake.png");
         }
         try {
-            ImageView productImageView = new ImageView(new Image(new FileInputStream(pathToImage.toString())));
-            return productImageView;
+            return new ImageView(new Image(new FileInputStream(pathToImage.toString())));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -149,21 +148,17 @@ public class GraphicController extends Application {
     }
 
     public ImageView getPlantImageView(int plantLevel) {
-        String pathToImage  = "src/GUI/Textures/Grass/grass1.png";
-        try {
-            ImageView grassView = new ImageView(new Image(new FileInputStream(pathToImage)));
-            if (plantLevel == 1)
-                grassView.setViewport(new Rectangle2D(148, 0, 47, 47));
-            else if (plantLevel == 2)
-                grassView.setViewport(new Rectangle2D(148, 47, 47, 47));
-            else if (plantLevel == 3)
-                grassView.setViewport(new Rectangle2D(148, 94, 47, 47));
-            else if (plantLevel >= 4)
-                grassView.setViewport(new Rectangle2D(148, 148, 47, 47));
-            return grassView;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        ImageView grassView = new ImageView(grassImage);
+        grassView.setScaleX(0.4);
+        grassView.setScaleY(0.4);
+        if (plantLevel == 1)
+            grassView.setViewport(new Rectangle2D(148, 0, 47, 47));
+        else if (plantLevel == 2)
+            grassView.setViewport(new Rectangle2D(148, 47, 47, 47));
+        else if (plantLevel == 3)
+            grassView.setViewport(new Rectangle2D(148, 94, 47, 47));
+        else if (plantLevel >= 4)
+            grassView.setViewport(new Rectangle2D(148, 148, 47, 47));
+        return grassView;
     }
 }
