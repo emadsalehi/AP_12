@@ -1,9 +1,5 @@
 package view;
 
-import model.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class View {
@@ -88,5 +84,9 @@ public void logNoWildAnimalFound(){
 
     public void logLevelPassed() {
         System.out.println("Level passed.\nCongratulations!");
+    }
+
+    public void logNotPossible() {
+        System.out.println("Not possible");
     }
 }

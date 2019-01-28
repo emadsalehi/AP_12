@@ -3,9 +3,13 @@ package model;
 import java.util.HashMap;
 
 public class Level {
-    private int requiredMoney;
-    private HashMap<Animal, Integer> requiredAnimals;
-    private HashMap<Product, Integer> requiredProduct;
+    private int requiredMoney = 3000;
+    private HashMap<Animal, Integer> requiredAnimals = new HashMap<>(); {
+        requiredAnimals.put(new Cat(3, 5), 20);
+    }
+    private HashMap<Product, Integer> requiredProduct = new HashMap<>(); {
+        requiredProduct.put(new PrimitiveProduct(PrimitiveProductType.EGG), 20);
+    }
 
     public int getRequiredMoney() {
         return requiredMoney;
