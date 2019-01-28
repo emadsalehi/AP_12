@@ -255,6 +255,26 @@ public class GraphicController extends Application {
         ArrayList<Rectangle> upgradeButtonRectangles = new ArrayList<>();
         ArrayList<Text> upgradeButtonTexts = new ArrayList<>();
 
+        StringBuilder wellStringBuilder = new StringBuilder("/GUI/Textures/Service/Well/");
+        Image wellImage = new Image
+                (serviceLevelImageSelector(farmController.getFarm().getWell().getLevel(),wellStringBuilder));
+        ImageView wellImageView = new ImageView(wellImage);
+        wellImageView.setFitWidth(120);
+        wellImageView.setFitHeight(120);
+        wellImageView.setViewport(new Rectangle2D(0,0,
+                wellImage.getWidth()/4, wellImage.getHeight()/4));
+        wellImageView.relocate(WIDTH /2 , 40);
+        game.getChildren().add(wellImageView);
+
+//        StringBuilder storageStringBuilder = new StringBuilder("/GUI/Textures/Service/Depot/");
+//        Image storageImage = new Image
+//                (serviceLevelImageSelector(farmController.getFarm().getStorage().getLevel(), storageStringBuilder));
+//        ImageView storageImageView = new ImageView(storageImage);
+//        storageImageView.setFitWidth(200);
+//        storageImageView.setFitHeight(150);
+//        storageImageView.relocate(WIDTH / 2 - 100, HEIGHT / 2 + 130);
+//        game.getChildren().add(storageImageView);
+
         Rectangle wellUpgradeButtonRectangle = new Rectangle(WIDTH / 2 + 30, 150, 60, 30);
         Text wellUpgradeButtonText = new Text(WIDTH / 2 + 40, 170,
                 Integer.toString(farmController.getFarm().getWell().getUpgradePrice()));
