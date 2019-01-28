@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class Level {
     private int requiredMoney;
-    private HashMap<Animal, Integer> requiredAnimals;
-    private HashMap<Product, Integer> requiredProduct;
+    private HashMap<Animal, Integer> requiredAnimals = new HashMap<>();
+    private HashMap<Product, Integer> requiredProduct = new HashMap<>();
 
     public int getRequiredMoney() {
         return requiredMoney;
