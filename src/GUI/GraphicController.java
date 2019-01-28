@@ -21,10 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.*;
-import model.request.CageRequest;
-import model.request.PickUpRequest;
-import model.request.PlantRequest;
-import model.request.TurnRequest;
+import model.request.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,11 +94,12 @@ public class GraphicController extends Application {
     }
 
     public void newGame() {
+        Farm farm = farmController.getFarm();
         game.getChildren().clear();
         game.getChildren().add(backGround);
         StringBuilder storageStringBuilder = new StringBuilder("/GUI/Textures/Service/Depot/");
         Image storageImage = new Image
-                (serviceLevelImageSelector(farmController.getFarm().getStorage().getLevel(), storageStringBuilder));
+                (serviceLevelImageSelector(farm.getStorage().getLevel(), storageStringBuilder));
         ImageView storageImageView = new ImageView(storageImage);
         storageImageView.setFitWidth(200);
         storageImageView.setFitHeight(150);
@@ -110,7 +108,7 @@ public class GraphicController extends Application {
 
         StringBuilder helicopterStringBuilder = new StringBuilder("/GUI/Textures/Service/Helicopter/");
         Image helicopterImage = new Image
-                (serviceLevelImageSelector(farmController.getFarm().getHelicopter().getLevel(), helicopterStringBuilder));
+                (serviceLevelImageSelector(farm.getHelicopter().getLevel(), helicopterStringBuilder));
         //todo: Helicopter seems to be not initiated or its level isn't known
         ImageView helicopterImageView = new ImageView(helicopterImage);
         helicopterImageView.setFitHeight(150);
@@ -120,17 +118,16 @@ public class GraphicController extends Application {
 
         StringBuilder truckStringBuilder = new StringBuilder("/GUI/Textures/Service/Truck/");
         Image truckImage = new Image
-                (serviceLevelImageSelector(farmController.getFarm().getTruck().getLevel(), truckStringBuilder));
+                (serviceLevelImageSelector(farm.getTruck().getLevel(), truckStringBuilder));
         ImageView truckImageView = new ImageView(truckImage);
         truckImageView.setFitWidth(130);
         truckImageView.setFitHeight(130);
         truckImageView.relocate(WIDTH / 2 - 240, HEIGHT / 2 + 140);
         game.getChildren().add(truckImageView);
 
-        farmController.getFarm().workshopAdder();
         StringBuilder cookieBakeryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/Cake (Cookie Bakery)/");
         Image cookieBakeryImage = new Image
-                (workshopLevelImageSelector(farmController.getFarm().getWorkShops().get(0).getLevel(),
+                (workshopLevelImageSelector(farm.getWorkShops().get(0).getLevel(),
                         cookieBakeryStringBuilder));
         //todo I ADD the workshops JUST FOR TEST
         ImageView cookieBakeryImageView = new ImageView(cookieBakeryImage);
@@ -141,7 +138,7 @@ public class GraphicController extends Application {
         StringBuilder sewingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "CarnivalDress (Sewing Factory)/");
         Image sewingFactoryImage = new Image
-                (workshopLevelImageSelector(farmController.getFarm().getWorkShops().get(1).getLevel(),
+                (workshopLevelImageSelector(farm.getWorkShops().get(1).getLevel(),
                         sewingFactoryStringBuilder));
         ImageView sewingFactoryImageView = new ImageView(sewingFactoryImage);
         workShopImageModify(sewingFactoryImageView, sewingFactoryImage);
@@ -151,7 +148,7 @@ public class GraphicController extends Application {
         StringBuilder eggPowderPlantStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "DriedEggs (Egg Powder Plant)/");
         Image eggPowderPlantImage = new Image
-                (workshopLevelImageSelector(farmController.getFarm().getWorkShops().get(2).getLevel(),
+                (workshopLevelImageSelector(farm.getWorkShops().get(2).getLevel(),
                         eggPowderPlantStringBuilder));
         ImageView eggPowderPlantImageView = new ImageView(eggPowderPlantImage);
         workShopImageModify(eggPowderPlantImageView, eggPowderPlantImage);
@@ -161,7 +158,7 @@ public class GraphicController extends Application {
         StringBuilder cakeBakeryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "FlouryCake (Cake Bakery)/");
         Image cakeBakeryImage = new Image
-                (workshopLevelImageSelector(farmController.getFarm().getWorkShops().get(3).getLevel(),
+                (workshopLevelImageSelector(farm.getWorkShops().get(3).getLevel(),
                         cakeBakeryStringBuilder));
         ImageView cakeBakeryImageView = new ImageView(cakeBakeryImage);
         workShopImageModify(cakeBakeryImageView, cakeBakeryImage);
@@ -171,7 +168,7 @@ public class GraphicController extends Application {
         StringBuilder spinneryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "Spinnery (Spinnery)/");
         Image spinneryImage = new Image
-                (workshopLevelImageSelector(farmController.getFarm().getWorkShops().get(4).getLevel(),
+                (workshopLevelImageSelector(farm.getWorkShops().get(4).getLevel(),
                         spinneryStringBuilder));
         ImageView spinneryImageView = new ImageView(spinneryImage);
         workShopImageModify(spinneryImageView, spinneryImage);
@@ -181,7 +178,7 @@ public class GraphicController extends Application {
         StringBuilder weavingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "Weaving (Weaving Factory)/");
         Image weavingFactoryImage = new Image
-                (workshopLevelImageSelector(farmController.getFarm().getWorkShops().get(5).getLevel(),
+                (workshopLevelImageSelector(farm.getWorkShops().get(5).getLevel(),
                         weavingFactoryStringBuilder));
         ImageView weavingFactoryImageView = new ImageView(weavingFactoryImage);
         workShopImageModify(weavingFactoryImageView, weavingFactoryImage);
@@ -266,7 +263,7 @@ public class GraphicController extends Application {
 
         StringBuilder wellStringBuilder = new StringBuilder("/GUI/Textures/Service/Well/");
         Image wellImage = new Image
-                (serviceLevelImageSelector(farmController.getFarm().getWell().getLevel(),wellStringBuilder));
+                (serviceLevelImageSelector(farm.getWell().getLevel(),wellStringBuilder));
         ImageView wellImageView = new ImageView(wellImage);
         wellImageView.setFitWidth(120);
         wellImageView.setFitHeight(120);
@@ -277,19 +274,19 @@ public class GraphicController extends Application {
 
         Rectangle wellUpgradeButtonRectangle = new Rectangle(WIDTH / 2 + 30, 150, 60, 30);
         Text wellUpgradeButtonText = new Text(WIDTH / 2 + 40, 170,
-                Integer.toString(farmController.getFarm().getWell().getUpgradePrice()));
+                Integer.toString(farm.getWell().getUpgradePrice()));
         gameButtonMaker(wellUpgradeButtonRectangle, wellUpgradeButtonText);
         wellUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("well"))) {
                 wellUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWell().getUpgradePrice())
+                        Integer.toString(farm.getWell().getUpgradePrice())
                 );
             }
         });
         wellUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("well"))) {
                 wellUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWell().getUpgradePrice())
+                        Integer.toString(farm.getWell().getUpgradePrice())
                 );
             }
         });
@@ -303,19 +300,19 @@ public class GraphicController extends Application {
         Text storageUpgradeButtonText = new Text(
                 storageImageView.getLayoutX() + storageImageView.getFitWidth() / 2 - 20,
                 storageImageView.getLayoutY() + storageImageView.getFitHeight() + 7,
-                Integer.toString(farmController.getFarm().getStorage().getUpgradePrice()));
+                Integer.toString(farm.getStorage().getUpgradePrice()));
         gameButtonMaker(storageUpgradeButtonRectangle, storageUpgradeButtonText);
         storageUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
                 storageUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getStorage().getUpgradePrice())
+                        Integer.toString(farm.getStorage().getUpgradePrice())
                 );
             }
         });
         storageUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
                 storageUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getStorage().getUpgradePrice())
+                        Integer.toString(farm.getStorage().getUpgradePrice())
                 );
             }
         });
@@ -330,18 +327,18 @@ public class GraphicController extends Application {
         Text truckUpgradeButtonText = new Text(
                 truckImageView.getLayoutX() + truckImageView.getFitWidth() / 2 - 10,
                 truckImageView.getLayoutY() + truckImageView.getFitHeight() + 15,
-                Integer.toString(farmController.getFarm().getTruck().getUpgradeCost()));
+                Integer.toString(farm.getTruck().getUpgradeCost()));
         gameButtonMaker(truckUpgradeButtonRectangle, truckUpgradeButtonText);
         truckUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("truck"))) {
                 truckUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getTruck().getUpgradeCost()));
+                        Integer.toString(farm.getTruck().getUpgradeCost()));
             }
         });
         truckUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("truck"))) {
                 truckUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getTruck().getUpgradeCost()));
+                        Integer.toString(farm.getTruck().getUpgradeCost()));
             }
         });
         upgradeButtonTexts.add(truckUpgradeButtonText);
@@ -350,18 +347,18 @@ public class GraphicController extends Application {
         Rectangle helicopterUpgradeButtonRectangle = new Rectangle(WIDTH / 2 + 160, HEIGHT - 40,
                 60, 30);
         Text helicopterUpgradeButtonText = new Text(WIDTH / 2 + 170, HEIGHT - 20,
-                Integer.toString(farmController.getFarm().getHelicopter().getUpgradeCost()));
+                Integer.toString(farm.getHelicopter().getUpgradeCost()));
         gameButtonMaker(helicopterUpgradeButtonRectangle, helicopterUpgradeButtonText);
         helicopterUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("helicopter"))) {
                 helicopterUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getHelicopter().getUpgradeCost()));
+                        Integer.toString(farm.getHelicopter().getUpgradeCost()));
             }
         });
         helicopterUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("helicopter"))) {
                 helicopterUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getHelicopter().getUpgradeCost()));
+                        Integer.toString(farm.getHelicopter().getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(helicopterUpgradeButtonRectangle);
@@ -370,18 +367,18 @@ public class GraphicController extends Application {
         Rectangle cookieBakeryUpgradeButtonRectangle = new Rectangle(60, 130,
                 60, 30);
         Text cookieBakeryUpgradeButtonText = new Text(70, 150,
-                Integer.toString(farmController.getFarm().getWorkShops().get(0).getUpgradeCost()));
+                Integer.toString(farm.getWorkShops().get(0).getUpgradeCost()));
         gameButtonMaker(cookieBakeryUpgradeButtonRectangle, cookieBakeryUpgradeButtonText);
         cookieBakeryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cookiebakery"))) {
                 cookieBakeryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(0).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(0).getUpgradeCost()));
             }
         });
         cookieBakeryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cookiebakery"))) {
                 cookieBakeryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(0).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(0).getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(cookieBakeryUpgradeButtonRectangle);
@@ -390,18 +387,18 @@ public class GraphicController extends Application {
         Rectangle sewingFactoryUpgradeButtonRectangle = new Rectangle(60, 260,
                 60, 30);
         Text sewingFactoryUpgradeButtonText = new Text(70, 280,
-                Integer.toString(farmController.getFarm().getWorkShops().get(1).getUpgradeCost()));
+                Integer.toString(farm.getWorkShops().get(1).getUpgradeCost()));
         gameButtonMaker(sewingFactoryUpgradeButtonRectangle, sewingFactoryUpgradeButtonText);
         sewingFactoryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("sewingfactory"))) {
                 sewingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(1).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(1).getUpgradeCost()));
             }
         });
         sewingFactoryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("sewingfactory"))) {
                 sewingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(1).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(1).getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(sewingFactoryUpgradeButtonRectangle);
@@ -410,18 +407,18 @@ public class GraphicController extends Application {
         Rectangle eggPowderPlantUpgradeButtonRectangle = new Rectangle(60, 400,
                 60, 30);
         Text eggPowderPlantUpgradeButtonText = new Text(70, 420,
-                Integer.toString(farmController.getFarm().getWorkShops().get(2).getUpgradeCost()));
+                Integer.toString(farm.getWorkShops().get(2).getUpgradeCost()));
         gameButtonMaker(eggPowderPlantUpgradeButtonRectangle, eggPowderPlantUpgradeButtonText);
         eggPowderPlantUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("eggpowderplant"))) {
                 eggPowderPlantUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(2).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(2).getUpgradeCost()));
             }
         });
         eggPowderPlantUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("eggpowderplant"))) {
                 eggPowderPlantUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(2).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(2).getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(eggPowderPlantUpgradeButtonRectangle);
@@ -430,18 +427,18 @@ public class GraphicController extends Application {
         Rectangle cakeBakeryUpgradeButtonRectangle = new Rectangle(700, 130,
                 60, 30);
         Text cakeBakeryUpgradeButtonText = new Text(710, 150,
-                Integer.toString(farmController.getFarm().getWorkShops().get(3).getUpgradeCost()));
+                Integer.toString(farm.getWorkShops().get(3).getUpgradeCost()));
         gameButtonMaker(cakeBakeryUpgradeButtonRectangle, cakeBakeryUpgradeButtonText);
         cakeBakeryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cakebakery"))) {
                 cakeBakeryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(3).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(3).getUpgradeCost()));
             }
         });
         cakeBakeryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cakebakery"))) {
                 cakeBakeryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(3).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(3).getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(cakeBakeryUpgradeButtonRectangle);
@@ -450,18 +447,18 @@ public class GraphicController extends Application {
         Rectangle spinneryUpgradeButtonRectangle = new Rectangle(700, 260,
                 60, 30);
         Text spinneryUpgradeButtonText = new Text(710, 280,
-                Integer.toString(farmController.getFarm().getWorkShops().get(4).getUpgradeCost()));
+                Integer.toString(farm.getWorkShops().get(4).getUpgradeCost()));
         gameButtonMaker(spinneryUpgradeButtonRectangle, spinneryUpgradeButtonText);
         spinneryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("spinnery"))) {
                 spinneryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(4).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(4).getUpgradeCost()));
             }
         });
         spinneryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("spinnery"))) {
                 spinneryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(4).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(4).getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(spinneryUpgradeButtonRectangle);
@@ -470,18 +467,18 @@ public class GraphicController extends Application {
         Rectangle weavingFactoryUpgradeButtonRectangle = new Rectangle(700, 400,
                 60, 30);
         Text weavingFactoryUpgradeButtonText = new Text(710, 420,
-                Integer.toString(farmController.getFarm().getWorkShops().get(5).getUpgradeCost()));
+                Integer.toString(farm.getWorkShops().get(5).getUpgradeCost()));
         gameButtonMaker(weavingFactoryUpgradeButtonRectangle, weavingFactoryUpgradeButtonText);
         weavingFactoryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("weavingfactory"))) {
                 weavingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(5).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(5).getUpgradeCost()));
             }
         });
         weavingFactoryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("weavingfactory"))) {
                 weavingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farmController.getFarm().getWorkShops().get(5).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(5).getUpgradeCost()));
             }
         });
         upgradeButtonRectangles.add(weavingFactoryUpgradeButtonRectangle);
@@ -507,7 +504,6 @@ public class GraphicController extends Application {
                     game.getChildren().clear();
                     game.getChildren().add(backGround);
                     farmController.turnAction(new TurnRequest(1));
-                    Farm farm = farmController.getFarm();
                     Cell[][] cells = farm.getCells();
                     game.setOnMouseClicked(event -> {
                         int x = (int)((event.getX() - Utils.startX) / Utils.cellXSize);
