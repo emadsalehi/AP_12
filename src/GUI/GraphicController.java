@@ -18,15 +18,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.FarmAnimal;
 import model.FarmAnimalType;
-import model.PrimitiveProduct;
-import model.PrimitiveProductType;
-import model.request.BuyRequest;
+import model.request.UpgradeRequest;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class GraphicController extends Application {
     private final int WIDTH = 800;
@@ -98,7 +96,7 @@ public class GraphicController extends Application {
         ImageView storageImageView = new ImageView(storageImage);
         storageImageView.setFitWidth(200);
         storageImageView.setFitHeight(150);
-        storageImageView.relocate(WIDTH / 2 - 100, HEIGHT / 2 + 150);
+        storageImageView.relocate(WIDTH / 2 - 100, HEIGHT / 2 + 130);
         game.getChildren().add(storageImageView);
 
         StringBuilder helicopterStringBuilder = new StringBuilder("/GUI/Textures/Service/Helicopter/");
@@ -108,16 +106,16 @@ public class GraphicController extends Application {
         ImageView helicopterImageView = new ImageView(helicopterImage);
         helicopterImageView.setFitHeight(150);
         helicopterImageView.setFitWidth(150);
-        helicopterImageView.relocate(WIDTH / 2 + 120, HEIGHT / 2 + 150);
+        helicopterImageView.relocate(WIDTH / 2 + 100, HEIGHT / 2 + 125);
         game.getChildren().add(helicopterImageView);
 
         StringBuilder truckStringBuilder = new StringBuilder("/GUI/Textures/Service/Truck/");
         Image truckImage = new Image
                 (serviceLevelImageSelector(farmController.getFarm().getTruck().getLevel(), truckStringBuilder));
         ImageView truckImageView = new ImageView(truckImage);
-        truckImageView.setFitWidth(180);
+        truckImageView.setFitWidth(130);
         truckImageView.setFitHeight(130);
-        truckImageView.relocate(WIDTH / 2 - 300, HEIGHT / 2 + 150);
+        truckImageView.relocate(WIDTH / 2 - 240, HEIGHT / 2 + 140);
         game.getChildren().add(truckImageView);
 
         farmController.getFarm().workshopAdder();
@@ -182,43 +180,43 @@ public class GraphicController extends Application {
         game.getChildren().add(weavingFactoryImageView);
 
         ImageView chickenBuyBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
-        chickenBuyBoard.relocate(20,20);
+        chickenBuyBoard.relocate(20, 20);
         chickenBuyBoard.setFitWidth(80);
         chickenBuyBoard.setFitHeight(100);
-        farmAnimalBuyButton(chickenBuyBoard,FarmAnimalType.CHICKEN);
+        farmAnimalBuyButton(chickenBuyBoard, FarmAnimalType.CHICKEN);
         game.getChildren().add(chickenBuyBoard);
 
         ImageView chickenIconBoard = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/chicken.png"));
-        chickenIconBoard.relocate(28,23);
+        chickenIconBoard.relocate(28, 23);
         chickenIconBoard.setFitHeight(60);
         chickenIconBoard.setFitWidth(60);
-        farmAnimalBuyButton(chickenIconBoard,FarmAnimalType.CHICKEN);
+        farmAnimalBuyButton(chickenIconBoard, FarmAnimalType.CHICKEN);
         game.getChildren().add(chickenIconBoard);
 
-        Text chickenBuyPrice = new Text(30,103, Integer.toString(FarmAnimalType.CHICKEN.getBuyCost()));
-        chickenBuyPrice.setFill(Color.rgb(195,207,23));
-        chickenBuyPrice.setFont(Font.font("Chalkboard", FontWeight.BOLD,25));
-        farmAnimalBuyButton(chickenBuyPrice,FarmAnimalType.CHICKEN);
+        Text chickenBuyPrice = new Text(30, 103, Integer.toString(FarmAnimalType.CHICKEN.getBuyCost()));
+        chickenBuyPrice.setFill(Color.rgb(195, 207, 23));
+        chickenBuyPrice.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
+        farmAnimalBuyButton(chickenBuyPrice, FarmAnimalType.CHICKEN);
         game.getChildren().add(chickenBuyPrice);
 
 
         ImageView sheepBuyBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
-        sheepBuyBoard.relocate(105,20);
+        sheepBuyBoard.relocate(105, 20);
         sheepBuyBoard.setFitWidth(80);
         sheepBuyBoard.setFitHeight(100);
-        farmAnimalBuyButton(sheepBuyBoard,FarmAnimalType.SHEEP);
+        farmAnimalBuyButton(sheepBuyBoard, FarmAnimalType.SHEEP);
         game.getChildren().add(sheepBuyBoard);
 
         ImageView sheepBuyIcon = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/sheep.png"));
-        sheepBuyIcon.relocate(111,23);
+        sheepBuyIcon.relocate(111, 23);
         sheepBuyIcon.setFitWidth(60);
         sheepBuyIcon.setFitHeight(60);
         farmAnimalBuyButton(sheepBuyIcon, FarmAnimalType.SHEEP);
         game.getChildren().add(sheepBuyIcon);
 
-        Text sheepBuyText = new Text(111,103,Integer.toString(FarmAnimalType.SHEEP.getBuyCost()));
-        sheepBuyText.setFill(Color.rgb(195,207,23));
-        sheepBuyText.setFont(Font.font("Chalkboard",FontWeight.BOLD,25));
+        Text sheepBuyText = new Text(111, 103, Integer.toString(FarmAnimalType.SHEEP.getBuyCost()));
+        sheepBuyText.setFill(Color.rgb(195, 207, 23));
+        sheepBuyText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
         farmAnimalBuyButton(sheepBuyText, FarmAnimalType.SHEEP);
         game.getChildren().add(sheepBuyText);
 
@@ -226,61 +224,280 @@ public class GraphicController extends Application {
         cowBuyBoard.relocate(190, 20);
         cowBuyBoard.setFitWidth(80);
         cowBuyBoard.setFitHeight(100);
-        farmAnimalBuyButton(cowBuyBoard,FarmAnimalType.COW);
+        farmAnimalBuyButton(cowBuyBoard, FarmAnimalType.COW);
         game.getChildren().add(cowBuyBoard);
 
         ImageView cowBuyIcon = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/brown_cow.png"));
         cowBuyIcon.relocate(195, 20);
         cowBuyIcon.setFitHeight(60);
         cowBuyIcon.setFitWidth(60);
-        farmAnimalBuyButton(cowBuyIcon,FarmAnimalType.COW);
+        farmAnimalBuyButton(cowBuyIcon, FarmAnimalType.COW);
         game.getChildren().add(cowBuyIcon);
 
         Text cowButText = new Text(200, 103, Integer.toString(FarmAnimalType.COW.getBuyCost()));
-        cowButText.setFill(Color.rgb(195,207,23));
-        cowButText.setFont(Font.font("Chalkboard",FontWeight.BOLD,25));
-        farmAnimalBuyButton(cowButText,FarmAnimalType.COW);
+        cowButText.setFill(Color.rgb(195, 207, 23));
+        cowButText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
+        farmAnimalBuyButton(cowButText, FarmAnimalType.COW);
         game.getChildren().add(cowButText);
 
         ImageView coinBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
-        coinBoard.relocate(WIDTH/2 + 250, 30);
+        coinBoard.relocate(WIDTH / 2 + 250, 30);
         coinBoard.setFitWidth(100);
         coinBoard.setFitHeight(120);
         game.getChildren().add(coinBoard);
 
         ImageView coinIcon = new ImageView(new Image("/GUI/Textures/gameButtons/coin.png"));
-        coinIcon.relocate(WIDTH/2 + 270 , 40);
+        coinIcon.relocate(WIDTH / 2 + 270, 40);
         coinIcon.setFitHeight(60);
         coinIcon.setFitWidth(60);
         game.getChildren().add(coinIcon);
 
-        moneyTextUpdater();
+        ArrayList<Rectangle> upgradeButtonRectangles = new ArrayList<>();
+        ArrayList<Text> upgradeButtonTexts = new ArrayList<>();
 
+        Rectangle wellUpgradeButtonRectangle = new Rectangle(WIDTH / 2 + 30, 150, 60, 30);
+        Text wellUpgradeButtonText = new Text(WIDTH / 2 + 40, 170,
+                Integer.toString(farmController.getFarm().getWell().getUpgradePrice()));
+        gameButtonMaker(wellUpgradeButtonRectangle, wellUpgradeButtonText);
+        wellUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("well"))) {
+                wellUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWell().getUpgradePrice())
+                );
+            }
+        });
+        wellUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("well"))) {
+                wellUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWell().getUpgradePrice())
+                );
+            }
+        });
+        upgradeButtonRectangles.add(wellUpgradeButtonRectangle);
+        upgradeButtonTexts.add(wellUpgradeButtonText);
+
+        Rectangle storageUpgradeButtonRectangle = new Rectangle(
+                storageImageView.getLayoutX() + storageImageView.getFitWidth() / 2 - 30,
+                storageImageView.getLayoutY() + storageImageView.getFitHeight() - 13,
+                60, 30);
+        Text storageUpgradeButtonText = new Text(
+                storageImageView.getLayoutX() + storageImageView.getFitWidth() / 2 - 20,
+                storageImageView.getLayoutY() + storageImageView.getFitHeight() + 7,
+                Integer.toString(farmController.getFarm().getStorage().getUpgradePrice()));
+        gameButtonMaker(storageUpgradeButtonRectangle, storageUpgradeButtonText);
+        storageUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
+                storageUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getStorage().getUpgradePrice())
+                );
+            }
+        });
+        storageUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
+                storageUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getStorage().getUpgradePrice())
+                );
+            }
+        });
+        upgradeButtonTexts.add(storageUpgradeButtonText);
+        upgradeButtonRectangles.add(storageUpgradeButtonRectangle);
+
+
+        Rectangle truckUpgradeButtonRectangle = new Rectangle(
+                truckImageView.getLayoutX() + truckImageView.getFitWidth() / 2 - 20,
+                truckImageView.getLayoutY() + truckImageView.getFitHeight() - 5,
+                60, 30);
+        Text truckUpgradeButtonText = new Text(
+                truckImageView.getLayoutX() + truckImageView.getFitWidth() / 2 - 10,
+                truckImageView.getLayoutY() + truckImageView.getFitHeight() + 15,
+                Integer.toString(farmController.getFarm().getTruck().getUpgradeCost()));
+        gameButtonMaker(truckUpgradeButtonRectangle, truckUpgradeButtonText);
+        truckUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("truck"))) {
+                truckUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getTruck().getUpgradeCost()));
+            }
+        });
+        truckUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("truck"))) {
+                truckUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getTruck().getUpgradeCost()));
+            }
+        });
+        upgradeButtonTexts.add(truckUpgradeButtonText);
+        upgradeButtonRectangles.add(truckUpgradeButtonRectangle);
+
+        Rectangle helicopterUpgradeButtonRectangle = new Rectangle(WIDTH / 2 + 160, HEIGHT - 40,
+                60, 30);
+        Text helicopterUpgradeButtonText = new Text(WIDTH / 2 + 170, HEIGHT - 20,
+                Integer.toString(farmController.getFarm().getHelicopter().getUpgradeCost()));
+        gameButtonMaker(helicopterUpgradeButtonRectangle, helicopterUpgradeButtonText);
+        helicopterUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("helicopter"))) {
+                helicopterUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getHelicopter().getUpgradeCost()));
+            }
+        });
+        helicopterUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("helicopter"))) {
+                helicopterUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getHelicopter().getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(helicopterUpgradeButtonRectangle);
+        upgradeButtonTexts.add(helicopterUpgradeButtonText);
+
+        Rectangle cookieBakeryUpgradeButtonRectangle = new Rectangle(60, 130,
+                60, 30);
+        Text cookieBakeryUpgradeButtonText = new Text(70, 150,
+                Integer.toString(farmController.getFarm().getWorkShops().get(0).getUpgradeCost()));
+        gameButtonMaker(cookieBakeryUpgradeButtonRectangle, cookieBakeryUpgradeButtonText);
+        cookieBakeryUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("cookiebakery"))) {
+                cookieBakeryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(0).getUpgradeCost()));
+            }
+        });
+        cookieBakeryUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("cookiebakery"))) {
+                cookieBakeryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(0).getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(cookieBakeryUpgradeButtonRectangle);
+        upgradeButtonTexts.add(cookieBakeryUpgradeButtonText);
+
+        Rectangle sewingFactoryUpgradeButtonRectangle = new Rectangle(60, 260,
+                60, 30);
+        Text sewingFactoryUpgradeButtonText = new Text(70, 280,
+                Integer.toString(farmController.getFarm().getWorkShops().get(1).getUpgradeCost()));
+        gameButtonMaker(sewingFactoryUpgradeButtonRectangle, sewingFactoryUpgradeButtonText);
+        sewingFactoryUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("sewingfactory"))) {
+                sewingFactoryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(1).getUpgradeCost()));
+            }
+        });
+        sewingFactoryUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("sewingfactory"))) {
+                sewingFactoryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(1).getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(sewingFactoryUpgradeButtonRectangle);
+        upgradeButtonTexts.add(sewingFactoryUpgradeButtonText);
+
+        Rectangle eggPowderPlantUpgradeButtonRectangle = new Rectangle(60, 400,
+                60, 30);
+        Text eggPowderPlantUpgradeButtonText = new Text(70, 420,
+                Integer.toString(farmController.getFarm().getWorkShops().get(2).getUpgradeCost()));
+        gameButtonMaker(eggPowderPlantUpgradeButtonRectangle, eggPowderPlantUpgradeButtonText);
+        eggPowderPlantUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("eggpowderplant"))) {
+                eggPowderPlantUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(2).getUpgradeCost()));
+            }
+        });
+        eggPowderPlantUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("eggpowderplant"))) {
+                eggPowderPlantUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(2).getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(eggPowderPlantUpgradeButtonRectangle);
+        upgradeButtonTexts.add(eggPowderPlantUpgradeButtonText);
+
+        Rectangle cakeBakeryUpgradeButtonRectangle = new Rectangle(700, 130,
+                60, 30);
+        Text cakeBakeryUpgradeButtonText = new Text(710, 150,
+                Integer.toString(farmController.getFarm().getWorkShops().get(3).getUpgradeCost()));
+        gameButtonMaker(cakeBakeryUpgradeButtonRectangle, cakeBakeryUpgradeButtonText);
+        cakeBakeryUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("cakebakery"))) {
+                cakeBakeryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(3).getUpgradeCost()));
+            }
+        });
+        cakeBakeryUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("cakebakery"))) {
+                cakeBakeryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(3).getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(cakeBakeryUpgradeButtonRectangle);
+        upgradeButtonTexts.add(cakeBakeryUpgradeButtonText);
+
+        Rectangle spinneryUpgradeButtonRectangle = new Rectangle(700, 260,
+                60, 30);
+        Text spinneryUpgradeButtonText = new Text(710, 280,
+                Integer.toString(farmController.getFarm().getWorkShops().get(4).getUpgradeCost()));
+        gameButtonMaker(spinneryUpgradeButtonRectangle, spinneryUpgradeButtonText);
+        spinneryUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("spinnery"))) {
+                spinneryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(4).getUpgradeCost()));
+            }
+        });
+        spinneryUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("spinnery"))) {
+                spinneryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(4).getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(spinneryUpgradeButtonRectangle);
+        upgradeButtonTexts.add(spinneryUpgradeButtonText);
+
+        Rectangle weavingFactoryUpgradeButtonRectangle = new Rectangle(700, 400,
+                60, 30);
+        Text weavingFactoryUpgradeButtonText = new Text(710, 420,
+                Integer.toString(farmController.getFarm().getWorkShops().get(5).getUpgradeCost()));
+        gameButtonMaker(weavingFactoryUpgradeButtonRectangle, weavingFactoryUpgradeButtonText);
+        weavingFactoryUpgradeButtonRectangle.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("weavingfactory"))) {
+                weavingFactoryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(5).getUpgradeCost()));
+            }
+        });
+        weavingFactoryUpgradeButtonText.setOnMouseClicked(event -> {
+            if (farmController.upgradeAction(new UpgradeRequest("weavingfactory"))) {
+                weavingFactoryUpgradeButtonText.setText(
+                        Integer.toString(farmController.getFarm().getWorkShops().get(5).getUpgradeCost()));
+            }
+        });
+        upgradeButtonRectangles.add(weavingFactoryUpgradeButtonRectangle);
+        upgradeButtonTexts.add(weavingFactoryUpgradeButtonText);
+
+
+        game.getChildren().addAll(upgradeButtonRectangles);
+        game.getChildren().addAll(upgradeButtonTexts);
+
+//        moneyTextUpdater();
+//
         scene.setRoot(game);
     }
 
     public void farmAnimalBuyButton(Node buttonNode, FarmAnimalType farmAnimalType) {
-        if (farmAnimalType.equals(FarmAnimalType.COW)) {
-            buttonNode.setOnMouseClicked(event -> {
-                farmController.buyAction(new BuyRequest(new FarmAnimal((int)Math.random()*30,(int)Math.random()*30,
-                        FarmAnimalType.COW)));
-                moneyTextUpdater();
-            });
-        } else if (farmAnimalType.equals(FarmAnimalType.CHICKEN)) {
-            farmController.buyAction(new BuyRequest(new FarmAnimal((int)Math.random()*30,(int)Math.random()*30,
-                    FarmAnimalType.CHICKEN)));
-            moneyTextUpdater();
-        } else {
-            farmController.buyAction(new BuyRequest(new FarmAnimal((int)Math.random()*30,(int)Math.random()*30,
-                    FarmAnimalType.SHEEP)));
-            moneyTextUpdater();
-        }
+//        if (farmAnimalType.equals(FarmAnimalType.COW)) {
+//            buttonNode.setOnMouseClicked(event -> {
+//                farmController.buyAction(new BuyRequest(new FarmAnimal((int)Math.random()*30,(int)Math.random()*30,
+//                        FarmAnimalType.COW)));
+//                moneyTextUpdater();
+//            });
+//        } else if (farmAnimalType.equals(FarmAnimalType.CHICKEN)) {
+////            farmController.buyAction(new BuyRequest(new FarmAnimal((int)(Math.random()*30),(int)(Math.random()*30),
+////                    FarmAnimalType.CHICKEN)));
+//            moneyTextUpdater();
+//        } else {
+////            farmController.buyAction(new BuyRequest(new FarmAnimal((int)Math.random()*30,(int)Math.random()*30,
+////                    FarmAnimalType.SHEEP)));
+////            moneyTextUpdater();
+////        }
     }
 
     public void moneyTextUpdater() {
-        Text moneyText = new Text(WIDTH/2 + 270, 130, Integer.toString(farmController.getFarm().getMoney()));
+        Text moneyText = new Text(WIDTH / 2 + 270, 130, Integer.toString(farmController.getFarm().getMoney()));
         moneyText.setFill(Color.WHITE);
-        moneyText.setFont(Font.font("Chalkboard",FontWeight.BOLD,30));
+        moneyText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 30));
         game.getChildren().add(moneyText);
     }
 
@@ -330,18 +547,24 @@ public class GraphicController extends Application {
         return imagePathStringBuilder.toString();
     }
 
-    public void gameButtonMaker(Rectangle buttonRectangle, Text buttonText, Group menuGroup) {
+    public void gameButtonMaker(Rectangle buttonRectangle, Text buttonText) {
         ImagePattern onMouseEnterTexture = new ImagePattern(
                 new Image("/GUI/Textures/gameButtons/buttonTexture.jpg")
         );
         ImagePattern onMouseExitTexture = new ImagePattern(
                 new Image("/GUI/Textures/gameButtons/buttonTexture2.jpg")
         );
+        buttonText.setFill(Color.rgb(255, 255, 255));
+        buttonText.setFont(Font.font("Chalkboard", 20));
         buttonRectangle.setFill(onMouseExitTexture);
         buttonRectangle.setStroke(Color.rgb(255, 255, 255));
-        buttonRectangle.setStrokeWidth(5);
-        buttonRectangle.setArcHeight(1);
-        buttonRectangle.setArcWidth(1);
+        buttonRectangle.setStrokeWidth(1);
+        buttonRectangle.setArcHeight(30);
+        buttonRectangle.setArcWidth(30);
+        gameButtonOnMouseMaker(buttonRectangle, buttonText, onMouseEnterTexture, onMouseExitTexture);
+    }
+
+    private void gameButtonOnMouseMaker(Rectangle buttonRectangle, Text buttonText, ImagePattern onMouseEnterTexture, ImagePattern onMouseExitTexture) {
         buttonRectangle.setOnMouseEntered(event -> {
             buttonRectangle.setFill(onMouseEnterTexture);
         });
@@ -365,18 +588,7 @@ public class GraphicController extends Application {
         buttonRectangle.setStrokeWidth(5);
         buttonRectangle.setArcWidth(0.5);
         buttonRectangle.setArcHeight(0.5);
-        buttonRectangle.setOnMouseEntered(event -> {
-            buttonRectangle.setFill(onMouseEnterTexture);
-        });
-        buttonRectangle.setOnMouseExited(event -> {
-            buttonRectangle.setFill(onMouseExitTexture);
-        });
-        buttonText.setOnMouseEntered(event -> {
-            buttonRectangle.setFill(onMouseEnterTexture);
-        });
-        buttonText.setOnMouseExited(event -> {
-            buttonRectangle.setFill(onMouseExitTexture);
-        });
+        gameButtonOnMouseMaker(buttonRectangle, buttonText, onMouseEnterTexture, onMouseExitTexture);
 
 
         buttonText.setFill(Color.rgb(207, 0, 2));
