@@ -103,7 +103,6 @@ public abstract class Animal {
 
     }
 
-
     public abstract void move(int destinationX, int destinationY);
 
     public int getX() {

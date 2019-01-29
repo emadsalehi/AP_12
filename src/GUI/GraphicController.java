@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.*;
 import model.request.*;
 
@@ -34,6 +35,7 @@ public class GraphicController extends Application {
     private final Image grassImage = new Image(new FileInputStream("src/GUI/Textures/Grass/grass1.png"));
     private Group menu = new Group();
     private Group game = new Group();
+    private Group border = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
     private final String pathToBackGroundImage = "src/GUI/Textures/back.png";
@@ -50,7 +52,7 @@ public class GraphicController extends Application {
     @Override
     public void start(Stage primaryStage) {
         newGame();
-        scene.setRoot(game);
+        scene.setRoot(border);
         WriteThread writeThread = new WriteThread(farmController);
         writeThread.start();
         primaryStage.setScene(scene);
@@ -95,8 +97,8 @@ public class GraphicController extends Application {
 
     public void newGame() {
         Farm farm = farmController.getFarm();
-        game.getChildren().clear();
-        game.getChildren().add(backGround);
+        border.getChildren().clear();
+        border.getChildren().add(backGround);
         StringBuilder storageStringBuilder = new StringBuilder("/GUI/Textures/Service/Depot/");
         Image storageImage = new Image
                 (serviceLevelImageSelector(farm.getStorage().getLevel(), storageStringBuilder));
@@ -104,7 +106,7 @@ public class GraphicController extends Application {
         storageImageView.setFitWidth(200);
         storageImageView.setFitHeight(150);
         storageImageView.relocate(WIDTH / 2 - 100, HEIGHT / 2 + 130);
-        game.getChildren().add(storageImageView);
+        border.getChildren().add(storageImageView);
 
         StringBuilder helicopterStringBuilder = new StringBuilder("/GUI/Textures/Service/Helicopter/");
         Image helicopterImage = new Image
@@ -114,7 +116,7 @@ public class GraphicController extends Application {
         helicopterImageView.setFitHeight(150);
         helicopterImageView.setFitWidth(150);
         helicopterImageView.relocate(WIDTH / 2 + 100, HEIGHT / 2 + 125);
-        game.getChildren().add(helicopterImageView);
+        border.getChildren().add(helicopterImageView);
 
         StringBuilder truckStringBuilder = new StringBuilder("/GUI/Textures/Service/Truck/");
         Image truckImage = new Image
@@ -123,7 +125,7 @@ public class GraphicController extends Application {
         truckImageView.setFitWidth(130);
         truckImageView.setFitHeight(130);
         truckImageView.relocate(WIDTH / 2 - 240, HEIGHT / 2 + 140);
-        game.getChildren().add(truckImageView);
+        border.getChildren().add(truckImageView);
 
         StringBuilder cookieBakeryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/Cake (Cookie Bakery)/");
         Image cookieBakeryImage = new Image
@@ -133,7 +135,7 @@ public class GraphicController extends Application {
         ImageView cookieBakeryImageView = new ImageView(cookieBakeryImage);
         workShopImageModify(cookieBakeryImageView, cookieBakeryImage);
         cookieBakeryImageView.relocate(WIDTH / 2 - 350, HEIGHT / 2 - 100);
-        game.getChildren().add(cookieBakeryImageView);
+        border.getChildren().add(cookieBakeryImageView);
 
         StringBuilder sewingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "CarnivalDress (Sewing Factory)/");
@@ -143,7 +145,7 @@ public class GraphicController extends Application {
         ImageView sewingFactoryImageView = new ImageView(sewingFactoryImage);
         workShopImageModify(sewingFactoryImageView, sewingFactoryImage);
         cookieBakeryImageView.relocate(WIDTH / 2 - 350, HEIGHT / 2);
-        game.getChildren().add(sewingFactoryImageView);
+        border.getChildren().add(sewingFactoryImageView);
 
         StringBuilder eggPowderPlantStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "DriedEggs (Egg Powder Plant)/");
@@ -153,7 +155,7 @@ public class GraphicController extends Application {
         ImageView eggPowderPlantImageView = new ImageView(eggPowderPlantImage);
         workShopImageModify(eggPowderPlantImageView, eggPowderPlantImage);
         eggPowderPlantImageView.relocate(WIDTH / 2 - 350, HEIGHT / 2 + 150);
-        game.getChildren().add(eggPowderPlantImageView);
+        border.getChildren().add(eggPowderPlantImageView);
 
         StringBuilder cakeBakeryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "FlouryCake (Cake Bakery)/");
@@ -163,7 +165,7 @@ public class GraphicController extends Application {
         ImageView cakeBakeryImageView = new ImageView(cakeBakeryImage);
         workShopImageModify(cakeBakeryImageView, cakeBakeryImage);
         cakeBakeryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2 - 100);
-        game.getChildren().add(cakeBakeryImageView);
+        border.getChildren().add(cakeBakeryImageView);
 
         StringBuilder spinneryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "Spinnery (Spinnery)/");
@@ -173,7 +175,7 @@ public class GraphicController extends Application {
         ImageView spinneryImageView = new ImageView(spinneryImage);
         workShopImageModify(spinneryImageView, spinneryImage);
         spinneryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2);
-        game.getChildren().add(spinneryImageView);
+        border.getChildren().add(spinneryImageView);
 
         StringBuilder weavingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "Weaving (Weaving Factory)/");
@@ -183,27 +185,27 @@ public class GraphicController extends Application {
         ImageView weavingFactoryImageView = new ImageView(weavingFactoryImage);
         workShopImageModify(weavingFactoryImageView, weavingFactoryImage);
         weavingFactoryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2 + 150);
-        game.getChildren().add(weavingFactoryImageView);
+        border.getChildren().add(weavingFactoryImageView);
 
         ImageView chickenBuyBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
         chickenBuyBoard.relocate(20, 20);
         chickenBuyBoard.setFitWidth(80);
         chickenBuyBoard.setFitHeight(100);
         farmAnimalBuyButton(chickenBuyBoard, FarmAnimalType.CHICKEN);
-        game.getChildren().add(chickenBuyBoard);
+        border.getChildren().add(chickenBuyBoard);
 
         ImageView chickenIconBoard = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/chicken.png"));
         chickenIconBoard.relocate(28, 23);
         chickenIconBoard.setFitHeight(60);
         chickenIconBoard.setFitWidth(60);
         farmAnimalBuyButton(chickenIconBoard, FarmAnimalType.CHICKEN);
-        game.getChildren().add(chickenIconBoard);
+        border.getChildren().add(chickenIconBoard);
 
         Text chickenBuyPrice = new Text(30, 103, Integer.toString(FarmAnimalType.CHICKEN.getBuyCost()));
         chickenBuyPrice.setFill(Color.rgb(195, 207, 23));
         chickenBuyPrice.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
         farmAnimalBuyButton(chickenBuyPrice, FarmAnimalType.CHICKEN);
-        game.getChildren().add(chickenBuyPrice);
+        border.getChildren().add(chickenBuyPrice);
 
 
         ImageView sheepBuyBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
@@ -211,52 +213,52 @@ public class GraphicController extends Application {
         sheepBuyBoard.setFitWidth(80);
         sheepBuyBoard.setFitHeight(100);
         farmAnimalBuyButton(sheepBuyBoard, FarmAnimalType.SHEEP);
-        game.getChildren().add(sheepBuyBoard);
+        border.getChildren().add(sheepBuyBoard);
 
         ImageView sheepBuyIcon = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/sheep.png"));
         sheepBuyIcon.relocate(111, 23);
         sheepBuyIcon.setFitWidth(60);
         sheepBuyIcon.setFitHeight(60);
         farmAnimalBuyButton(sheepBuyIcon, FarmAnimalType.SHEEP);
-        game.getChildren().add(sheepBuyIcon);
+        border.getChildren().add(sheepBuyIcon);
 
         Text sheepBuyText = new Text(111, 103, Integer.toString(FarmAnimalType.SHEEP.getBuyCost()));
         sheepBuyText.setFill(Color.rgb(195, 207, 23));
         sheepBuyText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
         farmAnimalBuyButton(sheepBuyText, FarmAnimalType.SHEEP);
-        game.getChildren().add(sheepBuyText);
+        border.getChildren().add(sheepBuyText);
 
         ImageView cowBuyBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
         cowBuyBoard.relocate(190, 20);
         cowBuyBoard.setFitWidth(80);
         cowBuyBoard.setFitHeight(100);
         farmAnimalBuyButton(cowBuyBoard, FarmAnimalType.COW);
-        game.getChildren().add(cowBuyBoard);
+        border.getChildren().add(cowBuyBoard);
 
         ImageView cowBuyIcon = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/brown_cow.png"));
         cowBuyIcon.relocate(195, 20);
         cowBuyIcon.setFitHeight(60);
         cowBuyIcon.setFitWidth(60);
         farmAnimalBuyButton(cowBuyIcon, FarmAnimalType.COW);
-        game.getChildren().add(cowBuyIcon);
+        border.getChildren().add(cowBuyIcon);
 
         Text cowButText = new Text(200, 103, Integer.toString(FarmAnimalType.COW.getBuyCost()));
         cowButText.setFill(Color.rgb(195, 207, 23));
         cowButText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
         farmAnimalBuyButton(cowButText, FarmAnimalType.COW);
-        game.getChildren().add(cowButText);
+        border.getChildren().add(cowButText);
 
         ImageView coinBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
         coinBoard.relocate(WIDTH / 2 + 250, 30);
         coinBoard.setFitWidth(100);
         coinBoard.setFitHeight(120);
-        game.getChildren().add(coinBoard);
+        border.getChildren().add(coinBoard);
 
         ImageView coinIcon = new ImageView(new Image("/GUI/Textures/gameButtons/coin.png"));
         coinIcon.relocate(WIDTH / 2 + 270, 40);
         coinIcon.setFitHeight(60);
         coinIcon.setFitWidth(60);
-        game.getChildren().add(coinIcon);
+        border.getChildren().add(coinIcon);
 
         ArrayList<Rectangle> upgradeButtonRectangles = new ArrayList<>();
         ArrayList<Text> upgradeButtonTexts = new ArrayList<>();
@@ -270,7 +272,31 @@ public class GraphicController extends Application {
         wellImageView.setViewport(new Rectangle2D(0,0,
                 wellImage.getWidth()/4, wellImage.getHeight()/4));
         wellImageView.relocate(WIDTH /2 , 40);
-        game.getChildren().add(wellImageView);
+        wellImageView.setOnMouseClicked(event -> {
+            if (farmController.wellAction(new WellRequest())) {
+
+                WellWorkshopSpriteAnimation wellAnimation = new WellWorkshopSpriteAnimation(
+                       wellImageView, Duration.millis(timeConstant), 16,
+                       4,4,0,(int)wellImageView.getFitWidth(),
+                        (int)wellImageView.getFitHeight());
+                wellAnimation.play();
+                Rectangle wellBar = new Rectangle(WIDTH/2 + 150, 40, 30,80);
+                wellBar.setFill(Color.rgb(200,255,200));
+                wellBar.setArcWidth(15);
+                wellBar.setArcHeight(15);
+
+                AnimationTimer wellBarAnimationTimer = new AnimationTimer() {
+                    @Override
+                    public void handle(long now) {
+
+                    }
+                };
+
+            } else {
+
+            }
+        });
+        border.getChildren().add(wellImageView);
 
         Rectangle wellUpgradeButtonRectangle = new Rectangle(WIDTH / 2 + 30, 150, 60, 30);
         Text wellUpgradeButtonText = new Text(WIDTH / 2 + 40, 170,
@@ -485,8 +511,8 @@ public class GraphicController extends Application {
         upgradeButtonTexts.add(weavingFactoryUpgradeButtonText);
 
 
-        game.getChildren().addAll(upgradeButtonRectangles);
-        game.getChildren().addAll(upgradeButtonTexts);
+        border.getChildren().addAll(upgradeButtonRectangles);
+        border.getChildren().addAll(upgradeButtonTexts);
 
 //        moneyTextUpdater();
 //
@@ -494,6 +520,7 @@ public class GraphicController extends Application {
             private long lastTime = 0;
             private double time = 0;
             private long second = 1000000000;
+            ArrayList<Node> gameNodes = new ArrayList<>();
             @Override
             public void handle(long now) {
                 if (lastTime == 0)
@@ -502,18 +529,22 @@ public class GraphicController extends Application {
                     lastTime = now;
                     time += 1;
                     game.getChildren().clear();
-                    game.getChildren().add(backGround);
                     farmController.turnAction(new TurnRequest(1));
+                    border.getChildren().removeAll(gameNodes);
+                    gameNodes.clear();
                     Cell[][] cells = farm.getCells();
-                    game.setOnMouseClicked(event -> {
+                    border.setOnMouseClicked(event -> {
                         int x = (int)((event.getX() - Utils.startX) / Utils.cellXSize);
                         int y = (int)((event.getY() - Utils.startY) / Utils.cellYSize);
                         if (x >= 0 && x < 30 && y >= 0 && y < 30) {
-                            if (!farmController.pickUpAction(new PickUpRequest(x, y)))
-                                if (!farmController.cageAction(new CageRequest(x, y)))
+                            if (!farmController.pickUpAction(new PickUpRequest(x, y))) {
+                                if (!farmController.cageAction(new CageRequest(x, y))) {
                                     farmController.plantAction(new PlantRequest(x, y));
+                                }
+                            }
                         }
                     });
+                    ArrayList<Animation> animations = new ArrayList<>();
                     for (int i = 0; i < 30; i++) {
                         for (int j = 0; j < 30; j++) {
                             if (cells[i][j].isHasPlant()) {
@@ -523,14 +554,10 @@ public class GraphicController extends Application {
                                 game.getChildren().add(imageView);
                             }
                             ArrayList<Animal> animals = cells[i][j].getAnimals();
-                            ArrayList<Animation> animations = new ArrayList<>();
                             for (Animal animal : animals) {
                                 Animation animation = new SpriteAnimal(animal, timeConstant, game);
                                 animation.setCycleCount(animal.getSpeed());
                                 animations.add(animation);
-                            }
-                            for (Animation animation : animations) {
-                                animation.play();
                             }
                             for (Product product : cells[i][j].getProducts()) {
                                 ImageView productImageView = getProductImageView(product);
@@ -538,13 +565,18 @@ public class GraphicController extends Application {
                                 productImageView.setY(Utils.startY + Utils.cellYSize * j - 15);
                                 game.getChildren().add(productImageView);
                             }
+
                         }
                     }
 
+                    for (Animation animation : animations) {
+                        animation.play();
+                    }
+                    gameNodes.addAll(game.getChildren());
+                    border.getChildren().addAll(gameNodes);
                 }
             }
         };
-        scene.setRoot(game);
         gameRunner.start();
     }
 
