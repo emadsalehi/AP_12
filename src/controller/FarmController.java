@@ -312,7 +312,7 @@ public class FarmController {
                         stringBuilder.append(cell.getProducts().get(0).getClass().getSimpleName().codePointAt(0));
                     } else if (cell.isHasPlant()) {
                         stringBuilder.append("O");
-                    }
+                    } //What if there is nothing to show?
                 }
             }
             view.logMap(stringBuilder.toString());
