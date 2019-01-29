@@ -268,7 +268,7 @@ public class FarmController {
         if (printFrom.equals("info")) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Money: " + farm.getMoney() + " Time: " + farm.getMoney());
-            stringBuilder.append("Level: ");
+            stringBuilder.append(" Level: "); // TODO
             if (farm.getLevel().getRequiredMoney() != 0) {
                 stringBuilder.append("Money: " + farm.getMoney() + "/" + farm.getLevel().getRequiredMoney() + ' ');
             }
