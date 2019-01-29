@@ -15,6 +15,14 @@ public class Farm {
     private Level level = new Level();
     private int time;
 
+    public Farm() {
+        for(int k = 0 ; k < 30 ; k++){
+            for(int j = 0 ; j < 30 ; j++){
+                cells[k][j] = new Cell();
+            }
+        }
+    }
+
     public int getTime() {
         return time;
     }
