@@ -7,10 +7,10 @@ public abstract class Animal {
     private int y;
     private int buyPrice;
     private int sellPrice;
-    private int timeTillRandom = 4;
+    private int timeTillRandom = 0;
     private int speed = 1;
     private String type;
-    private int xDirection = -1;
+    private int xDirection = 0;
     private int yDirection = 0;
     private boolean isMoving = true;
 
