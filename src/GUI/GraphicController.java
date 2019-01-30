@@ -536,7 +536,8 @@ public class GraphicController extends Application {
             private long lastTime = 0;
             private double time = 0;
             private long second = 1000000000;
-            ArrayList<Node> gameNodes = new ArrayList<>();
+            private int numberOfGameNodes = 0;
+            private int numberOfBorderNodes = border.getChildren().size();
             @Override
             public void handle(long now) {
                 if (lastTime == 0) {
@@ -545,10 +546,8 @@ public class GraphicController extends Application {
                 if (now > lastTime + second / timeConstant * 1000) {
                     lastTime = now;
                     time += 1;
-                    game.getChildren().clear();
                     farmController.turnAction(new TurnRequest(1));
-                    border.getChildren().removeAll(gameNodes);
-                    gameNodes.clear();
+                    border.getChildren().remove(numberOfBorderNodes - numberOfGameNodes , numberOfBorderNodes);
                     Cell[][] cells = farm.getCells();
                     ArrayList<Animation> animations = new ArrayList<>();
                     for (int i = 0; i < 30; i++) {
@@ -583,8 +582,9 @@ public class GraphicController extends Application {
                     for (Animation animation : animations) {
                         animation.play();
                     }
-                    gameNodes.addAll(game.getChildren());
-                    border.getChildren().addAll(gameNodes);
+                    numberOfGameNodes = game.getChildren().size();
+                    border.getChildren().addAll(game.getChildren());
+                    numberOfBorderNodes = border.getChildren().size();
                 }
             }
         };
