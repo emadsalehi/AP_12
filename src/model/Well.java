@@ -15,7 +15,7 @@ public class Well {
         this.level = 1;
         this.fillPrice = 19;
         this.upgradePrice = 250;
-        this.timeToFill = 100;
+        this.timeToFill = 4;
         this.capacity = 4;
         this.waterLeft = capacity;
     }
