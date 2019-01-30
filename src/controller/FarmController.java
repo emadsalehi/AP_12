@@ -801,6 +801,11 @@ public class FarmController {
     public Integer[] getFarmAnimalDestination(int farmAnimalX, int farmAnimalY, Cell[][] cells) {
         Integer[] destination = {-1, -1};
         double distance = 10000;
+        if (cells[farmAnimalX][farmAnimalY].isHasPlant()) {
+            destination[0] = farmAnimalX;
+            destination[1] = farmAnimalY;
+            return destination;
+        }
         for (int i = 0; i < 30; i++) {
             for (int j = 0; j < 30; j++) {
                 if (cells[i][j].isHasPlant())

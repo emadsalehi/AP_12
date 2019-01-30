@@ -11,10 +11,10 @@ public class Farm {
             for (int j = 0; j < 30; j++)
                 cells[i][j] = new Cell();
     }
-    private int money = 1000;
+    private int money = 10000;
     private Storage storage = new Storage();
     private Well well = new Well();
-    private java.util.ArrayList<WorkShop> workShops = new ArrayList<>();
+    private ArrayList<WorkShop> workShops;
     private Helicopter helicopter = new Helicopter();
     private Truck truck = new Truck();
     private Level level = new Level();
@@ -36,43 +36,43 @@ public class Farm {
         displacer();
         for (int i = 0; i < 30; i++) {
             for (int j = 0; j < 30; j++) {
-                Cell cell = cells[i][j];
-                checkWildAndFarmCollision(cell);
-                checkWildAndProductCollision(cell);
-                catProductCollision(cell);
-                for (Animal animal : cell.getAnimals()) {
+                //Cell cell = cells[i][j];
+                checkWildAndFarmCollision(cells[i][j]);
+                checkWildAndProductCollision(cells[i][j]);
+                catProductCollision(cells[i][j]);
+                for (Animal animal : cells[i][j].getAnimals()) {
                     if (animal instanceof FarmAnimal) {
-                        if (cell.isHasPlant()) {
+                        ((FarmAnimal) animal).nextTurn();
+                        if (cells[i][j].isHasPlant()) {
                             if (((FarmAnimal) animal).isHungry()) {
                                 animal.setMoving(false);
                                 ((FarmAnimal) animal).setTimeTillFill(((FarmAnimal) animal).getTimeTillFill() - 1);
-                                cell.setPlantLevel(cell.getPlantLevel() - 2);
+                                cells[i][j].setPlantLevel(cells[i][j].getPlantLevel() - 2);
                                 if (((FarmAnimal) animal).getTimeTillFill() == 0) {
                                     ((FarmAnimal) animal).setHungry(false);
-                                    ((FarmAnimal) animal).setTimeTillFill(5);
-                                    ((FarmAnimal) animal).setTimeTillHungry(17);
+                                    ((FarmAnimal) animal).setTimeTillFill(4);
                                     animal.setMoving(true);
                                 }
                             }
-                            if (cell.getPlantLevel() == 0) {
-                                cell.setHasPlant(false);
+                            if (cells[i][j].getPlantLevel() <= 0) {
+                                cells[i][j].setHasPlant(false);
+                                animal.setMoving(true);
                             }
                         }
-                        ((FarmAnimal) animal).nextTurn();
                         if (((FarmAnimal) animal).isReadyToProduce()) {
                             ((FarmAnimal) animal).setReadyToProduce(false);
-                            ArrayList<Product> products = cell.getProducts();
+                            ArrayList<Product> products = cells[i][j].getProducts();
                             if (((FarmAnimal) animal).getFarmAnimalType().equals(FarmAnimalType.CHICKEN)) {
                                 products.add(new PrimitiveProduct(PrimitiveProductType.EGG));
-                                cell.setProducts(products);
+                                cells[i][j].setProducts(products);
                             }
                             else if (((FarmAnimal) animal).getFarmAnimalType().equals(FarmAnimalType.COW)) {
                                 products.add(new PrimitiveProduct(PrimitiveProductType.MILK));
-                                cell.setProducts(products);
+                                cells[i][j].setProducts(products);
                             }
                             else {
                                 products.add(new PrimitiveProduct(PrimitiveProductType.WOOL));
-                                cell.setProducts(products);
+                                cells[i][j].setProducts(products);
                             }
                         }
                     }
