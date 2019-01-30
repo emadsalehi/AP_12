@@ -77,9 +77,9 @@ public abstract class Animal {
 
     public int randomiser(int value) {
         Random random = new Random();
-        if (value <= speed * 4) {
+        if (value <= speed * 5) {
             return random.nextInt(2);
-        } else if (value >= 29 - speed * 4) {
+        } else if (value >= 29 - speed * 5) {
             return random.nextInt(2) - 1;
         } else {
             return random.nextInt(3) - 1;
@@ -102,7 +102,6 @@ public abstract class Animal {
         setY(getY() + ySpeed);
 
     }
-
 
     public abstract void move(int destinationX, int destinationY);
 

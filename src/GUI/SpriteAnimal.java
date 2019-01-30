@@ -71,7 +71,7 @@ public class SpriteAnimal extends Transition {
             else if (((FarmAnimal) animal).getFarmAnimalType() == FarmAnimalType.COW)
                 pathToImage = pathToImage.concat("Cow");
             else
-                pathToImage = pathToImage.concat("GuineaFowl");
+                pathToImage = pathToImage.concat("Turkey");
         }
         pathToImage = pathToImage.concat("/");
         if (animal.isMoving())
