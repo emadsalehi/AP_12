@@ -589,7 +589,7 @@ public class GraphicController extends Application {
     public void farmAnimalBuyButton(Node buttonNode, FarmAnimalType farmAnimalType, Text moneyText) {
         if (farmAnimalType.equals(FarmAnimalType.COW)) {
             buttonNode.setOnMouseClicked(event -> {
-                farmController.buyAction(new BuyRequest(new FarmAnimal((int)Math.random()*30,(int)Math.random()*30,
+                farmController.buyAction(new BuyRequest(new FarmAnimal((int)(Math.random()*30),(int)(Math.random()*30),
                         FarmAnimalType.COW)));
                 moneyTextUpdater(moneyText);
             });
@@ -601,7 +601,7 @@ public class GraphicController extends Application {
             });
         } else {
             buttonNode.setOnMouseClicked(event -> {
-                farmController.buyAction(new BuyRequest(new FarmAnimal((int) Math.random() * 30, (int) Math.random() * 30,
+                farmController.buyAction(new BuyRequest(new FarmAnimal((int) (Math.random() * 30), (int) (Math.random() * 30),
                         FarmAnimalType.SHEEP)));
                 moneyTextUpdater(moneyText);
             });
