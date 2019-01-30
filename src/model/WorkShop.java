@@ -9,7 +9,7 @@ public abstract class WorkShop {
     private int throwedProductX;
     private int throwedProductY;
     private int numberOfRawProduct = 1;
-    private int numberOfProcessedProduct = 1;
+    private int numberOfProcessedProduct = 0;
 
     public WorkShop(int maxTimeToFinish, int throwedProductX, int throwedProductY, int numberOfProcessedProduct) {
         this.maxTimeToFinish = maxTimeToFinish;

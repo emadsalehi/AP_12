@@ -22,6 +22,7 @@ public class Spinnery extends WorkShop {
     public void upgrade() {
         this.setLevel(this.getLevel() + 1);
         this.setNumberOfProcessedProduct(this.getNumberOfProcessedProduct() + 1);
+        this.setNumberOfRawProduct(this.getNumberOfRawProduct() + 1);
         if (this.getLevel() == 0)
             this.setMaxTimeToFinish(14);
         else if (this.getLevel() == 1)
