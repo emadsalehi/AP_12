@@ -520,7 +520,17 @@ public class GraphicController extends Application {
 
         border.getChildren().addAll(upgradeButtonRectangles);
         border.getChildren().addAll(upgradeButtonTexts);
-
+        border.setOnMouseClicked(event -> {
+            int x = (int)((event.getX() - Utils.startX) / Utils.cellXSize);
+            int y = (int)((event.getY() - Utils.startY) / Utils.cellYSize);
+            if (x >= 0 && x < 30 && y >= 0 && y < 30) {
+                if (!farmController.pickUpAction(new PickUpRequest(x, y))) {
+                    if (!farmController.cageAction(new CageRequest(x, y))) {
+                        farmController.plantAction(new PlantRequest(x, y));
+                    }
+                }
+            }
+        });
 //
         AnimationTimer gameRunner = new AnimationTimer() {
             private long lastTime = 0;
@@ -529,8 +539,9 @@ public class GraphicController extends Application {
             ArrayList<Node> gameNodes = new ArrayList<>();
             @Override
             public void handle(long now) {
-                if (lastTime == 0)
+                if (lastTime == 0) {
                     lastTime = now;
+                }
                 if (now > lastTime + second / timeConstant * 1000) {
                     lastTime = now;
                     time += 1;
@@ -539,17 +550,6 @@ public class GraphicController extends Application {
                     border.getChildren().removeAll(gameNodes);
                     gameNodes.clear();
                     Cell[][] cells = farm.getCells();
-                    border.setOnMouseClicked(event -> {
-                        int x = (int)((event.getX() - Utils.startX) / Utils.cellXSize);
-                        int y = (int)((event.getY() - Utils.startY) / Utils.cellYSize);
-                        if (x >= 0 && x < 30 && y >= 0 && y < 30) {
-                            if (!farmController.pickUpAction(new PickUpRequest(x, y))) {
-                                if (!farmController.cageAction(new CageRequest(x, y))) {
-                                    farmController.plantAction(new PlantRequest(x, y));
-                                }
-                            }
-                        }
-                    });
                     ArrayList<Animation> animations = new ArrayList<>();
                     for (int i = 0; i < 30; i++) {
                         for (int j = 0; j < 30; j++) {
