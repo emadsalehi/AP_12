@@ -451,32 +451,41 @@ public class FarmController {
         }
     }
 
-    public void startAction(StartRequest request) {
+    public boolean startAction(StartRequest request) {
         //todo set in farm workshop not handled.
         WorkShop selectedWorkShop = null;
+        boolean isSelectedWorkShopFound = false;
         for (WorkShop workShop : farm.getWorkShops()) {
-            if (request.getWorkShopName().equals("sewingfactory") && workShop instanceof SewingFactory)
+            if (request.getWorkShopName().equals("sewingfactory") && workShop instanceof SewingFactory) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else if (request.getWorkShopName().equals("spinnery") && workShop instanceof Spinnery)
+            } else if (request.getWorkShopName().equals("spinnery") && workShop instanceof Spinnery) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else if (request.getWorkShopName().equals("eggpowderplant") && workShop instanceof EggPowderPlant)
+            }else if (request.getWorkShopName().equals("eggpowderplant") && workShop instanceof EggPowderPlant) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else if (request.getWorkShopName().equals("weavingfactory") && workShop instanceof WeavingFactory)
+            } else if (request.getWorkShopName().equals("weavingfactory") && workShop instanceof WeavingFactory) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else if (request.getWorkShopName().equals("cookiebakery") && workShop instanceof CookieBakery)
+            }else if (request.getWorkShopName().equals("cookiebakery") && workShop instanceof CookieBakery) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else if (request.getWorkShopName().equals("cakebakery") && workShop instanceof CakeBakery)
+            }else if (request.getWorkShopName().equals("cakebakery") && workShop instanceof CakeBakery) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else if (request.getWorkShopName().equals("customworkshop") && workShop instanceof CustomWorkShop)
+            }else if (request.getWorkShopName().equals("customworkshop") && workShop instanceof CustomWorkShop) {
+                isSelectedWorkShopFound = true;
                 selectedWorkShop = workShop;
-            else {
-                view.logWrongCommand();
-                return;
             }
+        }
+        if (!isSelectedWorkShopFound) {
+            view.logWrongCommand();
+            return false;
         }
         if (selectedWorkShop.isWorking()) {
             view.logWorkShopIsWorking();
-            return;
+            return false;
         }
         Storage storage = farm.getStorage();
         if (selectedWorkShop instanceof SewingFactory) {
@@ -490,7 +499,7 @@ public class FarmController {
             }
             if (product1 == null || product2 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
             storage.getProducts().remove(product2);
@@ -502,7 +511,7 @@ public class FarmController {
                     product1 = product;
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
         } else if (selectedWorkShop instanceof EggPowderPlant) {
@@ -513,7 +522,7 @@ public class FarmController {
                     product1 = product;
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
         } else if (selectedWorkShop instanceof WeavingFactory) {
@@ -524,7 +533,7 @@ public class FarmController {
                     product1 = product;
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
         } else if (selectedWorkShop instanceof CookieBakery) {
@@ -535,7 +544,7 @@ public class FarmController {
                     product1 = product;
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
         } else if (selectedWorkShop instanceof CakeBakery) {
@@ -551,7 +560,7 @@ public class FarmController {
             }
             if (product1 == null || product2 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
             storage.getProducts().remove(product2);
@@ -570,12 +579,13 @@ public class FarmController {
             }
             if (product1 == null) {
                 view.logRequirementsIsNotEnough();
-                return;
+                return false;
             }
             storage.getProducts().remove(product1);
         }
         farm.setStorage(storage);
         selectedWorkShop.startWorkShop();
+        return true;
     }
 
     public void turnAction(TurnRequest request) {
@@ -713,23 +723,32 @@ public class FarmController {
             }
         } else {
             WorkShop selectedWorkShop = null;
+            boolean isWorshopSelected = false;
             for (WorkShop workShop : farm.getWorkShops()) {
-                if (request.getPartTOUpgradeName().equals("sewingfactory") && workShop instanceof SewingFactory)
+
+                if (request.getPartTOUpgradeName().equals("sewingfactory") && workShop instanceof SewingFactory) {
                     selectedWorkShop = workShop;
-                else if (request.getPartTOUpgradeName().equals("spinnery") && workShop instanceof Spinnery)
+                    isWorshopSelected = true;
+                }else if (request.getPartTOUpgradeName().equals("spinnery") && workShop instanceof Spinnery) {
                     selectedWorkShop = workShop;
-                else if (request.getPartTOUpgradeName().equals("eggpowderplant") && workShop instanceof EggPowderPlant)
+                    isWorshopSelected = true;
+                }else if (request.getPartTOUpgradeName().equals("eggpowderplant") && workShop instanceof EggPowderPlant) {
                     selectedWorkShop = workShop;
-                else if (request.getPartTOUpgradeName().equals("weavingfactory") && workShop instanceof WeavingFactory)
+                    isWorshopSelected = true;
+                }else if (request.getPartTOUpgradeName().equals("weavingfactory") && workShop instanceof WeavingFactory) {
                     selectedWorkShop = workShop;
-                else if (request.getPartTOUpgradeName().equals("cookiebakery") && workShop instanceof CookieBakery)
+                    isWorshopSelected = true;
+                }else if (request.getPartTOUpgradeName().equals("cookiebakery") && workShop instanceof CookieBakery) {
                     selectedWorkShop = workShop;
-                else if (request.getPartTOUpgradeName().equals("cakebakery") && workShop instanceof CakeBakery)
+                    isWorshopSelected = true;
+                }else if (request.getPartTOUpgradeName().equals("cakebakery") && workShop instanceof CakeBakery) {
                     selectedWorkShop = workShop;
-                else {
-                    view.logWrongCommand();
-                    return false;
+                    isWorshopSelected = true;
                 }
+            }
+            if (!isWorshopSelected) {
+                view.logWrongCommand();
+                return false;
             }
             if (selectedWorkShop.getLevel() == 4) {
                 view.logLevelIsHighest();
@@ -755,6 +774,9 @@ public class FarmController {
     public boolean wellAction(WellRequest request) {
         if (farm.getMoney() < farm.getWell().getFillPrice()) {
             view.logNotEnoughMoney();
+            return false;
+        }
+        if (farm.getWell().getCapacity() == farm.getWell().getWaterLeft()) {
             return false;
         }
         if (!farm.getWell().isWorking()) {

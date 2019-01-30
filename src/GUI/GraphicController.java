@@ -136,7 +136,15 @@ public class GraphicController extends Application {
         workShopImageModify(cookieBakeryImageView, cookieBakeryImage);
         cookieBakeryImageView.relocate(WIDTH / 2 - 350, HEIGHT / 2 - 140);
         border.getChildren().add(cookieBakeryImageView);
+        cookieBakeryImageView.setOnMouseClicked(event -> {
+            if (farmController.startAction(new StartRequest("cookiebakery"))) {
+                workshopWellAnimationBuilder(cookieBakeryImage, cookieBakeryImageView, 0);
+            }
+        });
+        if (farmController.getFarm().getWorkShops().get(0).getLevel() == 0) {
+            cookieBakeryImageView.setVisible(false);
 
+        }
         StringBuilder sewingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "CarnivalDress (Sewing Factory)/");
         Image sewingFactoryImage = new Image
@@ -146,6 +154,14 @@ public class GraphicController extends Application {
         workShopImageModify(sewingFactoryImageView, sewingFactoryImage);
         sewingFactoryImageView.relocate(WIDTH / 2.0 - 350, HEIGHT / 2.0);
         border.getChildren().add(sewingFactoryImageView);
+        sewingFactoryImageView.setOnMouseClicked(event -> {
+            if (farmController.startAction(new StartRequest("sewingfactory"))) {
+                workshopWellAnimationBuilder(sewingFactoryImage,sewingFactoryImageView,1);
+            }
+        });
+        if (farmController.getFarm().getWorkShops().get(1).getLevel() == 0) {
+            sewingFactoryImageView.setOpacity(0);
+        }
 
         StringBuilder eggPowderPlantStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "DriedEggs (Egg Powder Plant)/");
@@ -156,6 +172,15 @@ public class GraphicController extends Application {
         workShopImageModify(eggPowderPlantImageView, eggPowderPlantImage);
         eggPowderPlantImageView.relocate(WIDTH / 2 - 350, HEIGHT / 2 + 100);
         border.getChildren().add(eggPowderPlantImageView);
+        eggPowderPlantImageView.setOnMouseClicked(event -> {
+            if (farmController.startAction(new StartRequest("eggpowderplant"))) {
+                workshopWellAnimationBuilder(eggPowderPlantImage,eggPowderPlantImageView,2);
+            }
+        });
+        if (farmController.getFarm().getWorkShops().get(2).getLevel() == 0) {
+            eggPowderPlantImageView.setVisible(false);
+
+        }
 
         StringBuilder cakeBakeryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "FlouryCake (Cake Bakery)/");
@@ -166,7 +191,15 @@ public class GraphicController extends Application {
         workShopImageModify(cakeBakeryImageView, cakeBakeryImage);
         cakeBakeryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2 - 140);
         border.getChildren().add(cakeBakeryImageView);
+        cakeBakeryImageView.setOnMouseClicked(event -> {
+            if (farmController.startAction(new StartRequest("cakebakery"))){
+                workshopWellAnimationBuilder(cakeBakeryImage,cakeBakeryImageView,2);
+            }
+        });
+        if (farmController.getFarm().getWorkShops().get(3).getLevel() == 0) {
+            cakeBakeryImageView.setVisible(false);
 
+        }
         StringBuilder spinneryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "Spinnery (Spinnery)/");
         Image spinneryImage = new Image
@@ -176,6 +209,15 @@ public class GraphicController extends Application {
         workShopImageModify(spinneryImageView, spinneryImage);
         spinneryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2);
         border.getChildren().add(spinneryImageView);
+        spinneryImageView.setOnMouseClicked(event -> {
+            if (farmController.startAction(new StartRequest("spinnery"))){
+                workshopWellAnimationBuilder(spinneryImage,spinneryImageView,2);
+            }
+        });
+        if (farmController.getFarm().getWorkShops().get(4).getLevel() == 0) {
+            spinneryImageView.setVisible(false);
+        }
+
 
         StringBuilder weavingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "Weaving (Weaving Factory)/");
@@ -186,6 +228,14 @@ public class GraphicController extends Application {
         workShopImageModify(weavingFactoryImageView, weavingFactoryImage);
         weavingFactoryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2 + 100);
         border.getChildren().add(weavingFactoryImageView);
+        weavingFactoryImageView.setOnMouseClicked(event -> {
+            if (farmController.startAction(new StartRequest("weavingfactory"))){
+                workshopWellAnimationBuilder(weavingFactoryImage,weavingFactoryImageView,2);
+            }
+        });
+        if (farmController.getFarm().getWorkShops().get(5).getLevel() == 0) {
+            weavingFactoryImageView.setVisible(false);
+        }
 
         ImageView coinBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
         coinBoard.relocate(WIDTH / 2 + 250, 30);
@@ -281,24 +331,8 @@ public class GraphicController extends Application {
         wellImageView.relocate(WIDTH /2 , 40);
         wellImageView.setOnMouseClicked(event -> {
             if (farmController.wellAction(new WellRequest())) {
-
-                WellWorkshopSpriteAnimation wellAnimation = new WellWorkshopSpriteAnimation(
-                       wellImageView, Duration.millis(timeConstant), 16,
-                       4,4,0,(int)wellImage.getWidth()/4,
-                        (int)wellImage.getHeight()/4);
-                wellAnimation.play();
-                Rectangle wellBar = new Rectangle(WIDTH/2 + 150, 40, 30,80);
-                wellBar.setFill(Color.rgb(200,255,200));
-                wellBar.setArcWidth(15);
-                wellBar.setArcHeight(15);
-
-                AnimationTimer wellBarAnimationTimer = new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-
-                    }
-                };
-
+                moneyTextUpdater(moneyText);
+                workshopWellAnimationBuilder(wellImage, wellImageView, 7);
             } else {
 
             }
@@ -311,16 +345,24 @@ public class GraphicController extends Application {
         gameButtonMaker(wellUpgradeButtonRectangle, wellUpgradeButtonText);
         wellUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("well"))) {
+                StringBuilder wellStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Well/");
+                wellImageView.setImage(new Image(serviceLevelImageSelector(farm.getWell().getLevel(),
+                        wellStringBuilder1)));
                 wellUpgradeButtonText.setText(
                         Integer.toString(farm.getWell().getUpgradePrice())
                 );
+                moneyTextUpdater(moneyText);
             }
         });
         wellUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("well"))) {
+                StringBuilder wellStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Well/");
+                wellImageView.setImage(new Image(serviceLevelImageSelector(farm.getWell().getLevel(),
+                        wellStringBuilder1)));
                 wellUpgradeButtonText.setText(
                         Integer.toString(farm.getWell().getUpgradePrice())
                 );
+                moneyTextUpdater(moneyText);
             }
         });
         upgradeButtonRectangles.add(wellUpgradeButtonRectangle);
@@ -337,16 +379,24 @@ public class GraphicController extends Application {
         gameButtonMaker(storageUpgradeButtonRectangle, storageUpgradeButtonText);
         storageUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
+                StringBuilder storageStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Depot/");
+                storageImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                .getStorage().getLevel(), storageStringBuilder1)));
                 storageUpgradeButtonText.setText(
                         Integer.toString(farm.getStorage().getUpgradePrice())
                 );
+                moneyTextUpdater(moneyText);
             }
         });
         storageUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
+                StringBuilder storageStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Depot/");
+                storageImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getStorage().getLevel(), storageStringBuilder1)));
                 storageUpgradeButtonText.setText(
                         Integer.toString(farm.getStorage().getUpgradePrice())
                 );
+                moneyTextUpdater(moneyText);
             }
         });
         upgradeButtonTexts.add(storageUpgradeButtonText);
@@ -364,14 +414,24 @@ public class GraphicController extends Application {
         gameButtonMaker(truckUpgradeButtonRectangle, truckUpgradeButtonText);
         truckUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("truck"))) {
+                StringBuilder truckStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Truck/");
+                truckImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getTruck().getLevel(), truckStringBuilder1)));
                 truckUpgradeButtonText.setText(
-                        Integer.toString(farm.getTruck().getUpgradeCost()));
+                        Integer.toString(farm.getTruck().getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
             }
         });
         truckUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("truck"))) {
+                StringBuilder truckStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Truck/");
+                truckImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getTruck().getLevel(), truckStringBuilder1)));
                 truckUpgradeButtonText.setText(
-                        Integer.toString(farm.getTruck().getUpgradeCost()));
+                        Integer.toString(farm.getTruck().getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
             }
         });
         upgradeButtonTexts.add(truckUpgradeButtonText);
@@ -384,14 +444,24 @@ public class GraphicController extends Application {
         gameButtonMaker(helicopterUpgradeButtonRectangle, helicopterUpgradeButtonText);
         helicopterUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("helicopter"))) {
+                StringBuilder helicopterStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Helicopter/");
+                helicopterImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getHelicopter().getLevel(), helicopterStringBuilder1)));
                 helicopterUpgradeButtonText.setText(
-                        Integer.toString(farm.getHelicopter().getUpgradeCost()));
+                        Integer.toString(farm.getHelicopter().getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
             }
         });
         helicopterUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("helicopter"))) {
+                StringBuilder helicopterStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Helicopter/");
+                helicopterImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getHelicopter().getLevel(), helicopterStringBuilder1)));
                 helicopterUpgradeButtonText.setText(
-                        Integer.toString(farm.getHelicopter().getUpgradeCost()));
+                        Integer.toString(farm.getHelicopter().getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
             }
         });
         upgradeButtonRectangles.add(helicopterUpgradeButtonRectangle);
@@ -404,14 +474,27 @@ public class GraphicController extends Application {
         gameButtonMaker(cookieBakeryUpgradeButtonRectangle, cookieBakeryUpgradeButtonText);
         cookieBakeryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cookiebakery"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/Cake (Cookie Bakery)/");
+                cookieBakeryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(0).getLevel(), stringBuilder1)));
                 cookieBakeryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(0).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(0).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                cookieBakeryImageView.setVisible(true);
             }
         });
         cookieBakeryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cookiebakery"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/Cake (Cookie Bakery)/");
+                cookieBakeryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(0).getLevel(), stringBuilder1)));
                 cookieBakeryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(0).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(0).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                cookieBakeryImageView.setVisible(true);
+
             }
         });
         upgradeButtonRectangles.add(cookieBakeryUpgradeButtonRectangle);
@@ -424,14 +507,28 @@ public class GraphicController extends Application {
         gameButtonMaker(sewingFactoryUpgradeButtonRectangle, sewingFactoryUpgradeButtonText);
         sewingFactoryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("sewingfactory"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/CarnivalDress (Sewing Factory)/");
+                sewingFactoryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(1).getLevel(), stringBuilder1)));
                 sewingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(1).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(1).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                sewingFactoryImageView.setVisible(true);
+
             }
         });
         sewingFactoryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("sewingfactory"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/CarnivalDress (Sewing Factory)/");
+                sewingFactoryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(1).getLevel(), stringBuilder1)));
                 sewingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(1).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(1).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                sewingFactoryImageView.setVisible(true);
+
             }
         });
         upgradeButtonRectangles.add(sewingFactoryUpgradeButtonRectangle);
@@ -444,14 +541,27 @@ public class GraphicController extends Application {
         gameButtonMaker(eggPowderPlantUpgradeButtonRectangle, eggPowderPlantUpgradeButtonText);
         eggPowderPlantUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("eggpowderplant"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/DriedEggs (Egg Powder Plant)/");
+                eggPowderPlantImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(2).getLevel(), stringBuilder1)));
                 eggPowderPlantUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(2).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(2).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                eggPowderPlantImageView.setVisible(true);
+
             }
         });
         eggPowderPlantUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("eggpowderplant"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/DriedEggs (Egg Powder Plant)/");
+                eggPowderPlantImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(2).getLevel(), stringBuilder1)));
                 eggPowderPlantUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(2).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(2).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                eggPowderPlantImageView.setVisible(true);
             }
         });
         upgradeButtonRectangles.add(eggPowderPlantUpgradeButtonRectangle);
@@ -464,14 +574,28 @@ public class GraphicController extends Application {
         gameButtonMaker(cakeBakeryUpgradeButtonRectangle, cakeBakeryUpgradeButtonText);
         cakeBakeryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cakebakery"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/FlouryCake (Cake Bakery)/");
+                cakeBakeryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(3).getLevel(), stringBuilder1)));
                 cakeBakeryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(3).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(3).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                cakeBakeryImageView.setVisible(true);
+
             }
         });
         cakeBakeryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("cakebakery"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/FlouryCake (Cake Bakery)/");
+                cakeBakeryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(3).getLevel(), stringBuilder1)));
                 cakeBakeryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(3).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(3).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                cakeBakeryImageView.setVisible(true);
+
             }
         });
         upgradeButtonRectangles.add(cakeBakeryUpgradeButtonRectangle);
@@ -484,14 +608,28 @@ public class GraphicController extends Application {
         gameButtonMaker(spinneryUpgradeButtonRectangle, spinneryUpgradeButtonText);
         spinneryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("spinnery"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/Spinnery (Spinnery)/");
+                spinneryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(4).getLevel(), stringBuilder1)));
                 spinneryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(4).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(4).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                spinneryImageView.setVisible(true);
+
             }
         });
         spinneryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("spinnery"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/Spinnery (Spinnery)/");
+                spinneryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(4).getLevel(), stringBuilder1)));
                 spinneryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(4).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(4).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                spinneryImageView.setVisible(true);
+
             }
         });
         upgradeButtonRectangles.add(spinneryUpgradeButtonRectangle);
@@ -504,14 +642,28 @@ public class GraphicController extends Application {
         gameButtonMaker(weavingFactoryUpgradeButtonRectangle, weavingFactoryUpgradeButtonText);
         weavingFactoryUpgradeButtonRectangle.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("weavingfactory"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/Weaving (Weaving Factory)/");
+                weavingFactoryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(5).getLevel(), stringBuilder1)));
                 weavingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(5).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(5).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                weavingFactoryImageView.setVisible(true);
+
             }
         });
         weavingFactoryUpgradeButtonText.setOnMouseClicked(event -> {
             if (farmController.upgradeAction(new UpgradeRequest("weavingfactory"))) {
+                StringBuilder stringBuilder1 = new StringBuilder("/GUI/Textures/Workshops/Weaving (Weaving Factory)/");
+                weavingFactoryImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
+                        .getWorkShops().get(5).getLevel(), stringBuilder1)));
                 weavingFactoryUpgradeButtonText.setText(
-                        Integer.toString(farm.getWorkShops().get(5).getUpgradeCost()));
+                        Integer.toString(farm.getWorkShops().get(5).getUpgradeCost())
+                );
+                moneyTextUpdater(moneyText);
+                weavingFactoryImageView.setVisible(true);
+
             }
         });
         upgradeButtonRectangles.add(weavingFactoryUpgradeButtonRectangle);
@@ -591,6 +743,22 @@ public class GraphicController extends Application {
         gameRunner.start();
     }
 
+    private void workshopWellAnimationBuilder(Image wellWorkshopImage, ImageView wellWorkshopImageView, int index) {
+        WellWorkshopSpriteAnimation wellWorkshopSpriteAnimation = new WellWorkshopSpriteAnimation(
+                wellWorkshopImageView, Duration.millis(timeConstant), 16,
+                4,4,0,(int)wellWorkshopImage.getWidth()/4,
+                (int)wellWorkshopImage.getHeight()/4);
+        if (index == 7) {
+            wellWorkshopSpriteAnimation.setCycleCount(farmController.getFarm().getWell().getTimeToFill());
+
+        }
+        else {
+            wellWorkshopSpriteAnimation.setCycleCount(farmController.getFarm().getWorkShops().get(index)
+            .getMaxTimeToFinish());
+        }
+        wellWorkshopSpriteAnimation.play();
+    }
+
     public void farmAnimalBuyButton(Node buttonNode, FarmAnimalType farmAnimalType, Text moneyText) {
         if (farmAnimalType.equals(FarmAnimalType.COW)) {
             buttonNode.setOnMouseClicked(event -> {
@@ -631,6 +799,7 @@ public class GraphicController extends Application {
         switch (level) {
             case 0:
                 imagePathStringBuilder.append("01.png");
+
                 break;
             case 1:
                 imagePathStringBuilder.append("01.png");

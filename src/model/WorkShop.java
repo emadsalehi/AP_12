@@ -5,6 +5,7 @@ public abstract class WorkShop {
     private int timeToFinish = 0;
     private int maxTimeToFinish;
     private int level = 0;
+    private boolean isReadytoProduce = false;
     private int throwedProductX;
     private int throwedProductY;
     private int numberOfRawProduct = 1;
@@ -22,22 +23,26 @@ public abstract class WorkShop {
 
     public void nextTurn() {
         if (this.isWorking) {
-            if (this.timeToFinish != 0)
+            if (this.timeToFinish != 0) {
                 this.timeToFinish -= 1;
-            else {
+                if (this.timeToFinish == 0) {
+                    isReadytoProduce = true;
+                }
+            } else {
+                if (isReadytoProduce) {
+                    isReadytoProduce = false;
+                }
                 this.timeToFinish = this.maxTimeToFinish;
                 this.isWorking = false;
             }
         }
     }
 
-    public boolean readyForDelivery(){
-        if (!this.isWorking && this.timeToFinish == this.maxTimeToFinish )
-            return true;
-        return false;
+    public boolean readyForDelivery() {
+        return isReadytoProduce;
     }
 
-    public void startWorkShop(){
+    public void startWorkShop() {
         this.isWorking = true;
         this.timeToFinish = this.maxTimeToFinish - 1;
     }
