@@ -559,12 +559,6 @@ public class GraphicController extends Application {
                                 imageView.setY(Utils.startY + Utils.cellYSize * j - 20);
                                 game.getChildren().add(imageView);
                             }
-                            ArrayList<Animal> animals = cells[i][j].getAnimals();
-                            for (Animal animal : animals) {
-                                Animation animation = new SpriteAnimal(animal, timeConstant, game);
-                                animation.setCycleCount(animal.getSpeed());
-                                animations.add(animation);
-                            }
                             for (Product product : cells[i][j].getProducts()) {
                                 ImageView productImageView = getProductImageView(product);
                                 productImageView.setX(Utils.startX + Utils.cellXSize * i - 15);
@@ -572,6 +566,17 @@ public class GraphicController extends Application {
                                 game.getChildren().add(productImageView);
                             }
 
+                        }
+                    }
+
+                    for (int i = 0; i < 30; i++) {
+                        for (int j = 0; j < 30; j++) {
+                            ArrayList<Animal> animals = cells[i][j].getAnimals();
+                            for (Animal animal : animals) {
+                                Animation animation = new SpriteAnimal(animal, timeConstant, game);
+                                animation.setCycleCount(animal.getSpeed());
+                                animations.add(animation);
+                            }
                         }
                     }
 
