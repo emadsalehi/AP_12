@@ -119,6 +119,7 @@ public class Helicopter {
     public void nextTurn(){
         if (!isAvailable){
             travelCounter--;
+            //System.out.println(travelCounter);
             if (travelCounter == 0){
                 isAvailable = true;
                 readyToDeliver = true;

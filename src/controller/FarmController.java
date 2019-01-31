@@ -76,35 +76,37 @@ public class FarmController {
         Truck truck = farm.getTruck();
         Helicopter helicopter = farm.getHelicopter();
         if (request.getVehicleTypeName().equals("truck")) {
-            for (WildAnimalType wildAnimalType : WildAnimalType.values()) {
-                if (wildAnimalType.name().equals(request.getItemName())) {
-                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()) {
-                        ArrayList<Animal> animals = truck.getAnimals();
-                        animals.add(new WildAnimal(0, 0, wildAnimalType));
-                        truck.setAnimals(animals);
-                        farm.setTruck(truck);
-                    } //TODO else ---> print not enough capacity
+            for (int q = 0 ; q < request.getCount() ; q++){
+                for (WildAnimalType wildAnimalType : WildAnimalType.values()) {
+                    if (wildAnimalType.name().equals(request.getItemName())) {
+                        if (truck.getCapacity() >= truck.calculateUsedCapacity() + wildAnimalType.getDepotSize()) {
+                            ArrayList<Animal> animals = truck.getAnimals();
+                            animals.add(new WildAnimal(0, 0, wildAnimalType));
+                            truck.setAnimals(animals);
+                            farm.setTruck(truck);
+                        } //TODO else ---> print not enough capacity
+                    }
                 }
-            }
-            for (FarmAnimalType farmAnimalType : FarmAnimalType.values()) {
-                //System.out.println(farmAnimalType.name() + " ");
-                if (farmAnimalType.name().equals(request.getItemName().toUpperCase())) {
-                    //System.out.println("1");
-                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()) {
-                        for (int i = 0 ; i < 30 ; i++){
-                            for (int j = 0 ; j < 30 ; j++){
-                                Iterator<Animal> iterator = (farm.getCells())[i][j].getAnimals().iterator();
-                                while(iterator.hasNext()){
-                                    Animal animal =iterator.next();
-                                    if (animal instanceof FarmAnimal){
-                                        FarmAnimal farmAnimal = (FarmAnimal)animal;
-                                        if (farmAnimal.getFarmAnimalType().name().equals(farmAnimalType.name())){
-                                            //System.out.println("1");
-                                            ArrayList<Animal> animals = truck.getAnimals();
-                                            animals.add(new FarmAnimal(0, 0, farmAnimalType));
-                                            truck.setAnimals(animals);
-                                            farm.setTruck(truck);
-                                            iterator.remove();
+                for (FarmAnimalType farmAnimalType : FarmAnimalType.values()) {
+                    //System.out.println(farmAnimalType.name() + " ");
+                    if (farmAnimalType.name().equals(request.getItemName().toUpperCase())) {
+                        //System.out.println("1");
+                        if (truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()) {
+                            for (int i = 0 ; i < 30 ; i++){
+                                for (int j = 0 ; j < 30 ; j++){
+                                    Iterator<Animal> iterator = (farm.getCells())[i][j].getAnimals().iterator();
+                                    while(iterator.hasNext()){
+                                        Animal animal =iterator.next();
+                                        if (animal instanceof FarmAnimal){
+                                            FarmAnimal farmAnimal = (FarmAnimal)animal;
+                                            if (farmAnimal.getFarmAnimalType().name().equals(farmAnimalType.name())){
+                                                //System.out.println("1");
+                                                ArrayList<Animal> animals = truck.getAnimals();
+                                                animals.add(new FarmAnimal(0, 0, farmAnimalType));
+                                                truck.setAnimals(animals);
+                                                farm.setTruck(truck);
+                                                iterator.remove();
+                                            }
                                         }
                                     }
                                 }
@@ -112,40 +114,44 @@ public class FarmController {
                         }
                     }
                 }
-            }
-            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()) {
-                if (primitiveProductType.name().equals(request.getItemName())) {
-                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + primitiveProductType.getDepotSize()) {
-                        ArrayList<Product> products = truck.getProducts();
-                        products.add(new PrimitiveProduct(primitiveProductType));
-                        truck.setProducts(products);
-                        farm.setTruck(truck);
+                for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()) {
+                    if (primitiveProductType.name().equals(request.getItemName())) {
+                        if (truck.getCapacity() >= truck.calculateUsedCapacity() + primitiveProductType.getDepotSize()) {
+                            ArrayList<Product> products = truck.getProducts();
+                            products.add(new PrimitiveProduct(primitiveProductType));
+                            truck.setProducts(products);
+                            farm.setTruck(truck);
+                        }
+                    }
+                }
+                for (SecondaryProductType secondaryProductType : SecondaryProductType.values()) {
+                    if (secondaryProductType.name().equals(request.getItemName())) {
+                        if (truck.getCapacity() >= truck.calculateUsedCapacity() + secondaryProductType.getDepotSize()) {
+                            ArrayList<Product> products = truck.getProducts();
+                            products.add(new SecondaryProduct(secondaryProductType));
+                            truck.setProducts(products);
+                            farm.setTruck(truck);
+                        }
                     }
                 }
             }
-            for (SecondaryProductType secondaryProductType : SecondaryProductType.values()) {
-                if (secondaryProductType.name().equals(request.getItemName())) {
-                    if (truck.getCapacity() >= truck.calculateUsedCapacity() + secondaryProductType.getDepotSize()) {
-                        ArrayList<Product> products = truck.getProducts();
-                        products.add(new SecondaryProduct(secondaryProductType));
-                        truck.setProducts(products);
-                        farm.setTruck(truck);
-                    }
-                }
-            }
+
         } else if (request.getVehicleTypeName().equals("helicopter")) {
-            for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()) {
-                if (primitiveProductType.name().equals(request.getItemName())) {
-                    if (helicopter.getCapacity() > helicopter.calculateUsedCapacity() + primitiveProductType.getDepotSize()
-                            && farm.getMoney() >= helicopter.calculateRequiredMoney() + primitiveProductType.getBuyCost()) {
-                        ArrayList<Product> products = helicopter.getProducts();
-                        products.add(new PrimitiveProduct(primitiveProductType));
-                        helicopter.setProducts(products);
-                        farm.setMoney(farm.getMoney() - primitiveProductType.getBuyCost());
-                        farm.setHelicopter(helicopter);
+            for (int q = 0 ; q < request.getCount() ; q++){
+                for (PrimitiveProductType primitiveProductType : PrimitiveProductType.values()) {
+                    if (primitiveProductType.name().equals(request.getItemName().toUpperCase())) {
+                        if (helicopter.getCapacity() > helicopter.calculateUsedCapacity() + primitiveProductType.getDepotSize()
+                                && farm.getMoney() >= helicopter.calculateRequiredMoney() + primitiveProductType.getBuyCost()) {
+                            ArrayList<Product> products = helicopter.getProducts();
+                            products.add(new PrimitiveProduct(primitiveProductType));
+                            helicopter.setProducts(products);
+                            farm.setMoney(farm.getMoney() - primitiveProductType.getBuyCost());
+                            farm.setHelicopter(helicopter);
+                        }
                     }
                 }
             }
+
         }
     }
 
@@ -632,12 +638,14 @@ public class FarmController {
             farm.updateCells();
             farm.getHelicopter().nextTurn();
             if (farm.getHelicopter().isReadyToDeliver()) {
+                //System.out.println("Ready to deliver in farm");
                 for (Product product : farm.getHelicopter().getProducts()) {
                     int randomX = (int) (Math.random() * 30);
                     int randomY = (int) (Math.random() * 30);
                     farm.getCells()[randomX][randomY].addProduct(product);
                 }
                 farm.getHelicopter().setReadyToDeliver(false);
+                farm.getHelicopter().clearProducts();
             }
             farm.getTruck().nextTurn();
             if (farm.getTruck().isReadyToPay()) {
