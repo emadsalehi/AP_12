@@ -1,17 +1,13 @@
 package controller;
 
+import com.gilecode.yagson.YaGson;
 import com.google.gson.Gson;
 import model.*;
 import model.request.*;
 import view.View;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 public class FarmController {
     ArrayList<WorkShop> workShops = new ArrayList<>(); {
@@ -265,8 +261,13 @@ public class FarmController {
     public void loadGameAction(LoadGameRequest request) {
         String path = request.getPathToJsonFile();
         Gson gson = new Gson();
+        YaGson yaGson = new YaGson();
         try {
-            farm = gson.fromJson(new FileReader(path), Farm.class);
+            //farm = gson.fromJson(new FileReader(path), Farm.class);
+            InputStream inputStream = new FileInputStream(path);
+            Scanner scanner = new Scanner(inputStream);
+            String farmJson = scanner.nextLine();
+            farm = yaGson.fromJson(farmJson , Farm.class);
         } catch (FileNotFoundException e) {
             view.logFileNotFound();
         }
@@ -458,8 +459,10 @@ public class FarmController {
     public void runAction(RunRequest request) {
         String path = request.getMapName();
         Gson gson = new Gson();
+        YaGson yaGson = new YaGson();
         try {
-            farm = gson.fromJson(new FileReader(path), Farm.class);
+            //farm = gson.fromJson(new FileReader(path), Farm.class);
+            farm = yaGson.fromJson(new FileReader(path), Farm.class);
         } catch (FileNotFoundException e) {
             view.logFileNotFound();
         }
@@ -467,8 +470,17 @@ public class FarmController {
 
     public void saveGameAction(SaveGameRequest request) {
         Gson gson = new Gson();
+        YaGson yaGson = new YaGson();
+        String farmJson = yaGson.toJson(farm , Farm.class);
+
         try {
-            gson.toJson(farm, new FileWriter(request.getPathToJsonFile()));
+            //gson.toJson(farm, new FileWriter(request.getPathToJsonFile()));
+            //yaGson.toJson(farm, new FileWriter(request.getPathToJsonFile()));
+            OutputStream outputStream = new FileOutputStream(request.getPathToJsonFile());
+            Formatter formatter = new Formatter(outputStream);
+            formatter.format(farmJson);
+            formatter.flush();
+
         } catch (IOException e) {
             view.logFileNotFound();
         }
