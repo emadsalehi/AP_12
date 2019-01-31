@@ -87,12 +87,29 @@ public class FarmController {
                 }
             }
             for (FarmAnimalType farmAnimalType : FarmAnimalType.values()) {
-                if (farmAnimalType.name().equals(request.getItemName())) {
+                System.out.println(farmAnimalType.name() + " ");
+                if (farmAnimalType.name().equals(request.getItemName().toUpperCase())) {
+                    //System.out.println("1");
                     if (truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()) {
-                        ArrayList<Animal> animals = truck.getAnimals();
-                        animals.add(new FarmAnimal(0, 0, farmAnimalType));
-                        truck.setAnimals(animals);
-                        farm.setTruck(truck);
+                        for (int i = 0 ; i < 30 ; i++){
+                            for (int j = 0 ; j < 30 ; j++){
+                                Iterator<Animal> iterator = (farm.getCells())[i][j].getAnimals().iterator();
+                                while(iterator.hasNext()){
+                                    Animal animal =iterator.next();
+                                    if (animal instanceof FarmAnimal){
+                                        FarmAnimal farmAnimal = (FarmAnimal)animal;
+                                        if (farmAnimal.getFarmAnimalType().name().equals(farmAnimalType.name())){
+                                            System.out.println("1");
+                                            ArrayList<Animal> animals = truck.getAnimals();
+                                            animals.add(new FarmAnimal(0, 0, farmAnimalType));
+                                            truck.setAnimals(animals);
+                                            farm.setTruck(truck);
+                                            iterator.remove();
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -330,8 +347,8 @@ public class FarmController {
                     } else {
                         stringBuilder.append(".");
                     }
-                    stringBuilder.append("\n");
                 }
+                stringBuilder.append("\n");
             }
             view.logMap(stringBuilder.toString());
         } else if (printFrom.equals("levels")) {
@@ -626,6 +643,8 @@ public class FarmController {
             if (farm.getTruck().isReadyToPay()) {
                 farm.setMoney(farm.getMoney() + farm.getTruck().calculatePaidMoney());
                 farm.getTruck().setReadyToPay(false);
+                farm.getTruck().clearAnimals();
+                farm.getTruck().clearProducts();
             }
             farm.setTime(farm.getTime() + 1);
 //            if (farm.levelPassedChecker()) {
