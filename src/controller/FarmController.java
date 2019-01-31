@@ -87,7 +87,7 @@ public class FarmController {
                 }
             }
             for (FarmAnimalType farmAnimalType : FarmAnimalType.values()) {
-                System.out.println(farmAnimalType.name() + " ");
+                //System.out.println(farmAnimalType.name() + " ");
                 if (farmAnimalType.name().equals(request.getItemName().toUpperCase())) {
                     //System.out.println("1");
                     if (truck.getCapacity() >= truck.calculateUsedCapacity() + farmAnimalType.getDepotSize()) {
@@ -99,7 +99,7 @@ public class FarmController {
                                     if (animal instanceof FarmAnimal){
                                         FarmAnimal farmAnimal = (FarmAnimal)animal;
                                         if (farmAnimal.getFarmAnimalType().name().equals(farmAnimalType.name())){
-                                            System.out.println("1");
+                                            //System.out.println("1");
                                             ArrayList<Animal> animals = truck.getAnimals();
                                             animals.add(new FarmAnimal(0, 0, farmAnimalType));
                                             truck.setAnimals(animals);
@@ -641,6 +641,7 @@ public class FarmController {
             }
             farm.getTruck().nextTurn();
             if (farm.getTruck().isReadyToPay()) {
+                //System.out.println("Ready to pay in farm");
                 farm.setMoney(farm.getMoney() + farm.getTruck().calculatePaidMoney());
                 farm.getTruck().setReadyToPay(false);
                 farm.getTruck().clearAnimals();

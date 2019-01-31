@@ -120,6 +120,8 @@ public class Truck {
         for (Animal animal : animals){
             if (animal instanceof WildAnimal){
                 paidMoney += ((WildAnimal) animal).getWildAnimalType().getSaleCost();
+            } else if (animal instanceof  FarmAnimal){
+                paidMoney += ((FarmAnimal) animal).getFarmAnimalType().getBuyCost() / 2;
             }
         }
         return paidMoney;
@@ -150,6 +152,8 @@ public class Truck {
     public void nextTurn(){
         if(!isAvailable){
             travelCounter--;
+            //System.out.println(travelCounter);
+            //System.out.println(calculatePaidMoney());
             if (travelCounter == 0){
                 isAvailable = true;
                 readyToPay = true;
