@@ -6,6 +6,7 @@ import controller.FarmController;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Profile {
 
@@ -15,6 +16,7 @@ public class Profile {
     private int portNumber;
     private String serverIP;
     private Socket profileSocket;
+    private HashMap<String, Integer> leaderBoard = new HashMap<>();
 
     public Profile(boolean isHost, String ServerProfileName, int serverPortNumber) {
         this.isHost = isHost;
@@ -77,5 +79,9 @@ public class Profile {
 
     public void setFarmController(FarmController farmController) {
         this.farmController = farmController;
+    }
+
+    public void addLeaderBoard(String name, Integer money) {
+        leaderBoard.put(name, money);
     }
 }
