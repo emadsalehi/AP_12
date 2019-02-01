@@ -2,6 +2,7 @@ package network;
 
 import controller.FarmController;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -41,5 +42,9 @@ public class NetworkController {
 
     public void sendMessage(String message){
 
+    }
+
+    public HashMap<String, Integer> showLeaderBoard() {
+        return profile.getLeaderBoard();
     }
 }
