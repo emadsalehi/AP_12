@@ -84,4 +84,8 @@ public class Profile {
     public void addLeaderBoard(String name, Integer money) {
         leaderBoard.put(name, money);
     }
+
+    public HashMap<String, Integer> getLeaderBoard() {
+        return leaderBoard;
+    }
 }
