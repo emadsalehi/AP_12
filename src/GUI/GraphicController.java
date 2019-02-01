@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 import model.request.*;
+import network.NetworkController;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,11 +37,13 @@ public class GraphicController extends Application {
     private Group menu = new Group();
     private Group game = new Group();
     private Group border = new Group();
+    private Group multiplayer = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
     private final String pathToBackGroundImage = "src/GUI/Textures/back.png";
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
+    private NetworkController networkController = new NetworkController();
 
     public GraphicController() throws FileNotFoundException {
     }
