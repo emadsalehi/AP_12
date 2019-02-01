@@ -1,6 +1,8 @@
 package network;
 
 
+import controller.FarmController;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,6 +15,8 @@ public class Profile {
     private int portNumber;
     private String serverIP;
     private Socket profileSocket;
+    private FarmController farmController;
+
 
     public Profile(boolean isHost, String ServerProfileName, int money, int serverPortNumber) {
         this.isHost = isHost;
@@ -60,6 +64,14 @@ public class Profile {
 
     public void setMoney(int money) {
         this.money = money;
+    }
+
+    public FarmController getFarmController() {
+        return farmController;
+    }
+
+    public void setFarmController(FarmController farmController) {
+        this.farmController = farmController;
     }
 
     public Socket socketMaker () {
