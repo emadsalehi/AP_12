@@ -8,6 +8,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
@@ -36,6 +38,7 @@ public class GraphicController extends Application {
     private Group menu = new Group();
     private Group game = new Group();
     private Group border = new Group();
+    private Group multiplayerGroup = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
     private final String pathToBackGroundImage = "src/GUI/Textures/back.png";
@@ -51,8 +54,8 @@ public class GraphicController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        newGame();
-        scene.setRoot(border);
+        multiplayer();
+//        scene.setRoot(border);
         WriteThread writeThread = new WriteThread(farmController);
         writeThread.start();
         primaryStage.setScene(scene);
@@ -94,6 +97,35 @@ public class GraphicController extends Application {
 
         scene.setRoot(menu);
     }
+
+    public void multiplayer () {
+        String backGroundPath = "src/GUI/Textures/menuTextures/cartoon-of-farm-background-vector-8546642.jpg";
+        ImageView multiplayerBackground = null;
+        try {
+            multiplayerBackground = new ImageView(new Image(new FileInputStream(backGroundPath)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        multiplayerBackground.setFitHeight(HEIGHT);
+        multiplayerBackground.setFitWidth(WIDTH);
+
+        RadioButton hostRadioButton = new RadioButton("Host");
+        hostRadioButton.relocate(WIDTH/2 - 48, 220);
+        hostRadioButton.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+        RadioButton joinRadioButton = new RadioButton("Join");
+        joinRadioButton.relocate(WIDTH/2 - 48, 250);
+        joinRadioButton.setFont(Font.font("Chalkboard",FontWeight.BOLD,20));
+        final ToggleGroup hostOrJoin = new ToggleGroup();
+        hostRadioButton.setToggleGroup(hostOrJoin);
+        joinRadioButton.setToggleGroup(hostOrJoin);
+
+        Text 
+
+        multiplayerGroup.getChildren().addAll(multiplayerBackground,hostRadioButton,joinRadioButton);
+
+        scene.setRoot(multiplayerGroup);
+    }
+
 
     public void newGame() {
         Farm farm = farmController.getFarm();
