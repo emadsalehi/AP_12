@@ -24,7 +24,8 @@ public class Writer implements Runnable {
         }
         Formatter formatter = new Formatter(outputStream);
         while (true){
-            formatter.format((new Integer(profile.getFarmController().getFarm().getMoney())).toString());
+            formatter.format("leaderboard#" + profile.getProfileName() + "#" +
+                    (new Integer(profile.getFarmController().getFarm().getMoney())).toString());
             formatter.flush();
             try {
                 Thread.sleep(1000);
