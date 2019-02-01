@@ -1,6 +1,5 @@
 package network;
 
-import java.util.HashMap;
 
 public class NetworkController {
     private Profile profile;
@@ -13,12 +12,12 @@ public class NetworkController {
 
 
     public void startChat(){
-
+        this.reader = new Reader();
+        new Thread(reader).start();
     }
 
     public void sendMessage(String message){
 
     }
 
-    public HashMap<>
 }
