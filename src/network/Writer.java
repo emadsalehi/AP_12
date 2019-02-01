@@ -23,7 +23,7 @@ public class Writer implements Runnable {
         Formatter formatter = new Formatter(outputStream);
         while (true){
             formatter.format("leaderboard#" + profile.getProfileName() + "#" +
-                    (new Integer(profile.getFarmController().getFarm().getMoney())).toString());
+                    (new Integer(profile.getFarmController().getFarm().getMoney())).toString() + "\n");
             formatter.flush();
             try {
                 Thread.sleep(1000);
