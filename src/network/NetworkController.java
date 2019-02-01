@@ -1,7 +1,5 @@
 package network;
 
-import java.util.HashMap;
-
 public class NetworkController {
     private Profile profile;
     private Reader reader;
@@ -19,6 +17,4 @@ public class NetworkController {
     public void sendMessage(String message){
 
     }
-
-    public HashMap<>
 }
