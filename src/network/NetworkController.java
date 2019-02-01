@@ -7,13 +7,14 @@ public class NetworkController {
     private Writer writer;
 
     public boolean addProfileAction(){
+        this.reader = new Reader();
+        new Thread(reader).start();
         return false;
     }
 
 
     public void startChat(){
-        this.reader = new Reader();
-        new Thread(reader).start();
+
     }
 
     public void sendMessage(String message){

@@ -66,6 +66,14 @@ public class Profile {
         this.money = money;
     }
 
+    public Socket getProfileSocket() {
+        return profileSocket;
+    }
+
+    public void setProfileSocket(Socket profileSocket) {
+        this.profileSocket = profileSocket;
+    }
+
     public FarmController getFarmController() {
         return farmController;
     }

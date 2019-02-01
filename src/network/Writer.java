@@ -7,18 +7,16 @@ import java.util.Formatter;
 
 public class Writer implements Runnable {
     private Profile profile;
-    Socket socket;
 
-    public Writer(Profile profile, Socket socket) {
+    public Writer(Profile profile) {
         this.profile = profile;
-        this.socket = socket;
     }
 
     @Override
     public void run() {
         OutputStream outputStream = null;
         try {
-            outputStream = socket.getOutputStream();
+            outputStream = profile.getProfileSocket().getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
