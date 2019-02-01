@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Reader implements Runnable {
-    private Profile profile
+    private Profile profile;
 
     public Reader(Profile profile) {
         this.profile = profile;

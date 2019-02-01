@@ -8,14 +8,14 @@ import java.util.Formatter;
 
 public class NetworkController {
     private Profile profile;
-    private Reader reader;
-    private Writer writer;
+    //private Reader reader;
+    //private Writer writer;
 
-    public boolean addProfileAction(){
-        this.reader = new Reader();
+    /*public boolean addProfileAction(){
+        this.reader = new Reader(profile);
         new Thread(reader).start();
         return false;
-    }
+    }*/
 
 
     public void startChat(){
