@@ -863,7 +863,9 @@ public class GraphicController extends Application {
         sendTextField.setMinWidth(200);
         Button sendButton = new Button("SEND");
         sendButton.setOnMouseClicked(event -> {
-            //todo what to do
+            String message = sendTextField.toString();
+            chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
+            sendMessage(sendTextField.toString());
         });
         HBox hBox = new HBox(20, sendTextField, sendButton);
         hBox.relocate(30,650);
