@@ -181,12 +181,12 @@ public class GraphicController extends Application {
                 String selectedString = selectedRadioButton.getText();
                 if (selectedString.equals("Host")) {
                     portTextField.setText("8050");
-                    iPTextField.setEditable(true);
-                    iPTextField.setText("N/A");
+                    iPTextField.setEditable(false);
+                    iPTextField.setText("localhost");
                 } else if (selectedString.equals("Join")) {
                     portTextField.setText("8060");
                     iPTextField.setText("ex: 100.100.100.100");
-                    iPTextField.setEditable(false);
+                    iPTextField.setEditable(true);
                 }
             }
         });
@@ -213,6 +213,7 @@ public class GraphicController extends Application {
             networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
             reader = new Reader(networkController.getProfile());
             writer = new Writer(networkController.getProfile());
+            reader.setGraphicController(this);
             new Thread(reader).start();
             new Thread(writer).start();
             newGame();
@@ -913,9 +914,10 @@ public class GraphicController extends Application {
         sendTextField.setMinWidth(200);
         Button sendButton = new Button("SEND");
         sendButton.setOnMouseClicked(event -> {
-            String message = sendTextField.toString();
-            chatArea.appendText(networkController.getProfile().getProfileName() + ": " + message + "\n");
-            networkController.sendMessage(sendTextField.toString());
+        String message = sendTextField.getText();
+        chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
+        networkController.sendMessage(sendTextField.getText());
+
         });
         HBox hBox = new HBox(20, sendTextField, sendButton);
         hBox.relocate(30, 650);
@@ -975,8 +977,9 @@ public class GraphicController extends Application {
         wellWorkshopSpriteAnimation.play();
     }
 
-    public void showMessage(String messageText, Profile messageSender) {
-        chatArea.appendText(messageSender.getProfileName() + ": " + messageText + "\n");
+
+    public synchronized void showMessage (String messageText, String profileName) {
+        chatArea.appendText(profileName +": "+ messageText+"\n");
     }
 
     public void newLeaderBoard() {

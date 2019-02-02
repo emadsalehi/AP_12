@@ -15,6 +15,13 @@ public class Writer implements Runnable {
 
     @Override
     public void run() {
+        try {
+            synchronized (profile) {
+                profile.wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         OutputStream outputStream = null;
         try {
             outputStream = profile.getProfileSocket().getOutputStream();
@@ -24,7 +31,7 @@ public class Writer implements Runnable {
         Formatter formatter = new Formatter(outputStream);
         while (true){
             formatter.format("leaderboard#" + profile.getProfileName() + "#" +
-                    (new Integer(profile.getFarmController().getFarm().getMoney())).toString() + "\n");
+                    (new Integer(profile.getFarmController().getFarm().getMoney())).toString());
             formatter.flush();
             try {
                 Thread.sleep(1000);
