@@ -30,6 +30,7 @@ import model.*;
 import model.Cell;
 import model.request.*;
 import network.NetworkController;
+import network.Profile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -896,6 +897,10 @@ public class GraphicController extends Application {
                     .getMaxTimeToFinish());
         }
         wellWorkshopSpriteAnimation.play();
+    }
+
+    public void showMessage (String messageText, Profile messageSender) {
+        chatArea.appendText(messageSender.getProfileName() +": "+ messageText+"\n");
     }
 
     public void farmAnimalBuyButton(Node buttonNode, FarmAnimalType farmAnimalType, Text moneyText) {
