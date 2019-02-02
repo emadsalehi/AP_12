@@ -4,12 +4,17 @@ import controller.FarmController;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -22,10 +27,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Cell;
 import model.request.*;
 import network.NetworkController;
 import network.Reader;
 import network.Writer;
+import network.Profile;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +44,7 @@ public class GraphicController extends Application {
     private final int WIDTH = Utils.sceneWidth;
     private final int HEIGHT = Utils.sceneHeight;
     private final Image grassImage = new Image(new FileInputStream("src/GUI/Textures/Grass/grass1.png"));
+    private final String pathToBackGroundImage = "src/GUI/Textures/back.png";
     private Group menu = new Group();
     private Group game = new Group();
     private Group border = new Group();
@@ -43,13 +52,12 @@ public class GraphicController extends Application {
     private Group leaderboard = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
-    private final String pathToBackGroundImage = "src/GUI/Textures/back.png";
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
     private NetworkController networkController = new NetworkController();
     private Reader reader;
     private Writer writer;
-
+    private static TextArea chatArea;
 
     public GraphicController() throws FileNotFoundException {
     }
@@ -60,8 +68,9 @@ public class GraphicController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        newGame();
-        scene.setRoot(border);
+        newMenu();
+        scene.setRoot(menu);
+//        scene.setRoot(border);
         WriteThread writeThread = new WriteThread(farmController);
         writeThread.start();
         primaryStage.setScene(scene);
@@ -69,6 +78,7 @@ public class GraphicController extends Application {
     }
 
     public void newMenu() {
+        menu.getChildren().clear();
         Media menuSound = new Media(new File("src/GUI/Textures/menuTextures/" +
                 "The Trouble Notes - Barney Rubble - Daytrotter Session - 11 21 2018.mp3").toURI().toString());
         MediaPlayer mediaPlayerSound = new MediaPlayer(menuSound);
@@ -87,22 +97,149 @@ public class GraphicController extends Application {
         mainMenuBackground.setFitWidth(WIDTH);
         menu.getChildren().add(mainMenuBackground);
 
-
         Text mainMenuTitle = new Text(WIDTH / 2 - 300, 100, "FARM FRENZY");
         mainMenuTitle.setFont(Font.font("Chalkboard", 100));
         mainMenuTitle.setFill(Color.rgb(195, 207, 23));
 
-        Rectangle selectLevelRectangle = new Rectangle(WIDTH / 2 - 70, 210, 300, 100);
-        Text selectLevelText = new Text(WIDTH / 2 - 48, 270, "SELECT LEVEL");
-        menuButtonMaker(selectLevelRectangle, selectLevelText, menu);
+        Rectangle newGameRectangle = new Rectangle(WIDTH / 2 - 70, 210, 300, 70);
+        Text newGameText = new Text(WIDTH / 2 - 30, 260, "NEW GAME");
+        menuButtonMaker(newGameRectangle, newGameText, menu);
+        newGameRectangle.setOnMouseClicked(event -> {
+            newGame();
+            scene.setRoot(border);
+        });
+        newGameText.setOnMouseClicked(event -> {
+            newGame();
+            scene.setRoot(border);
+        });
 
-        Rectangle loadGameRectangle = new Rectangle(WIDTH / 2 - 70, 320, 300, 100);
-        Text loadGameText = new Text(WIDTH / 2 - 32, 385, "LOAD GAME");
+        Rectangle loadGameRectangle = new Rectangle(WIDTH / 2 - 70, 290, 300, 70);
+        Text loadGameText = new Text(WIDTH / 2 - 32, 340, "LOAD GAME");
         menuButtonMaker(loadGameRectangle, loadGameText, menu);
 
-
-        scene.setRoot(menu);
+        Rectangle multiPlayerRectangle = new Rectangle(WIDTH / 2 - 70, 370, 300, 70);
+        Text multiPlayerText = new Text(WIDTH / 2 - 50, 420, "MULTIPLAYER");
+        menuButtonMaker(multiPlayerRectangle, multiPlayerText, menu);
+        multiPlayerRectangle.setOnMouseClicked(event -> {
+            mediaPlayerSound.stop();
+            multiplayer();
+            scene.setRoot(multiplayer);
+        });
+        multiPlayerText.setOnMouseClicked(event -> {
+            mediaPlayerSound.stop();
+            multiplayer();
+            scene.setRoot(multiplayer);
+        });
     }
+
+    public void multiplayer() {
+        multiplayer.getChildren().clear();
+        String backGroundPath = "src/GUI/Textures/menuTextures/cartoon-of-farm-background-vector-8546642.jpg";
+        ImageView multiplayerBackground = null;
+        try {
+            multiplayerBackground = new ImageView(new Image(new FileInputStream(backGroundPath)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        multiplayerBackground.setFitHeight(HEIGHT);
+        multiplayerBackground.setFitWidth(WIDTH);
+
+        RadioButton hostRadioButton = new RadioButton("Host");
+        hostRadioButton.relocate(WIDTH / 2 - 68, 220);
+        hostRadioButton.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+        RadioButton joinRadioButton = new RadioButton("Join");
+        joinRadioButton.relocate(WIDTH / 2 - 68, 250);
+        joinRadioButton.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+        final ToggleGroup hostOrJoin = new ToggleGroup();
+        hostRadioButton.setToggleGroup(hostOrJoin);
+        joinRadioButton.setToggleGroup(hostOrJoin);
+
+        Text portLabel = new Text("Port: ");
+        portLabel.relocate(WIDTH / 2 - 68, 290);
+        portLabel.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+        TextField portTextField = new TextField("ex: 80");
+        portTextField.relocate(WIDTH / 2 - 20, 283);
+
+        Text iPLabel = new Text("IP: ");
+        iPLabel.relocate(WIDTH / 2 - 68, 330);
+        iPLabel.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+        TextField iPTextField = new TextField("ex: 100.100.100.100");
+        iPTextField.relocate(WIDTH / 2 - 40, 323);
+        iPTextField.setEditable(false);
+
+        Text userNameLabel = new Text("Username: ");
+        userNameLabel.relocate(WIDTH / 2 - 68, 370);
+        userNameLabel.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+        TextField userNameTextField = new TextField("ex: Example1");
+        userNameTextField.relocate(WIDTH / 2 + 27, 363);
+
+        hostOrJoin.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            RadioButton selectedRadioButton = (RadioButton) hostOrJoin.getSelectedToggle();
+
+            if (selectedRadioButton != null) {
+                String selectedString = selectedRadioButton.getText();
+                if (selectedString.equals("Host")) {
+                    portTextField.setText("8050");
+                    iPTextField.setEditable(true);
+                    iPTextField.setText("N/A");
+                } else if (selectedString.equals("Join")) {
+                    portTextField.setText("8060");
+                    iPTextField.setText("ex: 100.100.100.100");
+                    iPTextField.setEditable(false);
+                }
+            }
+        });
+
+        Rectangle nextRectangle = new Rectangle(WIDTH / 2 + 70, 410, 70, 40);
+        Text nextText = new Text(WIDTH / 2 + 73, 440, "Next");
+
+        Rectangle backRectangle = new Rectangle(WIDTH / 2 - 20, 410, 70, 40);
+        Text backText = new Text(WIDTH / 2 - 17, 440, "Back");
+
+
+        multiplayer.getChildren().addAll(multiplayerBackground, hostRadioButton, joinRadioButton
+                , portLabel, portTextField, iPLabel, iPTextField, userNameLabel, userNameTextField);
+
+        menuButtonMaker(nextRectangle, nextText, multiplayer);
+        menuButtonMaker(backRectangle, backText, multiplayer);
+        nextText.setFont(Font.font("Chalkboard", 30));
+        backText.setFont(Font.font("Chalkboard", 30));
+
+        nextText.setOnMouseClicked(event -> {
+            boolean isHost;
+            if(hostRadioButton.isSelected())
+                isHost = true;
+            else
+                isHost = false;
+            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
+            reader = new Reader(networkController.getProfile());
+            writer = new Writer(networkController.getProfile());
+            new Thread(reader).start();
+            new Thread(writer).start();
+            newGame();
+            Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
+            Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
+            gameButtonMaker(chatButtonRectangle, chatButtonText);
+            chatButtonText.setOnMouseClicked(event1 -> newChat());
+            border.getChildren().addAll(chatButtonRectangle, chatButtonText);
+            Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
+            Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
+            gameButtonMaker(leaderBoardRectangle, leaderBoardText);
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
+            border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
+            scene.setRoot(border);
+        });
+
+        backRectangle.setOnMouseClicked(event -> {
+            newMenu();
+            scene.setRoot(menu);
+        });
+        backText.setOnMouseClicked(event -> {
+            newMenu();
+            scene.setRoot(menu);
+        });
+    }
+
 
     public void newGame() {
         Farm farm = farmController.getFarm();
@@ -165,7 +302,7 @@ public class GraphicController extends Application {
         border.getChildren().add(sewingFactoryImageView);
         sewingFactoryImageView.setOnMouseClicked(event -> {
             if (farmController.startAction(new StartRequest("sewingfactory"))) {
-                workshopWellAnimationBuilder(sewingFactoryImage,sewingFactoryImageView,1);
+                workshopWellAnimationBuilder(sewingFactoryImage, sewingFactoryImageView, 1);
             }
         });
         if (farmController.getFarm().getWorkShops().get(1).getLevel() == 0) {
@@ -183,7 +320,7 @@ public class GraphicController extends Application {
         border.getChildren().add(eggPowderPlantImageView);
         eggPowderPlantImageView.setOnMouseClicked(event -> {
             if (farmController.startAction(new StartRequest("eggpowderplant"))) {
-                workshopWellAnimationBuilder(eggPowderPlantImage,eggPowderPlantImageView,2);
+                workshopWellAnimationBuilder(eggPowderPlantImage, eggPowderPlantImageView, 2);
             }
         });
         if (farmController.getFarm().getWorkShops().get(2).getLevel() == 0) {
@@ -201,8 +338,8 @@ public class GraphicController extends Application {
         cakeBakeryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2 - 140);
         border.getChildren().add(cakeBakeryImageView);
         cakeBakeryImageView.setOnMouseClicked(event -> {
-            if (farmController.startAction(new StartRequest("cakebakery"))){
-                workshopWellAnimationBuilder(cakeBakeryImage,cakeBakeryImageView,2);
+            if (farmController.startAction(new StartRequest("cakebakery"))) {
+                workshopWellAnimationBuilder(cakeBakeryImage, cakeBakeryImageView, 2);
             }
         });
         if (farmController.getFarm().getWorkShops().get(3).getLevel() == 0) {
@@ -219,8 +356,8 @@ public class GraphicController extends Application {
         spinneryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2);
         border.getChildren().add(spinneryImageView);
         spinneryImageView.setOnMouseClicked(event -> {
-            if (farmController.startAction(new StartRequest("spinnery"))){
-                workshopWellAnimationBuilder(spinneryImage,spinneryImageView,2);
+            if (farmController.startAction(new StartRequest("spinnery"))) {
+                workshopWellAnimationBuilder(spinneryImage, spinneryImageView, 2);
             }
         });
         if (farmController.getFarm().getWorkShops().get(4).getLevel() == 0) {
@@ -238,8 +375,8 @@ public class GraphicController extends Application {
         weavingFactoryImageView.relocate(WIDTH / 2 + 200, HEIGHT / 2 + 100);
         border.getChildren().add(weavingFactoryImageView);
         weavingFactoryImageView.setOnMouseClicked(event -> {
-            if (farmController.startAction(new StartRequest("weavingfactory"))){
-                workshopWellAnimationBuilder(weavingFactoryImage,weavingFactoryImageView,2);
+            if (farmController.startAction(new StartRequest("weavingfactory"))) {
+                workshopWellAnimationBuilder(weavingFactoryImage, weavingFactoryImageView, 2);
             }
         });
         if (farmController.getFarm().getWorkShops().get(5).getLevel() == 0) {
@@ -274,13 +411,13 @@ public class GraphicController extends Application {
         chickenIconBoard.relocate(28, 23);
         chickenIconBoard.setFitHeight(60);
         chickenIconBoard.setFitWidth(60);
-        farmAnimalBuyButton(chickenIconBoard, FarmAnimalType.CHICKEN,moneyText);
+        farmAnimalBuyButton(chickenIconBoard, FarmAnimalType.CHICKEN, moneyText);
         border.getChildren().add(chickenIconBoard);
 
         Text chickenBuyPrice = new Text(30, 103, Integer.toString(FarmAnimalType.CHICKEN.getBuyCost()));
         chickenBuyPrice.setFill(Color.rgb(195, 207, 23));
         chickenBuyPrice.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
-        farmAnimalBuyButton(chickenBuyPrice, FarmAnimalType.CHICKEN,moneyText);
+        farmAnimalBuyButton(chickenBuyPrice, FarmAnimalType.CHICKEN, moneyText);
         border.getChildren().add(chickenBuyPrice);
 
 
@@ -288,42 +425,41 @@ public class GraphicController extends Application {
         sheepBuyBoard.relocate(105, 20);
         sheepBuyBoard.setFitWidth(80);
         sheepBuyBoard.setFitHeight(100);
-        farmAnimalBuyButton(sheepBuyBoard, FarmAnimalType.SHEEP,moneyText);
+        farmAnimalBuyButton(sheepBuyBoard, FarmAnimalType.SHEEP, moneyText);
         border.getChildren().add(sheepBuyBoard);
 
         ImageView sheepBuyIcon = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/sheep.png"));
         sheepBuyIcon.relocate(111, 23);
         sheepBuyIcon.setFitWidth(60);
         sheepBuyIcon.setFitHeight(60);
-        farmAnimalBuyButton(sheepBuyIcon, FarmAnimalType.SHEEP,moneyText);
+        farmAnimalBuyButton(sheepBuyIcon, FarmAnimalType.SHEEP, moneyText);
         border.getChildren().add(sheepBuyIcon);
 
         Text sheepBuyText = new Text(111, 103, Integer.toString(FarmAnimalType.SHEEP.getBuyCost()));
         sheepBuyText.setFill(Color.rgb(195, 207, 23));
         sheepBuyText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
-        farmAnimalBuyButton(sheepBuyText, FarmAnimalType.SHEEP,moneyText);
+        farmAnimalBuyButton(sheepBuyText, FarmAnimalType.SHEEP, moneyText);
         border.getChildren().add(sheepBuyText);
 
         ImageView cowBuyBoard = new ImageView(new Image("/GUI/Textures/gameButtons/board.png"));
         cowBuyBoard.relocate(190, 20);
         cowBuyBoard.setFitWidth(80);
         cowBuyBoard.setFitHeight(100);
-        farmAnimalBuyButton(cowBuyBoard, FarmAnimalType.COW,moneyText);
+        farmAnimalBuyButton(cowBuyBoard, FarmAnimalType.COW, moneyText);
         border.getChildren().add(cowBuyBoard);
 
         ImageView cowBuyIcon = new ImageView(new Image("/GUI/Textures/UI/Icons/Products/brown_cow.png"));
         cowBuyIcon.relocate(195, 20);
         cowBuyIcon.setFitHeight(60);
         cowBuyIcon.setFitWidth(60);
-        farmAnimalBuyButton(cowBuyIcon, FarmAnimalType.COW,moneyText);
+        farmAnimalBuyButton(cowBuyIcon, FarmAnimalType.COW, moneyText);
         border.getChildren().add(cowBuyIcon);
 
         Text cowButText = new Text(200, 103, Integer.toString(FarmAnimalType.COW.getBuyCost()));
         cowButText.setFill(Color.rgb(195, 207, 23));
         cowButText.setFont(Font.font("Chalkboard", FontWeight.BOLD, 25));
-        farmAnimalBuyButton(cowButText, FarmAnimalType.COW,moneyText);
+        farmAnimalBuyButton(cowButText, FarmAnimalType.COW, moneyText);
         border.getChildren().add(cowButText);
-
 
 
         ArrayList<Rectangle> upgradeButtonRectangles = new ArrayList<>();
@@ -331,13 +467,13 @@ public class GraphicController extends Application {
 
         StringBuilder wellStringBuilder = new StringBuilder("/GUI/Textures/Service/Well/");
         Image wellImage = new Image
-                (serviceLevelImageSelector(farm.getWell().getLevel(),wellStringBuilder));
+                (serviceLevelImageSelector(farm.getWell().getLevel(), wellStringBuilder));
         ImageView wellImageView = new ImageView(wellImage);
         wellImageView.setFitWidth(120);
         wellImageView.setFitHeight(120);
-        wellImageView.setViewport(new Rectangle2D(0,0,
-                wellImage.getWidth()/4, wellImage.getHeight()/4));
-        wellImageView.relocate(WIDTH /2 , 40);
+        wellImageView.setViewport(new Rectangle2D(0, 0,
+                wellImage.getWidth() / 4, wellImage.getHeight() / 4));
+        wellImageView.relocate(WIDTH / 2, 40);
         wellImageView.setOnMouseClicked(event -> {
             if (farmController.wellAction(new WellRequest())) {
                 moneyTextUpdater(moneyText);
@@ -390,7 +526,7 @@ public class GraphicController extends Application {
             if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
                 StringBuilder storageStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Depot/");
                 storageImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
-                .getStorage().getLevel(), storageStringBuilder1)));
+                        .getStorage().getLevel(), storageStringBuilder1)));
                 storageUpgradeButtonText.setText(
                         Integer.toString(farm.getStorage().getUpgradePrice())
                 );
@@ -682,8 +818,8 @@ public class GraphicController extends Application {
         border.getChildren().addAll(upgradeButtonRectangles);
         border.getChildren().addAll(upgradeButtonTexts);
         border.setOnMouseClicked(event -> {
-            int x = (int)((event.getX() - Utils.startX) / Utils.cellXSize);
-            int y = (int)((event.getY() - Utils.startY) / Utils.cellYSize);
+            int x = (int) ((event.getX() - Utils.startX) / Utils.cellXSize);
+            int y = (int) ((event.getY() - Utils.startY) / Utils.cellYSize);
             if (x >= 0 && x < 30 && y >= 0 && y < 30) {
                 if (!farmController.pickUpAction(new PickUpRequest(x, y))) {
                     if (!farmController.cageAction(new CageRequest(x, y))) {
@@ -699,6 +835,7 @@ public class GraphicController extends Application {
             private long second = 1000000000;
             private int numberOfGameNodes = 0;
             private int numberOfBorderNodes = border.getChildren().size();
+
             @Override
             public void handle(long now) {
                 if (lastTime == 0) {
@@ -708,7 +845,7 @@ public class GraphicController extends Application {
                     lastTime = now;
                     time += 1;
                     farmController.turnAction(new TurnRequest(1));
-                    border.getChildren().remove(numberOfBorderNodes - numberOfGameNodes , numberOfBorderNodes);
+                    border.getChildren().remove(numberOfBorderNodes - numberOfGameNodes, numberOfBorderNodes);
                     Cell[][] cells = farm.getCells();
                     ArrayList<Animation> animations = new ArrayList<>();
                     for (int i = 0; i < 30; i++) {
@@ -752,34 +889,65 @@ public class GraphicController extends Application {
         gameRunner.start();
     }
 
+    public void newChat () {
+        Stage chatWindow = new Stage();
+        Group chatGroup = new Group();
+        Scene chatScene = new Scene (chatGroup,600,900);
+        TextField sendTextField = new TextField("");
+        sendTextField.setMinWidth(200);
+        Button sendButton = new Button("SEND");
+        sendButton.setOnMouseClicked(event -> {
+            String message = sendTextField.toString();
+            chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
+            sendMessage(sendTextField.toString());
+        });
+        HBox hBox = new HBox(20, sendTextField, sendButton);
+        hBox.relocate(30,650);
+        hBox.relocate(30, 650);
+        chatArea = new TextArea("");
+        chatArea.setMinHeight(600);
+        chatArea.setMinWidth(600);
+
+        VBox vBox = new VBox(chatArea, hBox);
+
+        chatGroup.getChildren().add(vBox);
+
+        chatWindow.setScene(chatScene);
+        chatWindow.show();
+
+    }
+
     private void workshopWellAnimationBuilder(Image wellWorkshopImage, ImageView wellWorkshopImageView, int index) {
         WellWorkshopSpriteAnimation wellWorkshopSpriteAnimation = new WellWorkshopSpriteAnimation(
                 wellWorkshopImageView, Duration.millis(timeConstant), 16,
-                4,4,0,(int)wellWorkshopImage.getWidth()/4,
-                (int)wellWorkshopImage.getHeight()/4);
+                4, 4, 0, (int) wellWorkshopImage.getWidth() / 4,
+                (int) wellWorkshopImage.getHeight() / 4);
         if (index == 7) {
             wellWorkshopSpriteAnimation.setCycleCount(farmController.getFarm().getWell().getTimeToFill());
 
-        }
-        else {
+        } else {
             wellWorkshopSpriteAnimation.setCycleCount(farmController.getFarm().getWorkShops().get(index)
-            .getMaxTimeToFinish());
+                    .getMaxTimeToFinish());
         }
         wellWorkshopSpriteAnimation.play();
+    }
+
+    public void showMessage (String messageText, Profile messageSender) {
+        chatArea.appendText(messageSender.getProfileName() +": "+ messageText+"\n");
     }
 
     public void farmAnimalBuyButton(Node buttonNode, FarmAnimalType farmAnimalType, Text moneyText) {
         if (farmAnimalType.equals(FarmAnimalType.COW)) {
             buttonNode.setOnMouseClicked(event -> {
-                farmController.buyAction(new BuyRequest(new FarmAnimal((int)(Math.random()*30),(int)(Math.random()*30),
+                farmController.buyAction(new BuyRequest(new FarmAnimal((int) (Math.random() * 30), (int) (Math.random() * 30),
                         FarmAnimalType.COW)));
                 moneyTextUpdater(moneyText);
             });
         } else if (farmAnimalType.equals(FarmAnimalType.CHICKEN)) {
             buttonNode.setOnMouseClicked(event -> {
-            farmController.buyAction(new BuyRequest(new FarmAnimal((int)(Math.random()*30),(int)(Math.random()*30),
-                    FarmAnimalType.CHICKEN)));
-            moneyTextUpdater(moneyText);
+                farmController.buyAction(new BuyRequest(new FarmAnimal((int) (Math.random() * 30), (int) (Math.random() * 30),
+                        FarmAnimalType.CHICKEN)));
+                moneyTextUpdater(moneyText);
             });
         } else {
             buttonNode.setOnMouseClicked(event -> {
@@ -799,7 +967,7 @@ public class GraphicController extends Application {
 
     public void workShopImageModify(ImageView workshopImageView, Image workshopImage) {
         workshopImageView.setViewport(new Rectangle2D(0, 0, workshopImage.getWidth() / 4,
-                workshopImage.getHeight()/4));
+                workshopImage.getHeight() / 4));
         workshopImageView.setFitHeight(100);
         workshopImageView.setFitWidth(100);
     }
@@ -906,7 +1074,7 @@ public class GraphicController extends Application {
                 pathToImage.append("Plume/normal.png");
             else if (((PrimitiveProduct) product).getPrimitiveProductType() == PrimitiveProductType.FLOUR)
                 pathToImage.append("Flour.png");
-        } else if (product instanceof SecondaryProduct){
+        } else if (product instanceof SecondaryProduct) {
             if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.CAKE)
                 pathToImage.append("FlouryCake.png");
             else if (((SecondaryProduct) product).getSecondaryProductType() == SecondaryProductType.EGG_POWDER)
