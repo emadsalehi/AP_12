@@ -37,7 +37,6 @@ public class Reader implements Runnable {
             String str = scanner.nextLine();
             String[] params = str.split("#");
             if (params[0].equals("text")){
-                System.out.println("dsfkjskfjklsdjlksdj");
                 graphicController.showMessage(params[2], params[1]);
             }else if (params[0].equals("leaderboard")){
                 profile.addLeaderBoard(params[1] , Integer.valueOf(params[2]));

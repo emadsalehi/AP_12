@@ -25,7 +25,7 @@ public class NetworkController {
 
     }
 
-    public void sendMessage(String message){
+    public synchronized void sendMessage(String message){
         Socket socket = profile.getProfileSocket();
         OutputStream outputStream = null;
         try {

@@ -50,6 +50,7 @@ public class GraphicController extends Application {
     private Group border = new Group();
     private Group multiplayer = new Group();
     private Group leaderboard = new Group();
+    private Group chatGroup = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
@@ -892,7 +893,6 @@ public class GraphicController extends Application {
 
     public void newChat () {
         Stage chatWindow = new Stage();
-        Group chatGroup = new Group();
         Scene chatScene = new Scene (chatGroup,600,900);
         TextField sendTextField = new TextField("");
         sendTextField.setMinWidth(200);
@@ -933,8 +933,7 @@ public class GraphicController extends Application {
         wellWorkshopSpriteAnimation.play();
     }
 
-    public void showMessage (String messageText, String profileName) {
-        System.out.println("sHow maessage called");
+    public synchronized void showMessage (String messageText, String profileName) {
         chatArea.appendText(profileName +": "+ messageText+"\n");
     }
 
