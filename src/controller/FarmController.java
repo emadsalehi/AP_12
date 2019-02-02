@@ -258,6 +258,7 @@ public class FarmController {
         farm.setWorkShops(workShops);
     }
 
+
     public void loadGameAction(LoadGameRequest request) {
         String path = request.getPathToJsonFile();
         Gson gson = new Gson();
@@ -272,7 +273,6 @@ public class FarmController {
             view.logFileNotFound();
         }
     }
-
     public boolean pickUpAction(PickUpRequest request) {
         int x = request.getX();
         int y = request.getY();
