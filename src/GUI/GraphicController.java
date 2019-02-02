@@ -30,6 +30,8 @@ import javafx.util.Duration;
 import model.*;
 import model.request.*;
 import network.NetworkController;
+import network.Reader;
+import network.Writer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,6 +52,8 @@ public class GraphicController extends Application {
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
     private NetworkController networkController = new NetworkController();
+    private Reader reader;
+    private Writer writer;
 
     public GraphicController() throws FileNotFoundException {
     }
@@ -198,15 +202,26 @@ public class GraphicController extends Application {
         backText.setFont(Font.font("Chalkboard", 30));
 
         nextText.setOnMouseClicked(event -> {
-            
+            boolean isHost;
+            if(hostRadioButton.isSelected())
+                isHost = true;
+            else
+                isHost = false;
+            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
+            reader = new Reader(networkController.getProfile());
+            writer = new Writer(networkController.getProfile());
+            new Thread(reader).start();
+            new Thread(writer).start();
             newGame();
             Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
             Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
             gameButtonMaker(chatButtonRectangle, chatButtonText);
+            chatButtonText.setOnMouseClicked(event1 -> newChat());
             border.getChildren().addAll(chatButtonRectangle, chatButtonText);
             Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
             Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
             gameButtonMaker(leaderBoardRectangle, leaderBoardText);
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
             border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
             scene.setRoot(border);
         });
