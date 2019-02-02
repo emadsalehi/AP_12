@@ -8,25 +8,18 @@ import java.util.Formatter;
 public class Writer implements Runnable {
 
     private Profile profile;
+    private Socket socket;
 
-    public Writer(Profile profile) {
+    public Writer(Profile profile, Socket socket) {
         this.profile = profile;
+        this.socket = socket;
     }
 
     @Override
     public void run() {
-        try {
-            if(profile.isHost()) {
-                synchronized (profile) {
-                    profile.wait();
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         OutputStream outputStream = null;
         try {
-            outputStream = profile.getProfileSocket().getOutputStream();
+            outputStream = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,6 +35,5 @@ public class Writer implements Runnable {
                 e.printStackTrace();
             }
         }
-
     }
 }

@@ -212,12 +212,8 @@ public class GraphicController extends Application {
                 isHost = true;
             else
                 isHost = false;
-            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
-            reader = new Reader(networkController.getProfile());
-            writer = new Writer(networkController.getProfile());
-            reader.setGraphicController(this);
-            new Thread(reader).start();
-            new Thread(writer).start();
+            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(),
+                    userNameTextField.getText(), this);
             this.farmController = networkController.getProfile().getFarmController();
             newGame();
             Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
@@ -918,10 +914,10 @@ public class GraphicController extends Application {
         sendTextField.setMinWidth(200);
         Button sendButton = new Button("SEND");
         sendButton.setOnMouseClicked(event -> {
-        String message = sendTextField.getText();
-        chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
-        networkController.sendMessage(sendTextField.getText());
-
+            String message = sendTextField.getText();
+            if(networkController.getProfile().isHost())
+                chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
+            networkController.sendMessage(sendTextField.getText());
         });
         HBox hBox = new HBox(20, sendTextField, sendButton);
         hBox.relocate(30, 650);
@@ -936,7 +932,10 @@ public class GraphicController extends Application {
 
         chatWindow.setScene(chatScene);
         chatWindow.show();
+    }
 
+    public void showMessage(String name, String text) {
+        chatArea.appendText(name + ": " + text + "\n");
     }
 
     public HashMap<String, Integer> storageHashMapMaker () {
@@ -979,11 +978,6 @@ public class GraphicController extends Application {
                     .getMaxTimeToFinish());
         }
         wellWorkshopSpriteAnimation.play();
-    }
-
-
-    public synchronized void showMessage (String messageText, String profileName) {
-        chatArea.appendText(profileName +": "+ messageText+"\n");
     }
 
     public void newLeaderBoard() {
