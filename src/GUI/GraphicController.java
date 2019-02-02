@@ -30,7 +30,10 @@ import model.*;
 import model.Cell;
 import model.request.*;
 import network.NetworkController;
+import network.Reader;
+import network.Writer;
 import network.Profile;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +56,6 @@ public class GraphicController extends Application {
     private NetworkController networkController = new NetworkController();
     private static TextArea chatArea;
 
-
     public GraphicController() throws FileNotFoundException {
     }
 
@@ -63,7 +65,8 @@ public class GraphicController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        newChat();
+        newMenu();
+        scene.setRoot(menu);
 //        scene.setRoot(border);
         WriteThread writeThread = new WriteThread(farmController);
         writeThread.start();
@@ -72,6 +75,7 @@ public class GraphicController extends Application {
     }
 
     public void newMenu() {
+        menu.getChildren().clear();
         Media menuSound = new Media(new File("src/GUI/Textures/menuTextures/" +
                 "The Trouble Notes - Barney Rubble - Daytrotter Session - 11 21 2018.mp3").toURI().toString());
         MediaPlayer mediaPlayerSound = new MediaPlayer(menuSound);
@@ -99,9 +103,11 @@ public class GraphicController extends Application {
         menuButtonMaker(newGameRectangle, newGameText, menu);
         newGameRectangle.setOnMouseClicked(event -> {
             newGame();
+            scene.setRoot(border);
         });
         newGameText.setOnMouseClicked(event -> {
             newGame();
+            scene.setRoot(border);
         });
 
         Rectangle loadGameRectangle = new Rectangle(WIDTH / 2 - 70, 290, 300, 70);
@@ -114,17 +120,17 @@ public class GraphicController extends Application {
         multiPlayerRectangle.setOnMouseClicked(event -> {
             mediaPlayerSound.stop();
             multiplayer();
+            scene.setRoot(multiplayer);
         });
         multiPlayerText.setOnMouseClicked(event -> {
             mediaPlayerSound.stop();
             multiplayer();
+            scene.setRoot(multiplayer);
         });
-
-
-        scene.setRoot(menu);
     }
 
     public void multiplayer() {
+        multiplayer.getChildren().clear();
         String backGroundPath = "src/GUI/Textures/menuTextures/cartoon-of-farm-background-vector-8546642.jpg";
         ImageView multiplayerBackground = null;
         try {
@@ -164,22 +170,19 @@ public class GraphicController extends Application {
         TextField userNameTextField = new TextField("ex: Example1");
         userNameTextField.relocate(WIDTH / 2 + 27, 363);
 
-        hostOrJoin.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                RadioButton selectedRadioButton = (RadioButton) hostOrJoin.getSelectedToggle();
+        hostOrJoin.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            RadioButton selectedRadioButton = (RadioButton) hostOrJoin.getSelectedToggle();
 
-                if (selectedRadioButton != null) {
-                    String selectedString = selectedRadioButton.getText();
-                    if (selectedString.equals("Host")) {
-                        portTextField.setText("8050");
-                        iPTextField.setEditable(true);
-                        iPTextField.setText("N/A");
-                    } else if (selectedString.equals("Join")) {
-                        portTextField.setText("8060");
-                        iPTextField.setText("ex: 100.100.100.100");
-                        iPTextField.setEditable(false);
-                    }
+            if (selectedRadioButton != null) {
+                String selectedString = selectedRadioButton.getText();
+                if (selectedString.equals("Host")) {
+                    portTextField.setText("8050");
+                    iPTextField.setEditable(true);
+                    iPTextField.setText("N/A");
+                } else if (selectedString.equals("Join")) {
+                    portTextField.setText("8060");
+                    iPTextField.setText("ex: 100.100.100.100");
+                    iPTextField.setEditable(false);
                 }
             }
         });
@@ -189,12 +192,7 @@ public class GraphicController extends Application {
 
         Rectangle backRectangle = new Rectangle(WIDTH / 2 - 20, 410, 70, 40);
         Text backText = new Text(WIDTH / 2 - 17, 440, "Back");
-        backRectangle.setOnMouseClicked(event -> {
-            newMenu();
-        });
-        backText.setOnMouseClicked(event -> {
-            newMenu();
-        });
+
 
         multiplayer.getChildren().addAll(multiplayerBackground, hostRadioButton, joinRadioButton
                 , portLabel, portTextField, iPLabel, iPTextField, userNameLabel, userNameTextField);
@@ -204,7 +202,39 @@ public class GraphicController extends Application {
         nextText.setFont(Font.font("Chalkboard", 30));
         backText.setFont(Font.font("Chalkboard", 30));
 
-        scene.setRoot(multiplayer);
+        nextText.setOnMouseClicked(event -> {
+            boolean isHost;
+            if(hostRadioButton.isSelected())
+                isHost = true;
+            else
+                isHost = false;
+            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
+            reader = new Reader(networkController.getProfile());
+            writer = new Writer(networkController.getProfile());
+            new Thread(reader).start();
+            new Thread(writer).start();
+            newGame();
+            Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
+            Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
+            gameButtonMaker(chatButtonRectangle, chatButtonText);
+            chatButtonText.setOnMouseClicked(event1 -> newChat());
+            border.getChildren().addAll(chatButtonRectangle, chatButtonText);
+            Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
+            Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
+            gameButtonMaker(leaderBoardRectangle, leaderBoardText);
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
+            border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
+            scene.setRoot(border);
+        });
+
+        backRectangle.setOnMouseClicked(event -> {
+            newMenu();
+            scene.setRoot(menu);
+        });
+        backText.setOnMouseClicked(event -> {
+            newMenu();
+            scene.setRoot(menu);
+        });
     }
 
 
