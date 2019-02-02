@@ -4,7 +4,9 @@ import GUI.GraphicController;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Formatter;
 import java.util.Scanner;
 
 public class Reader implements Runnable {
@@ -18,11 +20,14 @@ public class Reader implements Runnable {
     @Override
     public void run() {
         InputStream inputStream = null;
+        OutputStream outputStream = null;
         final String TEXT = "text#(.*?)";
         final String LEADERBOARD = "leaderboard#(.*?)";
         try {
-            synchronized (profile) {
-                profile.wait();
+            if (profile.isHost()) {
+                synchronized (profile) {
+                    profile.wait();
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

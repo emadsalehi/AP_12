@@ -207,9 +207,11 @@ public class GraphicController extends Application {
         backText.setFont(Font.font("Chalkboard", 30));
 
         nextText.setOnMouseClicked(event -> {
-            chatArea.setEditable(false);
             boolean isHost;
-            isHost = hostRadioButton.isSelected();
+            if(hostRadioButton.isSelected())
+                isHost = true;
+            else
+                isHost = false;
             networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
             reader = new Reader(networkController.getProfile());
             writer = new Writer(networkController.getProfile());
