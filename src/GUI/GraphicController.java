@@ -252,6 +252,24 @@ public class GraphicController extends Application {
         storageImageView.setFitHeight(150);
         storageImageView.relocate(WIDTH / 2 - 100, HEIGHT / 2 + 130);
         border.getChildren().add(storageImageView);
+        storageImageView.setOnMouseClicked(event -> {
+            Stage storageStage = new Stage();
+            Group storageGroup = new Group();
+            Scene storageScene = new Scene(storageGroup, 600, 900);
+            HashMap<String,Integer> storageHashMap = storageHashMapMaker();
+            StringBuilder storageStringBuilder1 = new StringBuilder();
+            for (Map.Entry<String,Integer> entry : storageHashMap.entrySet()) {
+                storageStringBuilder1.append(entry.getKey()+": "+ entry.getKey()+"\n");
+            }
+            TextArea storageTextArea = new TextArea(storageStringBuilder1.toString());
+            storageTextArea.setMinHeight(900);
+            storageTextArea.setMinWidth(600);
+            storageTextArea.setEditable(false);
+            storageGroup.getChildren().add(storageTextArea);
+
+            storageStage.setScene(storageScene);
+            storageStage.show();
+        });
 
         StringBuilder helicopterStringBuilder = new StringBuilder("/GUI/Textures/Service/Helicopter/");
         Image helicopterImage = new Image
@@ -912,6 +930,33 @@ public class GraphicController extends Application {
 
         chatWindow.setScene(chatScene);
         chatWindow.show();
+
+    }
+
+    public HashMap<String, Integer> storageHashMapMaker () {
+        ArrayList<Product> storageProducts = farmController.getFarm().getStorage().getProducts();
+        HashMap<String, Integer> storageHashMap = new HashMap<>();
+        for (Product product : storageProducts) {
+            if (storageHashMap.containsKey(product.getClass().getSimpleName())) {
+                storageHashMap.put(product.getClass().getSimpleName(), 0);
+            }
+            else {
+                int number = storageHashMap.get(product) + 1;
+                storageHashMap.remove(product);
+                storageHashMap.put(product.getClass().getSimpleName(), number);
+            }
+        }
+        ArrayList<Animal> storageAnimals = farmController.getFarm().getStorage().getAnimals();
+        for (Animal animal : storageAnimals) {
+            if (storageHashMap.containsKey(animal.getClass().getSimpleName())) {
+                storageHashMap.put(animal.getClass().getSimpleName(), 0);
+            }
+            else {
+                int number = storageHashMap.get(animal) + 1;
+                storageHashMap.remove(animal);
+                storageHashMap.put(animal.getClass().getSimpleName(), number);
+            }
+        }
 
     }
 
