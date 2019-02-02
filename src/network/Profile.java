@@ -18,6 +18,7 @@ public class Profile {
     private Socket profileSocket;
     private HashMap<String, Integer> leaderBoard = new HashMap<>();
 
+
     public Profile(boolean isHost, String ServerProfileName, int serverPortNumber) {
         this.isHost = isHost;
         this.profileName = ServerProfileName;
@@ -53,6 +54,22 @@ public class Profile {
         this.profileName = profileName;
     }
 
+
+    public Socket getProfileSocket() {
+        return profileSocket;
+    }
+
+    public void setProfileSocket(Socket profileSocket) {
+        this.profileSocket = profileSocket;
+    }
+
+    public FarmController getFarmController() {
+        return farmController;
+    }
+
+    public void setFarmController(FarmController farmController) {
+        this.farmController = farmController;
+    }
 
     public Socket socketMaker () {
         if (isHost) {

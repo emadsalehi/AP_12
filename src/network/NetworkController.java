@@ -1,7 +1,10 @@
 package network;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.Formatter;
 import controller.FarmController;
-
 import java.util.HashMap;
 
 
@@ -27,7 +30,17 @@ public class NetworkController {
     }
 
     public void sendMessage(String message){
-
+        Socket socket = profile.getProfileSocket();
+        OutputStream outputStream = null;
+        try {
+            outputStream = socket.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Formatter formatter = new Formatter(outputStream);
+        formatter.format("text#" + profile.getProfileName() + "#" + message + "\n");
+        formatter.flush();
+        formatter.close();
     }
 
     public HashMap<String, Integer> showLeaderBoard() {
@@ -37,4 +50,5 @@ public class NetworkController {
     public Profile getProfile() {
         return profile;
     }
+
 }

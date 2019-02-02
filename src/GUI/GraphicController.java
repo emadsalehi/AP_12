@@ -49,11 +49,14 @@ public class GraphicController extends Application {
     private Group game = new Group();
     private Group border = new Group();
     private Group multiplayer = new Group();
+    private Group leaderboard = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
     private NetworkController networkController = new NetworkController();
+    private Reader reader;
+    private Writer writer;
     private static TextArea chatArea;
 
     public GraphicController() throws FileNotFoundException {
@@ -1106,5 +1109,9 @@ public class GraphicController extends Application {
         else if (plantLevel >= 4)
             grassView.setViewport(new Rectangle2D(148, 148, 47, 47));
         return grassView;
+    }
+
+    public void newLeaderboard(){
+        // TODO set scene to leaderboard
     }
 }
