@@ -193,15 +193,15 @@ public class GraphicController extends Application {
             newMenu();
         });
 
-        multiplayerGroup.getChildren().addAll(multiplayerBackground, hostRadioButton, joinRadioButton
+        multiplayer.getChildren().addAll(multiplayerBackground, hostRadioButton, joinRadioButton
                 , portLabel, portTextField, iPLabel, iPTextField, userNameLabel, userNameTextField);
 
-        menuButtonMaker(nextRectangle, nextText, multiplayerGroup);
-        menuButtonMaker(backRectangle, backText, multiplayerGroup);
+        menuButtonMaker(nextRectangle, nextText, multiplayer);
+        menuButtonMaker(backRectangle, backText, multiplayer);
         nextText.setFont(Font.font("Chalkboard", 30));
         backText.setFont(Font.font("Chalkboard", 30));
 
-        scene.setRoot(multiplayerGroup);
+        scene.setRoot(multiplayer);
     }
 
 
