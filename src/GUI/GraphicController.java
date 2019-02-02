@@ -225,7 +225,7 @@ public class GraphicController extends Application {
             Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
             Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
             gameButtonMaker(leaderBoardRectangle, leaderBoardText);
-            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderboard());
             border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
             scene.setRoot(border);
         });
@@ -899,7 +899,7 @@ public class GraphicController extends Application {
         sendButton.setOnMouseClicked(event -> {
             String message = sendTextField.toString();
             chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
-            sendMessage(sendTextField.toString());
+            networkController.sendMessage(sendTextField.toString());
         });
         HBox hBox = new HBox(20, sendTextField, sendButton);
         hBox.relocate(30,650);

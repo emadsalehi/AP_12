@@ -63,14 +63,6 @@ public class Profile {
         this.profileSocket = profileSocket;
     }
 
-    public FarmController getFarmController() {
-        return farmController;
-    }
-
-    public void setFarmController(FarmController farmController) {
-        this.farmController = farmController;
-    }
-
     public Socket socketMaker () {
         if (isHost) {
             ServerSocket profileServerSocket = null;

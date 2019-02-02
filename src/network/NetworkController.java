@@ -17,10 +17,6 @@ public class NetworkController {
         profile.addLeaderBoard(name, profile.getFarmController().getFarm().getMoney());
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
-
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
