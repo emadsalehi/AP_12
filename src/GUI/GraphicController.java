@@ -230,6 +230,7 @@ public class GraphicController extends Application {
             gameButtonMaker(leaderBoardRectangle, leaderBoardText);
             leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
             border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
+
             scene.setRoot(border);
         });
 
