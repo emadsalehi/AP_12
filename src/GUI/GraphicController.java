@@ -939,23 +939,23 @@ public class GraphicController extends Application {
         ArrayList<Product> storageProducts = farmController.getFarm().getStorage().getProducts();
         HashMap<String, Integer> storageHashMap = new HashMap<>();
         for (Product product : storageProducts) {
-            if (storageHashMap.containsKey(product.getClass().getSimpleName())) {
+            if (!storageHashMap.containsKey(product.getClass().getSimpleName())) {
                 storageHashMap.put(product.getClass().getSimpleName(), 0);
             }
             else {
-                int number = storageHashMap.get(product) + 1;
-                storageHashMap.remove(product);
+                int number = storageHashMap.get(product.getClass().getSimpleName()) + 1;
+                storageHashMap.remove(product.getClass().getSimpleName());
                 storageHashMap.put(product.getClass().getSimpleName(), number);
             }
         }
         ArrayList<Animal> storageAnimals = farmController.getFarm().getStorage().getAnimals();
         for (Animal animal : storageAnimals) {
-            if (storageHashMap.containsKey(animal.getClass().getSimpleName())) {
+            if (!storageHashMap.containsKey(animal.getClass().getSimpleName())) {
                 storageHashMap.put(animal.getClass().getSimpleName(), 0);
             }
             else {
-                int number = storageHashMap.get(animal) + 1;
-                storageHashMap.remove(animal);
+                int number = storageHashMap.get(animal.getClass().getSimpleName()) + 1;
+                storageHashMap.remove(animal.getClass().getSimpleName());
                 storageHashMap.put(animal.getClass().getSimpleName(), number);
             }
         }
