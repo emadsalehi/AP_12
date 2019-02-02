@@ -62,7 +62,7 @@ public class GraphicController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        newMenu();
+        newChat();
 //        scene.setRoot(border);
         WriteThread writeThread = new WriteThread(farmController);
         writeThread.start();
@@ -858,7 +858,7 @@ public class GraphicController extends Application {
     public void newChat () {
         Stage chatWindow = new Stage();
         Group chatGroup = new Group();
-        Scene chatScene = new Scene (chatGroup,800,600);
+        Scene chatScene = new Scene (chatGroup,600,900);
         TextField sendTextField = new TextField("");
         sendTextField.setMinWidth(200);
         Button sendButton = new Button("SEND");
@@ -868,7 +868,6 @@ public class GraphicController extends Application {
         HBox hBox = new HBox(20, sendTextField, sendButton);
         hBox.relocate(30,650);
         hBox.relocate(30, 650);
-        Scene scene = new Scene(chatGroup, 700, 700);
         chatArea = new TextArea("");
         chatArea.setMinHeight(600);
         chatArea.setMinWidth(600);
@@ -876,6 +875,9 @@ public class GraphicController extends Application {
         VBox vBox = new VBox(chatArea, hBox);
 
         chatGroup.getChildren().add(vBox);
+
+        chatWindow.setScene(chatScene);
+        chatWindow.show();
 
     }
 
