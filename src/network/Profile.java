@@ -1,11 +1,14 @@
 package network;
 
 
+import GUI.GraphicController;
 import controller.FarmController;
+import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Profile {
@@ -15,71 +18,54 @@ public class Profile {
     private FarmController farmController;
     private int portNumber;
     private String serverIP;
-    private Socket profileSocket;
+    private ArrayList<Socket> profileSockets = new ArrayList<>();
     private HashMap<String, Integer> leaderBoard = new HashMap<>();
+    private GraphicController graphicController;
 
 
-    public Profile(boolean isHost, String ServerProfileName, int serverPortNumber) {
-        this.isHost = isHost;
-        this.profileName = ServerProfileName;
-        this.portNumber = serverPortNumber;
-        if (isHost) {
-            serverIP = ("localhost");
-        }
-        this.profileSocket = socketMaker();
-    }
-
-    public Profile(boolean isHost, String ClientProfileName, int portNumber, String serverIP) {
+    public Profile(boolean isHost, String ClientProfileName, int portNumber, String serverIP, GraphicController graphicController) {
         this.isHost = isHost;
         this.profileName = ClientProfileName;
         this.portNumber = portNumber;
         this.serverIP = serverIP;
-        this.profileSocket = socketMaker();
-
+        this.graphicController = graphicController;
+        socketMaker();
     }
 
     public boolean isHost() {
         return isHost;
     }
 
-    public void setHost(boolean host) {
-        isHost = host;
-    }
-
     public String getProfileName() {
         return profileName;
     }
 
-    public void setProfileName(String profileName) {
-        this.profileName = profileName;
+    public ArrayList<Socket> getProfileSockets() {
+        return profileSockets;
     }
 
-
-    public Socket getProfileSocket() {
-        return profileSocket;
-    }
-
-    public void setProfileSocket(Socket profileSocket) {
-        this.profileSocket = profileSocket;
-    }
-
-    public Socket socketMaker () {
+    public void socketMaker () {
         if (isHost) {
-            ServerSocket profileServerSocket = null;
+            ServerSocket profileServerSocket;
             try {
                 profileServerSocket = new ServerSocket(portNumber);
-                return profileServerSocket.accept();
+                SocketThread socketThread = new SocketThread(profileServerSocket, this, graphicController);
+                socketThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                return new Socket(serverIP, portNumber);
+                Socket socket = new Socket(serverIP, portNumber);
+                profileSockets.add(socket);
+                Reader reader = new Reader(this, socket, graphicController);
+                Writer writer = new Writer(this, socket);
+                new Thread(reader).start();
+                new Thread(writer).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
     public FarmController getFarmController() {
@@ -96,5 +82,9 @@ public class Profile {
 
     public HashMap<String, Integer> getLeaderBoard() {
         return leaderBoard;
+    }
+
+    public void addProfileSocket (Socket socket) {
+        profileSockets.add(socket);
     }
 }

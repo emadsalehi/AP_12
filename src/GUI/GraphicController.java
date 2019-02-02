@@ -4,8 +4,6 @@ import controller.FarmController;
 import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -26,21 +24,23 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.*;
 import model.Cell;
+import model.*;
 import model.request.*;
 import network.NetworkController;
+import network.Profile;
 import network.Reader;
 import network.Writer;
-import network.Profile;
-
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GraphicController extends Application {
+    private static TextArea chatArea;
     private final int WIDTH = Utils.sceneWidth;
     private final int HEIGHT = Utils.sceneHeight;
     private final Image grassImage = new Image(new FileInputStream("src/GUI/Textures/Grass/grass1.png"));
@@ -49,7 +49,8 @@ public class GraphicController extends Application {
     private Group game = new Group();
     private Group border = new Group();
     private Group multiplayer = new Group();
-    private Group leaderboard = new Group();
+    private Group leaderBoardGroup = new Group();
+    private Group chatGroup = new Group();
     private Scene scene = new Scene(menu, WIDTH, HEIGHT);
     private int timeConstant = 1000;
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
@@ -57,7 +58,7 @@ public class GraphicController extends Application {
     private NetworkController networkController = new NetworkController();
     private Reader reader;
     private Writer writer;
-    private static TextArea chatArea;
+
 
     public GraphicController() throws FileNotFoundException {
     }
@@ -180,12 +181,12 @@ public class GraphicController extends Application {
                 String selectedString = selectedRadioButton.getText();
                 if (selectedString.equals("Host")) {
                     portTextField.setText("8050");
-                    iPTextField.setEditable(true);
-                    iPTextField.setText("N/A");
+                    iPTextField.setEditable(false);
+                    iPTextField.setText("localhost");
                 } else if (selectedString.equals("Join")) {
                     portTextField.setText("8060");
                     iPTextField.setText("ex: 100.100.100.100");
-                    iPTextField.setEditable(false);
+                    iPTextField.setEditable(true);
                 }
             }
         });
@@ -211,11 +212,9 @@ public class GraphicController extends Application {
                 isHost = true;
             else
                 isHost = false;
-            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(), userNameTextField.getText());
-            reader = new Reader(networkController.getProfile());
-            writer = new Writer(networkController.getProfile());
-            new Thread(reader).start();
-            new Thread(writer).start();
+            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(),
+                    userNameTextField.getText(), this);
+            this.farmController = networkController.getProfile().getFarmController();
             newGame();
             Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
             Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
@@ -225,8 +224,9 @@ public class GraphicController extends Application {
             Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
             Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
             gameButtonMaker(leaderBoardRectangle, leaderBoardText);
-            leaderBoardText.setOnMouseClicked(event1 -> newLeaderboard());
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
             border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
+
             scene.setRoot(border);
         });
 
@@ -253,6 +253,24 @@ public class GraphicController extends Application {
         storageImageView.setFitHeight(150);
         storageImageView.relocate(WIDTH / 2 - 100, HEIGHT / 2 + 130);
         border.getChildren().add(storageImageView);
+        storageImageView.setOnMouseClicked(event -> {
+            Stage storageStage = new Stage();
+            Group storageGroup = new Group();
+            Scene storageScene = new Scene(storageGroup, 600, 900);
+            HashMap<String,Integer> storageHashMap = storageHashMapMaker();
+            StringBuilder storageStringBuilder1 = new StringBuilder();
+            for (Map.Entry<String,Integer> entry : storageHashMap.entrySet()) {
+                storageStringBuilder1.append(entry.getKey()+": "+ entry.getKey()+"\n");
+            }
+            TextArea storageTextArea = new TextArea(storageStringBuilder1.toString());
+            storageTextArea.setMinHeight(900);
+            storageTextArea.setMinWidth(600);
+            storageTextArea.setEditable(false);
+            storageGroup.getChildren().add(storageTextArea);
+
+            storageStage.setScene(storageScene);
+            storageStage.show();
+        });
 
         StringBuilder helicopterStringBuilder = new StringBuilder("/GUI/Textures/Service/Helicopter/");
         Image helicopterImage = new Image
@@ -889,20 +907,20 @@ public class GraphicController extends Application {
         gameRunner.start();
     }
 
-    public void newChat () {
+    public void newChat() {
         Stage chatWindow = new Stage();
-        Group chatGroup = new Group();
-        Scene chatScene = new Scene (chatGroup,600,900);
+        Scene chatScene = new Scene(chatGroup, 600, 900);
         TextField sendTextField = new TextField("");
         sendTextField.setMinWidth(200);
         Button sendButton = new Button("SEND");
         sendButton.setOnMouseClicked(event -> {
-            String message = sendTextField.toString();
-            chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
-            networkController.sendMessage(sendTextField.toString());
+            String message = sendTextField.getText();
+            if(networkController.getProfile().isHost())
+                chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
+            networkController.sendMessage(sendTextField.getText());
         });
         HBox hBox = new HBox(20, sendTextField, sendButton);
-        hBox.relocate(30,650);
+        hBox.relocate(30, 650);
         hBox.relocate(30, 650);
         chatArea = new TextArea("");
         chatArea.setMinHeight(600);
@@ -914,7 +932,37 @@ public class GraphicController extends Application {
 
         chatWindow.setScene(chatScene);
         chatWindow.show();
+    }
 
+    public void showMessage(String name, String text) {
+        chatArea.appendText(name + ": " + text + "\n");
+    }
+
+    public HashMap<String, Integer> storageHashMapMaker () {
+        ArrayList<Product> storageProducts = farmController.getFarm().getStorage().getProducts();
+        HashMap<String, Integer> storageHashMap = new HashMap<>();
+        for (Product product : storageProducts) {
+            if (!storageHashMap.containsKey(product.getClass().getSimpleName())) {
+                storageHashMap.put(product.getClass().getSimpleName(), 0);
+            }
+            else {
+                int number = storageHashMap.get(product.getClass().getSimpleName()) + 1;
+                storageHashMap.remove(product.getClass().getSimpleName());
+                storageHashMap.put(product.getClass().getSimpleName(), number);
+            }
+        }
+        ArrayList<Animal> storageAnimals = farmController.getFarm().getStorage().getAnimals();
+        for (Animal animal : storageAnimals) {
+            if (!storageHashMap.containsKey(animal.getClass().getSimpleName())) {
+                storageHashMap.put(animal.getClass().getSimpleName(), 0);
+            }
+            else {
+                int number = storageHashMap.get(animal.getClass().getSimpleName()) + 1;
+                storageHashMap.remove(animal.getClass().getSimpleName());
+                storageHashMap.put(animal.getClass().getSimpleName(), number);
+            }
+        }
+        return storageHashMap;
     }
 
     private void workshopWellAnimationBuilder(Image wellWorkshopImage, ImageView wellWorkshopImageView, int index) {
@@ -932,9 +980,56 @@ public class GraphicController extends Application {
         wellWorkshopSpriteAnimation.play();
     }
 
-    public void showMessage (String messageText, Profile messageSender) {
-        chatArea.appendText(messageSender.getProfileName() +": "+ messageText+"\n");
+    public void newLeaderBoard() {
+        leaderBoardGroup.getChildren().clear();
+        Stage leaderBoardWindow = new Stage();
+        Scene leaderBoardScene = new Scene(leaderBoardGroup, 600, 900);
+        Text leaderBoardTitle = new Text(200, 10, "LEADERBOARD");
+        leaderBoardTitle.setFont(Font.font("Chalkboard", FontWeight.BOLD, 30));
+        StringBuilder leaderBoardTextBuilder = new StringBuilder();
+        HashMap<String, Integer> leaderBoardHashMap = networkController.showLeaderBoard();
+        LeaderboardWrapper leaderboardWrapper = new LeaderboardWrapper(leaderBoardHashMap);
+        for (Map.Entry<String, Integer> entry : leaderboardWrapper.getLeaderboardHashMap().entrySet()) {
+            leaderBoardTextBuilder.append(entry.getKey() + ":        " + entry.getValue() + "\n");
+        }
+        TextArea leaderBoardTextArea = new TextArea(leaderBoardTextBuilder.toString());
+        leaderBoardTextArea.setMinWidth(600);
+        leaderBoardTextArea.setMinHeight(800);
+        leaderBoardTextArea.setEditable(false);
+        leaderBoardTextArea.relocate(0, 100);
+
+        Button sortByMoneyButton = new Button("SORT BY MONEY");
+        Button sortByNameButton = new Button ("SORT BY NAME");
+
+        sortByMoneyButton.relocate(100, 60);
+        sortByNameButton.relocate( 200, 60);
+
+        sortByMoneyButton.setOnMouseClicked(event -> {
+            leaderboardWrapper.sortByValue();
+            leaderBoardTextBuilder.delete(0, leaderBoardTextBuilder.toString().length());
+            for (Map.Entry<String, Integer> entry : leaderboardWrapper.getLeaderboardHashMap().entrySet()) {
+                leaderBoardTextBuilder.append(entry.getKey() + ":        " + entry.getValue() + "\n");
+            }
+            leaderBoardTextArea.clear();
+            leaderBoardTextArea.setText(leaderBoardTextBuilder.toString());
+        });
+        sortByNameButton.setOnMouseClicked(event -> {
+            leaderboardWrapper.sortByKey();
+            leaderBoardTextBuilder.delete(0, leaderBoardTextBuilder.toString().length());
+            for (Map.Entry<String, Integer> entry : leaderboardWrapper.getLeaderboardHashMap().entrySet()) {
+                leaderBoardTextBuilder.append(entry.getKey() + ":        " + entry.getValue() + "\n");
+            }
+            leaderBoardTextArea.clear();
+            leaderBoardTextArea.setText(leaderBoardTextBuilder.toString());
+
+        });
+
+        leaderBoardGroup.getChildren().addAll(leaderBoardTextArea, sortByMoneyButton, sortByNameButton, leaderBoardTitle);
+        leaderBoardWindow.setScene(leaderBoardScene);
+        leaderBoardWindow.setOnCloseRequest(event -> leaderBoardWindow.close());
+        leaderBoardWindow.show();
     }
+
 
     public void farmAnimalBuyButton(Node buttonNode, FarmAnimalType farmAnimalType, Text moneyText) {
         if (farmAnimalType.equals(FarmAnimalType.COW)) {
@@ -1109,9 +1204,5 @@ public class GraphicController extends Application {
         else if (plantLevel >= 4)
             grassView.setViewport(new Rectangle2D(148, 148, 47, 47));
         return grassView;
-    }
-
-    public void newLeaderboard(){
-        // TODO set scene to leaderboard
     }
 }

@@ -45,4 +45,8 @@ public class Cell {
     public void setPlantLevel(int plantLevel) {
         this.plantLevel = plantLevel;
     }
+
+    public void addAnimal(Animal animal) {
+        this.animals.add(animal);
+    }
 }

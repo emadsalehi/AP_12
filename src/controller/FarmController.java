@@ -2,6 +2,7 @@ package controller;
 
 import com.gilecode.yagson.YaGson;
 import com.google.gson.Gson;
+import javafx.animation.Animation;
 import model.*;
 import model.request.*;
 import view.View;
@@ -660,6 +661,17 @@ public class FarmController {
                 farm.getHelicopter().clearProducts();
             }
             farm.getTruck().nextTurn();
+            int wildAnimalRandom = (int)(Math.random() * 35);
+            if (wildAnimalRandom == 1) {
+                int randomX = (int)(Math.random() * 30);
+                int randomY = (int)(Math.random() * 30);
+                WildAnimalType wildAnimalType = WildAnimalType.LION;
+                if (Math.random() > 0.5)
+                    wildAnimalType = WildAnimalType.BEAR;
+                else
+                    wildAnimalType = wildAnimalType.LION;
+                farm.getCells()[randomX][randomY].addAnimal(new WildAnimal(randomX, randomY, wildAnimalType));
+            }
             if (farm.getTruck().isReadyToPay()) {
                 //System.out.println("Ready to pay in farm");
                 farm.setMoney(farm.getMoney() + farm.getTruck().calculatePaidMoney());

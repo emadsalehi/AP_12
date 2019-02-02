@@ -4,39 +4,38 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Formatter;
+
+import GUI.GraphicController;
 import controller.FarmController;
+
 import java.util.HashMap;
 
 
 public class NetworkController {
     private Profile profile;
 
-    public void addProfileAction(boolean isHost, int port, String ip, String name){
-        profile = new Profile(isHost, name, port, ip);
+    public void addProfileAction(boolean isHost, int port, String ip, String name, GraphicController graphicController){
+        profile = new Profile(isHost, name, port, ip, graphicController);
         profile.setFarmController(new FarmController());
         profile.addLeaderBoard(name, profile.getFarmController().getFarm().getMoney());
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
     }
 
     public void startChat(){
 
     }
 
-    public void sendMessage(String message){
-        Socket socket = profile.getProfileSocket();
-        OutputStream outputStream = null;
-        try {
-            outputStream = socket.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public synchronized void sendMessage(String message){
+        for(Socket socket : profile.getProfileSockets()) {
+            OutputStream outputStream = null;
+            try {
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Formatter formatter = new Formatter(outputStream);
+            formatter.format("text#" + profile.getProfileName() + "#" + message + "\n");
+            formatter.flush();
         }
-        Formatter formatter = new Formatter(outputStream);
-        formatter.format("text#" + profile.getProfileName() + "#" + message + "\n");
-        formatter.flush();
-        formatter.close();
     }
 
     public HashMap<String, Integer> showLeaderBoard() {
