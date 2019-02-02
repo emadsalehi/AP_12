@@ -69,7 +69,7 @@ public class GraphicController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        newLeaderBoard();
+        newMenu();
         scene.setRoot(menu);
 //        scene.setRoot(border);
         WriteThread writeThread = new WriteThread(farmController);
@@ -959,7 +959,7 @@ public class GraphicController extends Application {
                 storageHashMap.put(animal.getClass().getSimpleName(), number);
             }
         }
-
+        return storageHashMap;
     }
 
     private void workshopWellAnimationBuilder(Image wellWorkshopImage, ImageView wellWorkshopImageView, int index) {
