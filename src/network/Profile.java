@@ -68,7 +68,8 @@ public class Profile {
             ServerSocket profileServerSocket = null;
             try {
                 profileServerSocket = new ServerSocket(portNumber);
-                return profileServerSocket.accept();
+                SocketThread socketThread = new SocketThread(profileServerSocket, this);
+                socketThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -97,4 +98,6 @@ public class Profile {
     public HashMap<String, Integer> getLeaderBoard() {
         return leaderBoard;
     }
+
+
 }

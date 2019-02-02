@@ -36,7 +36,6 @@ public class NetworkController {
         Formatter formatter = new Formatter(outputStream);
         formatter.format("text#" + profile.getProfileName() + "#" + message + "\n");
         formatter.flush();
-        formatter.close();
     }
 
     public HashMap<String, Integer> showLeaderBoard() {
