@@ -16,8 +16,10 @@ public class Writer implements Runnable {
     @Override
     public void run() {
         try {
-            synchronized (profile) {
-                profile.wait();
+            if(profile.isHost()) {
+                synchronized (profile) {
+                    profile.wait();
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -31,14 +33,14 @@ public class Writer implements Runnable {
         Formatter formatter = new Formatter(outputStream);
         while (true){
             formatter.format("leaderboard#" + profile.getProfileName() + "#" +
-                    (new Integer(profile.getFarmController().getFarm().getMoney())).toString());
+                    Integer.valueOf(profile.getFarmController().getFarm().getMoney()).toString() + "\n");
             formatter.flush();
+            profile.addLeaderBoard(profile.getProfileName(), profile.getFarmController().getFarm().getMoney());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
 
     }

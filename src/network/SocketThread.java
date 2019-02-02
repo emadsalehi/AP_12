@@ -19,7 +19,7 @@ public class SocketThread extends Thread {
         try {
             profile.setProfileSocket(serverSocket.accept());
             synchronized (profile) {
-                profile.notify();
+                profile.notifyAll();
             }
         } catch (IOException e) {
             e.printStackTrace();

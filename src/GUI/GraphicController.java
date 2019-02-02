@@ -218,6 +218,7 @@ public class GraphicController extends Application {
             reader.setGraphicController(this);
             new Thread(reader).start();
             new Thread(writer).start();
+            this.farmController = networkController.getProfile().getFarmController();
             newGame();
             Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
             Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
@@ -227,7 +228,7 @@ public class GraphicController extends Application {
             Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
             Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
             gameButtonMaker(leaderBoardRectangle, leaderBoardText);
-            leaderBoardText.setOnMouseClicked(event1 -> newLeaderboard());
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
             border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
             scene.setRoot(border);
         });
@@ -1028,8 +1029,9 @@ public class GraphicController extends Application {
 
         });
 
-        leaderBoardGroup.getChildren().add(leaderBoardTitle);
+        leaderBoardGroup.getChildren().addAll(leaderBoardTextArea, sortByMoneyButton, sortByNameButton, leaderBoardTitle);
         leaderBoardWindow.setScene(leaderBoardScene);
+        leaderBoardWindow.setOnCloseRequest(event -> leaderBoardWindow.close());
         leaderBoardWindow.show();
     }
 
@@ -1207,9 +1209,5 @@ public class GraphicController extends Application {
         else if (plantLevel >= 4)
             grassView.setViewport(new Rectangle2D(148, 148, 47, 47));
         return grassView;
-    }
-
-    public void newLeaderboard() {
-        // TODO set scene to leaderboard
     }
 }
