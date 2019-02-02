@@ -10,12 +10,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -28,6 +27,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
+import model.Cell;
 import model.request.*;
 import network.NetworkController;
 
@@ -50,6 +50,8 @@ public class GraphicController extends Application {
     private ImageView backGround = new ImageView(new Image(new FileInputStream(pathToBackGroundImage)));
     private FarmController farmController = new FarmController();
     private NetworkController networkController = new NetworkController();
+    private static TextArea chatArea;
+
 
     public GraphicController() throws FileNotFoundException {
     }
@@ -851,6 +853,30 @@ public class GraphicController extends Application {
             }
         };
         gameRunner.start();
+    }
+
+    public void newChat () {
+        Stage chatWindow = new Stage();
+        Group chatGroup = new Group();
+        Scene chatScene = new Scene (chatGroup,800,600);
+        TextField sendTextField = new TextField("");
+        sendTextField.setMinWidth(200);
+        Button sendButton = new Button("SEND");
+        sendButton.setOnMouseClicked(event -> {
+            //todo what to do
+        });
+        HBox hBox = new HBox(20, sendTextField, sendButton);
+        hBox.relocate(30,650);
+        hBox.relocate(30, 650);
+        Scene scene = new Scene(chatGroup, 700, 700);
+        chatArea = new TextArea("");
+        chatArea.setMinHeight(600);
+        chatArea.setMinWidth(600);
+
+        VBox vBox = new VBox(chatArea, hBox);
+
+        chatGroup.getChildren().add(vBox);
+
     }
 
     private void workshopWellAnimationBuilder(Image wellWorkshopImage, ImageView wellWorkshopImageView, int index) {
