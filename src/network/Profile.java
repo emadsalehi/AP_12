@@ -1,37 +1,36 @@
 package network;
 
 
+import controller.FarmController;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Profile {
 
     private boolean isHost;
     private String profileName;
-    private int money;
+    private FarmController farmController;
     private int portNumber;
     private String serverIP;
     private Socket profileSocket;
+    private HashMap<String, Integer> leaderBoard = new HashMap<>();
 
-    public Profile(boolean isHost, String ServerProfileName, int money, int serverPortNumber) {
+    public Profile(boolean isHost, String ServerProfileName, int serverPortNumber) {
         this.isHost = isHost;
         this.profileName = ServerProfileName;
-        this.money = money;
         this.portNumber = serverPortNumber;
         if (isHost) {
             serverIP = ("localhost");
         }
         this.profileSocket = socketMaker();
-
-    //  todo: writers and readers initializing
-
     }
 
-    public Profile(boolean isHost, String ClientProfileName, int money, int portNumber, String serverIP) {
+    public Profile(boolean isHost, String ClientProfileName, int portNumber, String serverIP) {
         this.isHost = isHost;
         this.profileName = ClientProfileName;
-        this.money = money;
         this.portNumber = portNumber;
         this.serverIP = serverIP;
         this.profileSocket = socketMaker();
@@ -54,13 +53,6 @@ public class Profile {
         this.profileName = profileName;
     }
 
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
 
     public Socket socketMaker () {
         if (isHost) {
@@ -81,5 +73,19 @@ public class Profile {
         return null;
     }
 
+    public FarmController getFarmController() {
+        return farmController;
+    }
 
+    public void setFarmController(FarmController farmController) {
+        this.farmController = farmController;
+    }
+
+    public void addLeaderBoard(String name, Integer money) {
+        leaderBoard.put(name, money);
+    }
+
+    public HashMap<String, Integer> getLeaderBoard() {
+        return leaderBoard;
+    }
 }
