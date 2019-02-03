@@ -1,14 +1,15 @@
 package network;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Formatter;
 
 import GUI.GraphicController;
+import com.gilecode.yagson.YaGson;
 import controller.FarmController;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 
 public class NetworkController {
@@ -39,6 +40,28 @@ public class NetworkController {
             formatter.flush();
         }
     }
+
+    public synchronized void sendBazaar(Socket socket){
+        OutputStream outputStream = null;
+        try {
+            outputStream = socket.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("/bazaar.json");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Scanner scanner = new Scanner(inputStream);
+        String bazaarJsonString = scanner.nextLine();
+
+        Formatter formatter = new Formatter(outputStream);
+        formatter.format("bazaar#" + bazaarJsonString + "\n");
+        formatter.flush();
+    }
+    
 
     public HashMap<String, Integer> showLeaderBoard() {
         return profile.getLeaderBoard();

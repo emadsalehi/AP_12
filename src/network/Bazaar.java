@@ -3,16 +3,15 @@ package network;
 import com.gilecode.yagson.YaGson;
 import model.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Bazaar {
-    private  HashMap <Product, Integer> bazaarProducts = new HashMap<>();
-    private  HashMap<Animal, Integer> bazaarAnimals = new HashMap<>();
+    //private  HashMap <Product, Integer> bazaarProducts = new HashMap<>();
+    //private  HashMap<Animal, Integer> bazaarAnimals = new HashMap<>();
     private HashMap<String , Integer> bazaar = new HashMap<>();
     private HashMap<String , Integer> priceList = new HashMap<>();
 
@@ -139,7 +138,7 @@ public class Bazaar {
             e.printStackTrace();
         }
     }
-    
+
     public void serializePrice(){
         YaGson yaGson = new YaGson();
         String priceJson = yaGson.toJson(priceList , HashMap.class);
@@ -153,6 +152,36 @@ public class Bazaar {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public HashMap<String , Integer> deserializeBazaar(){
+        YaGson yaGson = new YaGson();
+        InputStream inputStream = null;
+        HashMap<String , Integer> bazaar = new HashMap<>();
+        try {
+            inputStream = new FileInputStream("/bazaar.json");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Scanner scanner = new Scanner(inputStream);
+        String bazaarJson = scanner.nextLine();
+        bazaar = yaGson.fromJson(bazaarJson , HashMap.class);
+        return bazaar;
+    }
+
+    public HashMap<String , Integer> deserializePrice(){
+        YaGson yaGson = new YaGson();
+        InputStream inputStream = null;
+        HashMap<String , Integer> price = new HashMap<>();
+        try {
+            inputStream = new FileInputStream("/price.json");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Scanner scanner = new Scanner(inputStream);
+        String priceJson = scanner.nextLine();
+        price = yaGson.fromJson(priceJson , HashMap.class);
+        return bazaar;
     }
 
 
