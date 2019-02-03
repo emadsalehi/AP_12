@@ -322,6 +322,9 @@ public class GraphicController extends Application {
         helicopterImageView.setFitWidth(150);
         helicopterImageView.relocate(WIDTH / 2 + 100, HEIGHT / 2 + 125);
         border.getChildren().add(helicopterImageView);
+        helicopterImageView.setOnMouseClicked(event -> {
+            farmController.goAction(new GoRequest("helicopter"));
+        });
 
         StringBuilder truckStringBuilder = new StringBuilder("/GUI/Textures/Service/Truck/");
         Image truckImage = new Image
@@ -331,6 +334,9 @@ public class GraphicController extends Application {
         truckImageView.setFitHeight(130);
         truckImageView.relocate(WIDTH / 2 - 240, HEIGHT / 2 + 140);
         border.getChildren().add(truckImageView);
+        truckImageView.setOnMouseClicked(event -> {
+            farmController.goAction(new GoRequest("truck"));
+        });
 
         StringBuilder cookieBakeryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/Cake (Cookie Bakery)/");
         Image cookieBakeryImage = new Image
@@ -932,6 +938,18 @@ public class GraphicController extends Application {
                     lastTime = now;
                 }
                 if (now > lastTime + second / timeConstant * 1000) {
+                    if (!farmController.getFarm().getHelicopter().isAvailable()) {
+                        helicopterImageView.setVisible(false);
+                    }
+                    else {
+                        helicopterImageView.setVisible(true);
+                    }
+                    if (!farmController.getFarm().getTruck().isAvailable()) {
+                        helicopterImageView.setVisible(false);
+                    }
+                    else {
+                        helicopterImageView.setVisible(true);
+                    }
                     lastTime = now;
                     time += 1;
                     farmController.turnAction(new TurnRequest(1));
