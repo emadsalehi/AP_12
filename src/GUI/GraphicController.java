@@ -397,6 +397,7 @@ public class GraphicController extends Application implements Serializable {
         for(Map.Entry<String, Integer> entry : bazaar.getBazaar().entrySet()) {
             marketStringBuilder.append(entry.getKey() + ": " + entry.getValue()+ "      "+ bazaar.getPriceList().get(entry.getKey())+"\n");
         }
+        marketTextArea.setFont(Font.font("Chalkboard", FontWeight.BOLD, 40));
         marketTextArea.setText(marketStringBuilder.toString());
         marketStage.setScene(marketScene);
         marketStage.show();
