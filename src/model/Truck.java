@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Truck {
+public class Truck implements Serializable {
     private int level = 0;
     private double speed = 1 / (20 - 5 * level);
     private int capacity = (level + 2) * 20;

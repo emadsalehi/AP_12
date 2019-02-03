@@ -2,9 +2,10 @@ package model;
 
 import model.exceptions.NotPossibleException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Storage {
+public class Storage implements Serializable {
     private int level = 1;
     private int capacity = 50; //todo calculate in level setter.
     private int upgradePrice = 250;

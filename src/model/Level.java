@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Level {
+public class Level implements Serializable {
     private int requiredMoney = 3000;
     private HashMap<Animal, Integer> requiredAnimals = new HashMap<>(); {
         requiredAnimals.put(new Cat(3, 5), 20);

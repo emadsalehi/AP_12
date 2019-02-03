@@ -5,7 +5,9 @@ import model.FarmAnimal;
 import model.FarmAnimalType;
 import model.request.*;
 
-public class CommandAnalyzer {
+import java.io.Serializable;
+
+public class CommandAnalyzer implements Serializable {
     private final String BUY_REQUEST = "buy (cat|dog|cow|chicken|sheep)";  //Some Animals are absent in FarmAnimalType
     private final String PICKUP_REQUEST = "pickup ([1-9]|[1-2][0-9]|30) ([1-9]|[1-2][0-9]|30)";
     private final String CAGE_REQUEST = "cage ([1-9]|[1-2][0-9]|30) ([1-9]|[1-2][0-9]|30)";

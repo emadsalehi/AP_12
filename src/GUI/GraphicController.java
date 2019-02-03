@@ -34,11 +34,12 @@ import network.Writer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GraphicController extends Application {
+public class GraphicController extends Application implements Serializable {
     private static TextArea chatArea;
     private final int WIDTH = Utils.sceneWidth;
     private final int HEIGHT = Utils.sceneHeight;
@@ -239,20 +240,20 @@ public class GraphicController extends Application {
             gameButtonMaker(addFriendRectangle, addFriendText);
             addFriendRectangle.setOnMouseClicked(event1 -> {
                 String friendName = friendTextField.getText();
-//                networkController.addFriend(friendName);
+                networkController.getProfile().addFriend(friendName);
             });
             addFriendText.setOnMouseClicked(event1 -> {
                 String friendName = friendTextField.getText();
-//                networkController.addFriend(friendName);
+                networkController.getProfile().addFriend(friendName);
             });
             Rectangle friendsRectangle = new Rectangle(WIDTH - 284, 100, 130, 30);
             Text friendsText = new Text(WIDTH - 260, 120, "FRIENDS");
             gameButtonMaker(friendsRectangle, friendsText);
             friendsRectangle.setOnMouseClicked(event1 -> {
-
+                networkController.getProfile().showFriends();
             });
             friendsText.setOnMouseClicked(event1 -> {
-
+                networkController.getProfile().showFriends();
             });
             border.getChildren().addAll(addFriendRectangle, addFriendText, friendTextField, friendsRectangle, friendsText);
 
