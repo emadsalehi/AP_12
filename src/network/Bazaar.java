@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Bazaar {
+public class Bazaar implements Serializable{
     //private  HashMap <Product, Integer> bazaarProducts = new HashMap<>();
     //private  HashMap<Animal, Integer> bazaarAnimals = new HashMap<>();
     private HashMap<String , Integer> bazaar = new HashMap<>();

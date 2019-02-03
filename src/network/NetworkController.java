@@ -41,25 +41,28 @@ public class NetworkController {
         }
     }
 
-    public synchronized void sendBazaar(Socket socket){
-        OutputStream outputStream = null;
-        try {
-            outputStream = socket.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream("/bazaar.json");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Scanner scanner = new Scanner(inputStream);
-        String bazaarJsonString = scanner.nextLine();
+    public synchronized void sendBazaar(){
+        for (Socket socket : profile.getProfileSockets()) {
+            OutputStream outputStream = null;
+            try {
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            YaGson yaGson = new YaGson();
+//            InputStream inputStream = null;
+//            try {
+//                inputStream = new FileInputStream("/bazaar.json");
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            Scanner scanner = new Scanner(inputStream);
+//            String bazaarJsonString = scanner.nextLine();
 
-        Formatter formatter = new Formatter(outputStream);
-        formatter.format("bazaar#" + bazaarJsonString + "\n");
-        formatter.flush();
+            Formatter formatter = new Formatter(outputStream);
+            formatter.format("bazaar#" + yaGson.toJson(profile.getBazaar(), Bazaar.class) + "\n");
+            formatter.flush();
+        }
     }
     
 

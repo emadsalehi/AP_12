@@ -1,6 +1,7 @@
 package network;
 
 import GUI.GraphicController;
+import com.gilecode.yagson.YaGson;
 
 import java.io.*;
 import java.net.Socket;
@@ -37,25 +38,27 @@ public class Reader implements Runnable {
             else if (params[0].equals("leaderboard"))
                 profile.addLeaderBoard(params[1] , Integer.valueOf(params[2]));
             else if (params[0].equals("bazaar")){
-                String bazaarJson = params[1];
-                FileOutputStream fileOutputStream = null;
-                try {
-                    fileOutputStream = new FileOutputStream("/bazaar.json");
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                PrintWriter writer = new PrintWriter(fileOutputStream);
-                writer.print("");
-                writer.close();
-                OutputStream out = null;
-                try {
-                    out = new FileOutputStream("/bazaar.json");
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                Formatter formatter = new Formatter(out);
-                formatter.format(bazaarJson);
-                formatter.flush();
+                YaGson yaGson = new YaGson();
+                profile.setBazaar(yaGson.fromJson(params[1], Bazaar.class));
+//                String bazaarJson = params[1];
+//                FileOutputStream fileOutputStream = null;
+//                try {
+//                    fileOutputStream = new FileOutputStream("/bazaar.json");
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//                PrintWriter writer = new PrintWriter(fileOutputStream);
+//                writer.print("");
+//                writer.close();
+//                OutputStream out = null;
+//                try {
+//                    out = new FileOutputStream("/bazaar.json");
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//                Formatter formatter = new Formatter(out);
+//                formatter.format(bazaarJson);
+//                formatter.flush();
             }
             if(profile.isHost()) {
                 for (Socket socket : profile.getProfileSockets()) {

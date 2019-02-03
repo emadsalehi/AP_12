@@ -23,6 +23,7 @@ public class Profile implements Serializable {
     private HashMap<String, Integer> leaderBoard = new HashMap<>();
     private GraphicController graphicController;
     private ArrayList<String> friendNames = new ArrayList<>();
+    private Bazaar bazaar = new Bazaar();
     private boolean isUnique = true;
 
 
@@ -117,5 +118,13 @@ public class Profile implements Serializable {
 
     public void addToFriends(String string) {
         friendNames.add(string);
+    }
+
+    public Bazaar getBazaar() {
+        return bazaar;
+    }
+
+    public void setBazaar(Bazaar bazaar) {
+        this.bazaar = bazaar;
     }
 }
