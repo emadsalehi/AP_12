@@ -27,11 +27,6 @@ public enum FarmAnimalType {
         this.depotSize = depotSize;
     }
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
-    }
-
     public int getSpeed() {
         return speed;
     }

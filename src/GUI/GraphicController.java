@@ -238,10 +238,12 @@ public class GraphicController extends Application {
             Text addFriendText = new Text(WIDTH - 275, 80, "ADD FRIEND");
             gameButtonMaker(addFriendRectangle, addFriendText);
             addFriendRectangle.setOnMouseClicked(event1 -> {
-
+                String friendName = friendTextField.getText();
+//                networkController.addFriend(friendName);
             });
             addFriendText.setOnMouseClicked(event1 -> {
-
+                String friendName = friendTextField.getText();
+//                networkController.addFriend(friendName);
             });
             Rectangle friendsRectangle = new Rectangle(WIDTH - 284, 100, 130, 30);
             Text friendsText = new Text(WIDTH - 260, 120, "FRIENDS");
@@ -250,7 +252,7 @@ public class GraphicController extends Application {
 
             });
             friendsText.setOnMouseClicked(event1 -> {
-                
+
             });
             border.getChildren().addAll(addFriendRectangle, addFriendText, friendTextField, friendsRectangle, friendsText);
 
