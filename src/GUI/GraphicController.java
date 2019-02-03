@@ -28,7 +28,6 @@ import model.Cell;
 import model.*;
 import model.request.*;
 import network.NetworkController;
-import network.Profile;
 import network.Reader;
 import network.Writer;
 
@@ -110,6 +109,7 @@ public class GraphicController extends Application {
             scene.setRoot(border);
         });
         newGameText.setOnMouseClicked(event -> {
+            mediaPlayerSound.stop();
             newGame();
             scene.setRoot(border);
         });
@@ -216,18 +216,49 @@ public class GraphicController extends Application {
                     userNameTextField.getText(), this);
             if(isUnique) {
                 this.farmController = networkController.getProfile().getFarmController();
-                newGame();
-                Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
-                Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
-                gameButtonMaker(chatButtonRectangle, chatButtonText);
-                chatButtonText.setOnMouseClicked(event1 -> newChat());
-                border.getChildren().addAll(chatButtonRectangle, chatButtonText);
-                Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
-                Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
-                gameButtonMaker(leaderBoardRectangle, leaderBoardText);
-                leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
-                border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
-                scene.setRoot(border);
+            newGame();
+            Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
+            Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
+            gameButtonMaker(chatButtonRectangle, chatButtonText);
+            chatButtonText.setOnMouseClicked(event1 -> newChat());
+            border.getChildren().addAll(chatButtonRectangle, chatButtonText);
+            Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
+            Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
+            gameButtonMaker(leaderBoardRectangle, leaderBoardText);
+            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
+            Rectangle marketRectangle = new Rectangle(WIDTH / 2 - 100, 20, 100, 40);
+            Text marketText = new Text(WIDTH / 2 - 85, 45, "MARKET");
+            TextField friendTextField = new TextField("friend name");
+            friendTextField.setMinWidth(40);
+            friendTextField.setMaxWidth(100);
+            friendTextField.setMinHeight(30);
+            friendTextField.setMaxHeight(30);
+            friendTextField.relocate(WIDTH - 270, 20);
+            Rectangle addFriendRectangle = new Rectangle(WIDTH - 284, 60, 130, 30);
+            Text addFriendText = new Text(WIDTH - 275, 80, "ADD FRIEND");
+            gameButtonMaker(addFriendRectangle, addFriendText);
+            addFriendRectangle.setOnMouseClicked(event1 -> {
+
+            });
+            addFriendText.setOnMouseClicked(event1 -> {
+
+            });
+            Rectangle friendsRectangle = new Rectangle(WIDTH - 284, 100, 130, 30);
+            Text friendsText = new Text(WIDTH - 260, 120, "FRIENDS");
+            gameButtonMaker(friendsRectangle, friendsText);
+            friendsRectangle.setOnMouseClicked(event1 -> {
+
+            });
+            friendsText.setOnMouseClicked(event1 -> {
+                
+            });
+            border.getChildren().addAll(addFriendRectangle, addFriendText, friendTextField, friendsRectangle, friendsText);
+
+            gameButtonMaker(marketRectangle, marketText);
+            border.getChildren().addAll(marketRectangle, marketText);
+            border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
+
+            scene.setRoot(border);
             }
             else {
                 Text errorLabel = new Text("UserName is not unique!");
@@ -235,6 +266,7 @@ public class GraphicController extends Application {
                 errorLabel.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
                 multiplayer.getChildren().add(errorLabel);
             }
+
         });
 
         backRectangle.setOnMouseClicked(event -> {
@@ -264,10 +296,10 @@ public class GraphicController extends Application {
             Stage storageStage = new Stage();
             Group storageGroup = new Group();
             Scene storageScene = new Scene(storageGroup, 600, 900);
-            HashMap<String,Integer> storageHashMap = storageHashMapMaker();
+            HashMap<String, Integer> storageHashMap = storageHashMapMaker();
             StringBuilder storageStringBuilder1 = new StringBuilder();
-            for (Map.Entry<String,Integer> entry : storageHashMap.entrySet()) {
-                storageStringBuilder1.append(entry.getKey()+": "+ entry.getKey()+"\n");
+            for (Map.Entry<String, Integer> entry : storageHashMap.entrySet()) {
+                storageStringBuilder1.append(entry.getKey() + ": " + entry.getKey() + "\n");
             }
             TextArea storageTextArea = new TextArea(storageStringBuilder1.toString());
             storageTextArea.setMinHeight(900);
@@ -316,6 +348,25 @@ public class GraphicController extends Application {
             cookieBakeryImageView.setVisible(false);
 
         }
+        Rectangle timeRectangle = new Rectangle(WIDTH - 100, HEIGHT - 80, 100, 80);
+        Text timeText = new Text(WIDTH - 70, HEIGHT - 35, "00:00");
+        gameButtonMaker(timeRectangle, timeText);
+        AnimationTimer timeAnimationtimer = new AnimationTimer() {
+            int time = 0;
+            long lastCalled = 0;
+            long second = 1000000000;
+
+            @Override
+            public void handle(long now) {
+                if (now > lastCalled + second) {
+                    lastCalled = now;
+                    time++;
+                    timeText.setText(timeSetter(time));
+                }
+            }
+        };
+        timeAnimationtimer.start();
+        border.getChildren().addAll(timeRectangle, timeText);
         StringBuilder sewingFactoryStringBuilder = new StringBuilder("/GUI/Textures/Workshops/" +
                 "CarnivalDress (Sewing Factory)/");
         Image sewingFactoryImage = new Image
@@ -548,7 +599,7 @@ public class GraphicController extends Application {
                 Integer.toString(farm.getStorage().getUpgradePrice()));
         gameButtonMaker(storageUpgradeButtonRectangle, storageUpgradeButtonText);
         storageUpgradeButtonRectangle.setOnMouseClicked(event -> {
-            if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
+            if (farmController.upgradeAction(new UpgradeRequest("warehouse"))) {
                 StringBuilder storageStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Depot/");
                 storageImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
                         .getStorage().getLevel(), storageStringBuilder1)));
@@ -559,7 +610,7 @@ public class GraphicController extends Application {
             }
         });
         storageUpgradeButtonText.setOnMouseClicked(event -> {
-            if (farmController.upgradeAction(new UpgradeRequest("storage"))) {
+            if (farmController.upgradeAction(new UpgradeRequest("warehouse"))) {
                 StringBuilder storageStringBuilder1 = new StringBuilder("/GUI/Textures/Service/Depot/");
                 storageImageView.setImage(new Image(serviceLevelImageSelector(farmController.getFarm()
                         .getStorage().getLevel(), storageStringBuilder1)));
@@ -854,6 +905,18 @@ public class GraphicController extends Application {
             }
         });
 //
+        Rectangle levelRectangle = new Rectangle(WIDTH - 180, HEIGHT - 120, 180, 40);
+        Text levelText = new Text(WIDTH - 150, HEIGHT - 95, "SHOW LEVEL");
+        levelText.setFont(Font.font("Chalkboard", 20));
+        gameButtonMaker(levelRectangle, levelText);
+        levelRectangle.setOnMouseClicked(event -> {
+            levelShower();
+        });
+        levelText.setOnMouseClicked(event -> {
+            levelShower();
+        });
+
+        border.getChildren().addAll(levelRectangle, levelText);
         AnimationTimer gameRunner = new AnimationTimer() {
             private long lastTime = 0;
             private double time = 0;
@@ -914,6 +977,51 @@ public class GraphicController extends Application {
         gameRunner.start();
     }
 
+    public void levelShower() {
+        Stage levelStage = new Stage();
+        Group levelGroup = new Group();
+        Scene levelScene = new Scene(levelGroup, 600, 800);
+
+        TextArea levelTextArea = new TextArea();
+        levelTextArea.setMinWidth(600);
+        levelTextArea.setMinHeight(800);
+        StringBuilder levelStringBuilder = new StringBuilder();
+        Level level = farmController.getFarm().getLevel();
+        levelStringBuilder.append("RequiredMoney: " + level.getRequiredMoney() + "\n");
+        for (Map.Entry<Animal, Integer> entry : level.getRequiredAnimals().entrySet()) {
+            if (entry.getKey() instanceof Cat) {
+                levelStringBuilder.append("Cat: " + entry.getValue() + "\n");
+            } else if (entry.getKey() instanceof Dog) {
+                levelStringBuilder.append("Dog: " + entry.getValue() + "\n");
+            } else if (entry.getKey() instanceof FarmAnimal) {
+                levelStringBuilder.append(((FarmAnimal) entry.getKey()).getFarmAnimalType().toString() + ": " +
+                        entry.getValue() + "\n");
+            } else if (entry.getKey() instanceof WildAnimal) {
+                levelStringBuilder.append(((WildAnimal) entry.getKey()).getWildAnimalType().toString() + ": " +
+                        entry.getValue() + "\n");
+            }
+        }
+        for (Map.Entry<Product, Integer> entry : level.getRequiredProduct().entrySet()) {
+            if (entry.getKey() instanceof PrimitiveProduct) {
+                levelStringBuilder.append(((PrimitiveProduct) entry.getKey()).getPrimitiveProductType().toString()
+                        + ": " + entry.getValue() + "\n");
+            } else if (entry.getKey() instanceof SecondaryProduct) {
+                levelStringBuilder.append(((SecondaryProduct) entry.getKey()).getSecondaryProductType().toString()
+                        + ": " + entry.getValue() + "\n");
+            }
+        }
+        levelTextArea.setText(levelStringBuilder.toString());
+        levelTextArea.setEditable(false);
+        levelTextArea.setFont(Font.font("Chalkboard", FontWeight.BOLD, 40));
+        levelGroup.getChildren().add(levelTextArea);
+        levelStage.setScene(levelScene);
+        levelStage.show();
+    }
+
+    private String timeSetter(int time) {
+        return String.format("%02d:%02d", time / 60, time % 60);
+    }
+
     public void newChat() {
         Stage chatWindow = new Stage();
         Scene chatScene = new Scene(chatGroup, 600, 900);
@@ -922,8 +1030,8 @@ public class GraphicController extends Application {
         Button sendButton = new Button("SEND");
         sendButton.setOnMouseClicked(event -> {
             String message = sendTextField.getText();
-            if(networkController.getProfile().isHost())
-                chatArea.appendText(networkController.getProfile().getProfileName()+": "+ message+ "\n");
+            if (networkController.getProfile().isHost())
+                chatArea.appendText(networkController.getProfile().getProfileName() + ": " + message + "\n");
             networkController.sendMessage(sendTextField.getText());
         });
         HBox hBox = new HBox(20, sendTextField, sendButton);
@@ -945,28 +1053,40 @@ public class GraphicController extends Application {
         chatArea.appendText(name + ": " + text + "\n");
     }
 
-    public HashMap<String, Integer> storageHashMapMaker () {
+    public HashMap<String, Integer> storageHashMapMaker() {
         ArrayList<Product> storageProducts = farmController.getFarm().getStorage().getProducts();
         HashMap<String, Integer> storageHashMap = new HashMap<>();
         for (Product product : storageProducts) {
-            if (!storageHashMap.containsKey(product.getClass().getSimpleName())) {
-                storageHashMap.put(product.getClass().getSimpleName(), 0);
-            }
-            else {
-                int number = storageHashMap.get(product.getClass().getSimpleName()) + 1;
-                storageHashMap.remove(product.getClass().getSimpleName());
-                storageHashMap.put(product.getClass().getSimpleName(), number);
+            if (product instanceof PrimitiveProduct) {
+                if (!storageHashMap.containsKey(((PrimitiveProduct) product).getPrimitiveProductType().toString())) {
+                    storageHashMap.put(((PrimitiveProduct) product).getPrimitiveProductType().toString(), 1);
+                } else {
+                    int number = storageHashMap.get(((PrimitiveProduct) product).getPrimitiveProductType().toString()
+                    ) + 1;
+                    storageHashMap.remove(((PrimitiveProduct) product).getPrimitiveProductType().toString());
+                    storageHashMap.put(((PrimitiveProduct) product).getPrimitiveProductType().toString(), number);
+                }
+            } else {
+                if (!storageHashMap.containsKey(((SecondaryProduct) product).getSecondaryProductType().toString())) {
+                    storageHashMap.put(((SecondaryProduct) product).getSecondaryProductType().toString(), 1);
+                } else {
+                    int number = storageHashMap.get(((SecondaryProduct) product).getSecondaryProductType().toString()
+                    ) + 1;
+                    storageHashMap.remove(((SecondaryProduct) product).getSecondaryProductType().toString());
+                    storageHashMap.put(((SecondaryProduct) product).getSecondaryProductType().toString(), number);
+                }
             }
         }
         ArrayList<Animal> storageAnimals = farmController.getFarm().getStorage().getAnimals();
         for (Animal animal : storageAnimals) {
-            if (!storageHashMap.containsKey(animal.getClass().getSimpleName())) {
-                storageHashMap.put(animal.getClass().getSimpleName(), 0);
-            }
-            else {
-                int number = storageHashMap.get(animal.getClass().getSimpleName()) + 1;
-                storageHashMap.remove(animal.getClass().getSimpleName());
-                storageHashMap.put(animal.getClass().getSimpleName(), number);
+            if (animal instanceof WildAnimal) {
+                if (!storageHashMap.containsKey(((WildAnimal) animal).getWildAnimalType().toString())) {
+                    storageHashMap.put(((WildAnimal) animal).getWildAnimalType().toString(), 1);
+                } else {
+                    int number = storageHashMap.get(((WildAnimal) animal).getWildAnimalType().toString()) + 1;
+                    storageHashMap.remove(((WildAnimal) animal).getWildAnimalType().toString());
+                    storageHashMap.put(((WildAnimal) animal).getWildAnimalType().toString(), number);
+                }
             }
         }
         return storageHashMap;
@@ -979,7 +1099,6 @@ public class GraphicController extends Application {
                 (int) wellWorkshopImage.getHeight() / 4);
         if (index == 7) {
             wellWorkshopSpriteAnimation.setCycleCount(farmController.getFarm().getWell().getTimeToFill());
-
         } else {
             wellWorkshopSpriteAnimation.setCycleCount(farmController.getFarm().getWorkShops().get(index)
                     .getMaxTimeToFinish());
@@ -1006,10 +1125,10 @@ public class GraphicController extends Application {
         leaderBoardTextArea.relocate(0, 100);
 
         Button sortByMoneyButton = new Button("SORT BY MONEY");
-        Button sortByNameButton = new Button ("SORT BY NAME");
+        Button sortByNameButton = new Button("SORT BY NAME");
 
         sortByMoneyButton.relocate(100, 60);
-        sortByNameButton.relocate( 200, 60);
+        sortByNameButton.relocate(200, 60);
 
         sortByMoneyButton.setOnMouseClicked(event -> {
             leaderboardWrapper.sortByValue();
@@ -1100,16 +1219,16 @@ public class GraphicController extends Application {
         switch (level) {
             //todo : add Level0
             case 1:
-                imagePathStringBuilder.append("01.png");
-                break;
-            case 2:
                 imagePathStringBuilder.append("02.png");
                 break;
-            case 3:
+            case 2:
                 imagePathStringBuilder.append("03.png");
                 break;
-            default:
+            case 3:
                 imagePathStringBuilder.append("04.png");
+                break;
+            default:
+                imagePathStringBuilder.append("01.png");
         }
         return imagePathStringBuilder.toString();
     }

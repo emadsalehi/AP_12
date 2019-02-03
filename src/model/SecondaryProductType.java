@@ -17,6 +17,11 @@ public enum SecondaryProductType {
         this.saleCost = saleCost;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
     public int getDepotSize() {
         return depotSize;
     }
