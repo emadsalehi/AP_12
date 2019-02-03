@@ -3,13 +3,13 @@ package network;
 
 import GUI.GraphicController;
 import controller.FarmController;
-import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Profile {
 
@@ -21,6 +21,8 @@ public class Profile {
     private ArrayList<Socket> profileSockets = new ArrayList<>();
     private HashMap<String, Integer> leaderBoard = new HashMap<>();
     private GraphicController graphicController;
+    private ArrayList<Profile> friends = new ArrayList<>();
+    private boolean isUnique = true;
 
 
     public Profile(boolean isHost, String ClientProfileName, int portNumber, String serverIP, GraphicController graphicController) {
@@ -59,12 +61,34 @@ public class Profile {
                 Socket socket = new Socket(serverIP, portNumber);
                 profileSockets.add(socket);
                 Reader reader = new Reader(this, socket, graphicController);
-                Writer writer = new Writer(this, socket);
                 new Thread(reader).start();
-                new Thread(writer).start();
+                Thread.sleep(3000);
+                for (Map.Entry<String, Integer> entry : leaderBoard.entrySet()) {
+                    if (entry.getKey().equals(profileName))
+                        isUnique = false;
+                }
+                if(isUnique) {
+                    Writer writer = new Writer(this, socket);
+                    new Thread(writer).start();
+                    ProfileWriter profileWriter = new ProfileWriter(this, socket);
+                    new Thread(profileWriter).start();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+    public void addFriend(String name){
+        ProfileReader profileReader = new ProfileReader(this, profileSockets.get(0), name);
+        new Thread(profileReader).start();
+    }
+
+    public void showFriends() {
+        for (Profile profile : friends) {
+            System.out.println(profile.getProfileName());
         }
     }
 
@@ -86,5 +110,13 @@ public class Profile {
 
     public void addProfileSocket (Socket socket) {
         profileSockets.add(socket);
+    }
+
+    public boolean isUnique() {
+        return isUnique;
+    }
+
+    public void addToFriends(Profile profile) {
+        friends.add(profile);
     }
 }

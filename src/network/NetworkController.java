@@ -14,10 +14,12 @@ import java.util.HashMap;
 public class NetworkController {
     private Profile profile;
 
-    public void addProfileAction(boolean isHost, int port, String ip, String name, GraphicController graphicController){
+    public boolean addProfileAction(boolean isHost, int port, String ip, String name, GraphicController graphicController){
         profile = new Profile(isHost, name, port, ip, graphicController);
         profile.setFarmController(new FarmController());
-        profile.addLeaderBoard(name, profile.getFarmController().getFarm().getMoney());
+        if(profile.isHost())
+            profile.addLeaderBoard(name, profile.getFarmController().getFarm().getMoney());
+        return profile.isUnique();
     }
 
     public void startChat(){

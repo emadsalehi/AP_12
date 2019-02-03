@@ -208,10 +208,14 @@ public class GraphicController extends Application {
 
         nextText.setOnMouseClicked(event -> {
             boolean isHost;
-            isHost = hostRadioButton.isSelected();
-            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(),
+            if(hostRadioButton.isSelected())
+                isHost = true;
+            else
+                isHost = false;
+            boolean isUnique = networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(),
                     userNameTextField.getText(), this);
-            this.farmController = networkController.getProfile().getFarmController();
+            if(isUnique) {
+                this.farmController = networkController.getProfile().getFarmController();
             newGame();
             Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
             Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
@@ -255,6 +259,14 @@ public class GraphicController extends Application {
             border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
 
             scene.setRoot(border);
+            }
+            else {
+                Text errorLabel = new Text("UserName is not unique!");
+                errorLabel.relocate(WIDTH / 2 - 50, 470);
+                errorLabel.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+                multiplayer.getChildren().add(errorLabel);
+            }
+
         });
 
         backRectangle.setOnMouseClicked(event -> {
