@@ -5,10 +5,13 @@ import java.util.HashMap;
 public class Level {
     private int requiredMoney = 3000;
     private HashMap<Animal, Integer> requiredAnimals = new HashMap<>(); {
-        requiredAnimals.put(new Cat(3, 5), 20);
+        requiredAnimals.put(new FarmAnimal(3, 5,FarmAnimalType.CHICKEN), 5);
     }
     private HashMap<Product, Integer> requiredProduct = new HashMap<>(); {
         requiredProduct.put(new PrimitiveProduct(PrimitiveProductType.EGG), 20);
+        requiredProduct.put(new SecondaryProduct(SecondaryProductType.EGG_POWDER), 10);
+        requiredProduct.put(new SecondaryProduct(SecondaryProductType.COOKIE), 20);
+        requiredProduct.put(new SecondaryProduct(SecondaryProductType.CLOTHES), 5);
     }
 
     public int getRequiredMoney() {

@@ -47,6 +47,7 @@ public class GraphicController extends Application {
     private Group menu = new Group();
     private Group game = new Group();
     private Group border = new Group();
+    private Group selectLevel = new Group();
     private Group multiplayer = new Group();
     private Group leaderBoardGroup = new Group();
     private Group chatGroup = new Group();
@@ -102,17 +103,8 @@ public class GraphicController extends Application {
         mainMenuTitle.setFill(Color.rgb(195, 207, 23));
 
         Rectangle newGameRectangle = new Rectangle(WIDTH / 2 - 70, 210, 300, 70);
-        Text newGameText = new Text(WIDTH / 2 - 30, 260, "NEW GAME");
+        Text newGameText = new Text(WIDTH / 2 - 30, 260, "SELECT LEVEL");
         menuButtonMaker(newGameRectangle, newGameText, menu);
-        newGameRectangle.setOnMouseClicked(event -> {
-            newGame();
-            scene.setRoot(border);
-        });
-        newGameText.setOnMouseClicked(event -> {
-            mediaPlayerSound.stop();
-            newGame();
-            scene.setRoot(border);
-        });
 
         Rectangle loadGameRectangle = new Rectangle(WIDTH / 2 - 70, 290, 300, 70);
         Text loadGameText = new Text(WIDTH / 2 - 32, 340, "LOAD GAME");
@@ -131,7 +123,91 @@ public class GraphicController extends Application {
             multiplayer();
             scene.setRoot(multiplayer);
         });
+
+        newGameRectangle.setOnMouseClicked(event -> {
+            newGameText.setText("LEVEL 1");
+            loadGameText.setText("LEVEL 2");
+            multiPlayerText.setText("LEVEL 3");
+            newGameRectangle.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level1.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            newGameText.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level1.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            loadGameRectangle.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level2.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            loadGameText.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level2.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            multiPlayerRectangle.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level3.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            multiPlayerText.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level3.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+        });
+        newGameText.setOnMouseClicked(event -> {
+            newGameText.setText("LEVEL 1");
+            loadGameText.setText("LEVEL 2");
+            multiPlayerText.setText("LEVEL 3");
+            newGameRectangle.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level1.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            newGameText.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level1.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            loadGameRectangle.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level2.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            loadGameText.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level2.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            multiPlayerRectangle.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level3.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+            multiPlayerText.setOnMouseClicked(event1 -> {
+                mediaPlayerSound.stop();
+                farmController.loadGameAction(new LoadGameRequest("level3.json"));
+                newGame();
+                scene.setRoot(border);
+            });
+        });
     }
+
 
     public void multiplayer() {
         multiplayer.getChildren().clear();
@@ -943,12 +1019,14 @@ public class GraphicController extends Application {
                     }
                     else {
                         helicopterImageView.setVisible(true);
+                        moneyTextUpdater(moneyText);
                     }
                     if (!farmController.getFarm().getTruck().isAvailable()) {
-                        helicopterImageView.setVisible(false);
+                        truckImageView.setVisible(false);
                     }
                     else {
-                        helicopterImageView.setVisible(true);
+                        truckImageView.setVisible(true);
+                        moneyTextUpdater(moneyText);
                     }
                     lastTime = now;
                     time += 1;
