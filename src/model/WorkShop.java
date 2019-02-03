@@ -1,6 +1,8 @@
 package model;
 
-public abstract class WorkShop {
+import java.io.Serializable;
+
+public abstract class WorkShop implements Serializable {
     private boolean isWorking = false;
     private int timeToFinish = 0;
     private int maxTimeToFinish;

@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Cell {
+public class Cell implements Serializable {
     private java.util.ArrayList<Animal> animals = new ArrayList<>();
     private java.util.ArrayList<Product> products = new ArrayList<>();
     private boolean hasPlant = false;

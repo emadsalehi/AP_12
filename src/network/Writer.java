@@ -1,5 +1,8 @@
 package network;
 
+import com.gilecode.yagson.YaGson;
+import com.gilecode.yagson.YaGsonBuilder;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -29,6 +32,9 @@ public class Writer implements Runnable {
                     Integer.valueOf(profile.getFarmController().getFarm().getMoney()).toString() + "\n");
             formatter.flush();
             profile.addLeaderBoard(profile.getProfileName(), profile.getFarmController().getFarm().getMoney());
+            YaGson yaGson = new YaGsonBuilder().serializeSpecialFloatingPointValues().create();
+            formatter.format("profile#" + profile.getProfileName() + "\n");
+            formatter.flush();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

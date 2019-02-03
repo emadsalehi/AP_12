@@ -28,8 +28,6 @@ public class SocketThread extends Thread {
                 Writer writer = new Writer(profile, socket);
                 new Thread(reader).start();
                 new Thread(writer).start();
-                ProfileWriter profileWriter = new ProfileWriter(profile, socket);
-                new Thread(profileWriter).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public abstract class Animal {
+public abstract class Animal implements Serializable {
     private int x;
     private int y;
     private int buyPrice;

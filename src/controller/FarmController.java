@@ -10,7 +10,7 @@ import view.View;
 import java.io.*;
 import java.util.*;
 
-public class FarmController {
+public class FarmController implements Serializable {
     ArrayList<WorkShop> workShops = new ArrayList<>(); {
         workShops.add(new CookieBakery());
         workShops.add(new SewingFactory());

@@ -1,8 +1,9 @@
 package view;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class View {
+public class View implements Serializable {
     public String getInput() {
         Scanner input = new Scanner(System.in);
         return input.nextLine();

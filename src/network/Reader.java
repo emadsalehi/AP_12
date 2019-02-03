@@ -57,7 +57,6 @@ public class Reader implements Runnable {
                 formatter.format(bazaarJson);
                 formatter.flush();
             }
-
             if(profile.isHost()) {
                 for (Socket socket : profile.getProfileSockets()) {
                     try {

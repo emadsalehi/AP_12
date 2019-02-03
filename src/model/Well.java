@@ -1,7 +1,9 @@
 package model;
 import model.exceptions.*;
 
-public class Well {
+import java.io.Serializable;
+
+public class Well implements Serializable {
     private int level ;
     private int fillPrice;
     private int upgradePrice;

@@ -5,13 +5,14 @@ import GUI.GraphicController;
 import controller.FarmController;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Profile {
+public class Profile implements Serializable {
 
     private boolean isHost;
     private String profileName;
@@ -21,7 +22,7 @@ public class Profile {
     private ArrayList<Socket> profileSockets = new ArrayList<>();
     private HashMap<String, Integer> leaderBoard = new HashMap<>();
     private GraphicController graphicController;
-    private ArrayList<Profile> friends = new ArrayList<>();
+    private ArrayList<String> friendNames = new ArrayList<>();
     private boolean isUnique = true;
 
 
@@ -70,8 +71,6 @@ public class Profile {
                 if(isUnique) {
                     Writer writer = new Writer(this, socket);
                     new Thread(writer).start();
-                    ProfileWriter profileWriter = new ProfileWriter(this, socket);
-                    new Thread(profileWriter).start();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -87,8 +86,8 @@ public class Profile {
     }
 
     public void showFriends() {
-        for (Profile profile : friends) {
-            System.out.println(profile.getProfileName());
+        for (String name : friendNames) {
+            System.out.println(name);
         }
     }
 
@@ -116,7 +115,7 @@ public class Profile {
         return isUnique;
     }
 
-    public void addToFriends(Profile profile) {
-        friends.add(profile);
+    public void addToFriends(String string) {
+        friendNames.add(string);
     }
 }

@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Farm {
+public class Farm implements Serializable {
     private final int maxPlantLevel = 4;
     private Cell[][] cells = new Cell[30][30]; {
         for (int i = 0; i < 30; i++)

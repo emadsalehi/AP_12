@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Helicopter {
+public class Helicopter implements Serializable {
     //todo modify speed and capacity in set level method.
     private int level = 0;
     private double speed = 1 / (12 - 3 * level);
