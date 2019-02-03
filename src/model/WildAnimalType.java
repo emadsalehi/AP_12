@@ -25,4 +25,9 @@ public enum WildAnimalType {
     public int getSaleCost() {
         return saleCost;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }
