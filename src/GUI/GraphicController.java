@@ -321,9 +321,33 @@ public class GraphicController extends Application implements Serializable {
             Rectangle buyRectangle = new Rectangle(WIDTH/2 - 100, 110, 50, 30);
             Text buyText = new Text(WIDTH/2 - 95, 130, "BUY");
             gameButtonMaker(buyRectangle,buyText);
+            buyText.setOnMouseClicked(event1 -> {
+                String itemName = buyOrSellTextField.getText().split(" ")[0];
+                int number = Integer.valueOf(buyOrSellTextField.getText().split(" ")[1]);
+                int price = networkController.getProfile().getBazaar().buy(itemName,
+                        number,
+                        networkController.getProfile().getFarmController().getFarm().getMoney());
+                if (price != -1) {
+                    farmController.addAction(new AddRequest("helicopter", itemName, number));
+                    farmController.goAction(new GoRequest("helicopter"));
+                }
+                networkController.sendBazaar();
+            });
             Rectangle sellRectangle = new Rectangle(WIDTH/2 - 40, 110 , 50, 30);
             Text sellText = new Text(WIDTH/2 - 35, 130, "SELL");
+            sellText.setOnMouseClicked(event1 -> {
+                String itemName = buyOrSellTextField.getText().split(" ")[0];
+                int number = Integer.valueOf(buyOrSellTextField.getText().split(" ")[1]);
+                int price = networkController.getProfile().getBazaar().sell(itemName,
+                        number);
+                if (price != -1) {
+                    farmController.addAction(new AddRequest("truck", itemName, number));
+                    farmController.goAction(new GoRequest("truck"));
+                }
+                networkController.sendBazaar();
+            });
             gameButtonMaker(sellRectangle,sellText);
+
             border.getChildren().addAll(buyRectangle,buyText,sellRectangle,sellText,buyOrSellTextField);
 
 
