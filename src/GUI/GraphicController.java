@@ -419,7 +419,7 @@ public class GraphicController extends Application implements Serializable {
         Bazaar bazaar = networkController.getProfile().getBazaar();
         marketStringBuilder.append("ITEM    QUANTITY   PRICE");
         for(Map.Entry<String, Integer> entry : bazaar.getBazaar().entrySet()) {
-            marketStringBuilder.append(entry.getKey() + ": " + entry.getValue()+ "      "+ bazaar.getPriceList().get(entry.getKey())+"\n");
+            marketStringBuilder.append(entry.getKey() + ": " + entry.getValue() + "      " + "\n");
         }
         marketTextArea.setFont(Font.font("Chalkboard", FontWeight.BOLD, 40));
         marketTextArea.setText(marketStringBuilder.toString());

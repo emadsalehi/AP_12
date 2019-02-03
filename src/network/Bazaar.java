@@ -28,20 +28,20 @@ public class Bazaar implements Serializable{
         bazaar.put("fabric", 20);
     }
     private HashMap<String , Integer> priceList = new HashMap<>(); {
-        bazaar.put("chicken", 100);
-        bazaar.put("sheep", 1000);
-        bazaar.put("cow", 10000);
-        bazaar.put("egg", 10);
-        bazaar.put("milk", 1000);
-        bazaar.put("flour", 10);
-        bazaar.put("plume", 100);
-        bazaar.put("wool", 100);
-        bazaar.put("cookie", 100);
-        bazaar.put("egg_powder", 50);
-        bazaar.put("cake", 200);
-        bazaar.put("thread", 150);
-        bazaar.put("clothes", 1300);
-        bazaar.put("fabric", 300);
+        priceList.put("chicken", 100);
+        priceList.put("sheep", 1000);
+        priceList.put("cow", 10000);
+        priceList.put("egg", 10);
+        priceList.put("milk", 1000);
+        priceList.put("flour", 10);
+        priceList.put("plume", 100);
+        priceList.put("wool", 100);
+        priceList.put("cookie", 100);
+        priceList.put("egg_powder", 50);
+        priceList.put("cake", 200);
+        priceList.put("thread", 150);
+        priceList.put("clothes", 1300);
+        priceList.put("fabric", 300);
     }
 
 
