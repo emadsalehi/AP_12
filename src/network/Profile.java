@@ -21,6 +21,7 @@ public class Profile {
     private ArrayList<Socket> profileSockets = new ArrayList<>();
     private HashMap<String, Integer> leaderBoard = new HashMap<>();
     private GraphicController graphicController;
+    private ArrayList<Profile> friends = new ArrayList<>();
     private boolean isUnique = true;
 
 
@@ -69,12 +70,25 @@ public class Profile {
                 if(isUnique) {
                     Writer writer = new Writer(this, socket);
                     new Thread(writer).start();
+                    ProfileWriter profileWriter = new ProfileWriter(this, socket);
+                    new Thread(profileWriter).start();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void addFriend(String name){
+        ProfileReader profileReader = new ProfileReader(this, profileSockets.get(0), name);
+        new Thread(profileReader).start();
+    }
+
+    public void showFriends() {
+        for (Profile profile : friends) {
+            System.out.println(profile.getProfileName());
         }
     }
 
@@ -100,5 +114,9 @@ public class Profile {
 
     public boolean isUnique() {
         return isUnique;
+    }
+
+    public void addToFriends(Profile profile) {
+        friends.add(profile);
     }
 }
