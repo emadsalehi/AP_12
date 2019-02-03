@@ -661,7 +661,7 @@ public class FarmController {
                 farm.getHelicopter().clearProducts();
             }
             farm.getTruck().nextTurn();
-            int wildAnimalRandom = (int)(Math.random() * 35);
+            int wildAnimalRandom = (int)(Math.random() * 60);
             if (wildAnimalRandom == 1) {
                 int randomX = (int)(Math.random() * 30);
                 int randomY = (int)(Math.random() * 30);

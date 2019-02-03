@@ -212,22 +212,29 @@ public class GraphicController extends Application {
                 isHost = true;
             else
                 isHost = false;
-            networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(),
+            boolean isUnique = networkController.addProfileAction(isHost, Integer.valueOf(portTextField.getText()), iPTextField.getText(),
                     userNameTextField.getText(), this);
-            this.farmController = networkController.getProfile().getFarmController();
-            newGame();
-            Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
-            Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
-            gameButtonMaker(chatButtonRectangle, chatButtonText);
-            chatButtonText.setOnMouseClicked(event1 -> newChat());
-            border.getChildren().addAll(chatButtonRectangle, chatButtonText);
-            Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
-            Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
-            gameButtonMaker(leaderBoardRectangle, leaderBoardText);
-            leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
-            border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
-
-            scene.setRoot(border);
+            if(isUnique) {
+                this.farmController = networkController.getProfile().getFarmController();
+                newGame();
+                Rectangle chatButtonRectangle = new Rectangle(47, HEIGHT - 90, 70, 30);
+                Text chatButtonText = new Text(60, HEIGHT - 70, "Chat");
+                gameButtonMaker(chatButtonRectangle, chatButtonText);
+                chatButtonText.setOnMouseClicked(event1 -> newChat());
+                border.getChildren().addAll(chatButtonRectangle, chatButtonText);
+                Rectangle leaderBoardRectangle = new Rectangle(20, HEIGHT - 50, 140, 30);
+                Text leaderBoardText = new Text(33, HEIGHT - 28, "LeaderBoard");
+                gameButtonMaker(leaderBoardRectangle, leaderBoardText);
+                leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
+                border.getChildren().addAll(leaderBoardRectangle, leaderBoardText);
+                scene.setRoot(border);
+            }
+            else {
+                Text errorLabel = new Text("UserName is not unique!");
+                errorLabel.relocate(WIDTH / 2 - 50, 470);
+                errorLabel.setFont(Font.font("Chalkboard", FontWeight.BOLD, 20));
+                multiplayer.getChildren().add(errorLabel);
+            }
         });
 
         backRectangle.setOnMouseClicked(event -> {
