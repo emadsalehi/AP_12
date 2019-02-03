@@ -305,6 +305,27 @@ public class GraphicController extends Application implements Serializable {
             leaderBoardText.setOnMouseClicked(event1 -> newLeaderBoard());
             Rectangle marketRectangle = new Rectangle(WIDTH / 2 - 100, 20, 100, 40);
             Text marketText = new Text(WIDTH / 2 - 85, 45, "MARKET");
+            marketRectangle.setOnMouseClicked(event1 -> {
+                marketQuery();
+            });
+            marketText.setOnMouseClicked(event1 -> {
+                marketQuery();
+            });
+            TextField buyOrSellTextField = new TextField("What do you want?");
+            buyOrSellTextField.relocate(WIDTH/2 - 100, 70);
+            buyOrSellTextField.setMaxHeight(30);
+            buyOrSellTextField.setMinHeight(30);
+            buyOrSellTextField.setMaxWidth(100);
+            buyOrSellTextField.setMaxHeight(100);
+            Rectangle buyRectangle = new Rectangle(WIDTH/2 - 100, 110, 50, 30);
+            Text buyText = new Text(WIDTH/2 - 95, 130, "BUY");
+            gameButtonMaker(buyRectangle,buyText);
+            Rectangle sellRectangle = new Rectangle(WIDTH/2 - 40, 110 , 50, 30);
+            Text sellText = new Text(WIDTH/2 - 35, 130, "SELL");
+            gameButtonMaker(sellRectangle,sellText);
+            border.getChildren().addAll(buyRectangle,buyText,sellRectangle,sellText,buyOrSellTextField);
+
+
             TextField friendTextField = new TextField("friend name");
             friendTextField.setMinWidth(40);
             friendTextField.setMaxWidth(100);
@@ -356,6 +377,24 @@ public class GraphicController extends Application implements Serializable {
             newMenu();
             scene.setRoot(menu);
         });
+    }
+
+    private void marketQuery() {
+        Stage markerStage = new Stage();
+        Group marketGroup = new Group();
+        Scene marketScene = new Scene(marketGroup,600,800);
+
+        Text whatDoYouWant = new Text("What do you want?");
+        whatDoYouWant.setFont(Font.font("Chalkboard",FontWeight.BOLD,30));
+        whatDoYouWant.relocate(200, 10);
+        TextArea marketTextArea = new TextArea("Item: number");
+        marketTextArea.relocate(0, 50);
+        marketTextArea.setMinHeight(750);
+        marketTextArea.setMinWidth(600);
+
+        marketGroup.getChildren().addAll(whatDoYouWant,marketTextArea);
+        markerStage.setScene(marketScene);
+        markerStage.show();
     }
 
 
