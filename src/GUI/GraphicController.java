@@ -27,6 +27,7 @@ import javafx.util.Duration;
 import model.Cell;
 import model.*;
 import model.request.*;
+import network.Bazaar;
 import network.NetworkController;
 import network.Reader;
 import network.Writer;
@@ -380,21 +381,25 @@ public class GraphicController extends Application implements Serializable {
     }
 
     private void marketQuery() {
-        Stage markerStage = new Stage();
+        Stage marketStage = new Stage();
         Group marketGroup = new Group();
         Scene marketScene = new Scene(marketGroup,600,800);
 
-        Text whatDoYouWant = new Text("What do you want?");
-        whatDoYouWant.setFont(Font.font("Chalkboard",FontWeight.BOLD,30));
-        whatDoYouWant.relocate(200, 10);
-        TextArea marketTextArea = new TextArea("Item: number");
-        marketTextArea.relocate(0, 50);
-        marketTextArea.setMinHeight(750);
-        marketTextArea.setMinWidth(600);
 
-        marketGroup.getChildren().addAll(whatDoYouWant,marketTextArea);
-        markerStage.setScene(marketScene);
-        markerStage.show();
+        TextArea marketTextArea = new TextArea("Item: number");
+        marketTextArea.relocate(0, 0);
+        marketTextArea.setMinHeight(800);
+        marketTextArea.setMinWidth(600);
+        marketGroup.getChildren().addAll(marketTextArea);
+        StringBuilder marketStringBuilder = new StringBuilder();
+        Bazaar bazaar = networkController.getProfile().getBazaar();
+        marketStringBuilder.append("ITEM    QUANTITY   PRICE");
+        for(Map.Entry<String, Integer> entry : bazaar.getBazaar().entrySet()) {
+            marketStringBuilder.append(entry.getKey() + ": " + entry.getValue()+ "      "+ bazaar.getPriceList().get(entry.getKey())+"\n");
+        }
+        marketTextArea.setText(marketStringBuilder.toString());
+        marketStage.setScene(marketScene);
+        marketStage.show();
     }
 
 

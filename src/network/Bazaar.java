@@ -32,6 +32,22 @@ public class Bazaar implements Serializable{
         return false;
     }
 
+    public HashMap<String, Integer> getBazaar() {
+        return bazaar;
+    }
+
+    public void setBazaar(HashMap<String, Integer> bazaar) {
+        this.bazaar = bazaar;
+    }
+
+    public HashMap<String, Integer> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(HashMap<String, Integer> priceList) {
+        this.priceList = priceList;
+    }
+
     public void buy(String item , int number){
         for (Map.Entry<String , Integer> stringIntegerEntry : bazaar.entrySet()){
             if(stringIntegerEntry.getKey().equals(item)){
